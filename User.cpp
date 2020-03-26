@@ -319,7 +319,7 @@ int User::checkPasswords()
 
 void Catalog::changeCatalog()
 {
-
+	cout << "merry christmas";
 }
 
 void User::deleteAccount()
