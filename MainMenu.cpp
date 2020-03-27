@@ -2,40 +2,30 @@
 
 using namespace std;
 
-int8_t row = 0;
-string arrow = "  <--";
-
 void init()
 {
 	copyUserFile();
 }
 
-void drawMainMenu()
+void drawMenu(vector<string> msg, int8_t& row)
 {
-	system("cls");
-
+	for (int i = 0; i < msg.size(); ++i)
+	{
+		cout << msg[i];
+		if (row == i) cout << "<--";
+	}
 	cout << "\n\n";
-	cout << "   Войти как администратор";
-	if (row == 0) cout << arrow;
-	cout << "\n\n";
-
-	cout << "   Войти как пользователь";
-	if (row == 1) cout << arrow;
-	cout << "\n\n";
-
-	cout << "   Выход";
-	if (row == 2) cout << arrow;
-	cout << "\n";
 }
 
 void mainMenu()
 {
 	setlocale(0, "");
+	int8_t row = 0;
 
 	while (true)
 	{
-
-		drawMainMenu();
+		system("cls");
+		drawMenu({"Войти как администратор  ","\n\nВойти как пользователь  ","\n\nВыход  "}, row);
 
 		char a = ' ';
 		a = _getch();

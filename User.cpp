@@ -14,13 +14,7 @@ void userHaveAccount()
 	{
 		system("cls");
 		cout << "У вас есть аккаунт?\n\n";
-		cout << "  Да";
-		if (!row) cout << "\t<--";
-		cout << "\n\n  Нет";
-		if (row == 1) cout << "\t<--";
-		cout << "\n\n  Назад";
-		if (row == 2) cout << "\t<--";
-		cout << "\n\n";
+		drawMenu({ "  Да", "\n\n  Нет","\n\n  Назад",}, row);
 
 		char a = ' ';
 		a = _getch();
@@ -47,16 +41,7 @@ void User::userMenu()
 	while (true)
 	{
 		system("cls");
-
-		cout << "\n Изменить каталог";
-		if (!row) cout << "  <--";
-		cout << "\n\n Изменить пароль";
-		if (row == 1) cout << "  <--";
-		cout << "\n\n Удалить аккаунт";
-		if (row == 2) cout << "  <--";
-		cout << "\n\n Назад";
-		if (row == 3) cout << "  <--";
-		cout << "\n\n";
+		drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт" ,"\n\n Назад" }, row);
 
 		char a = ' ';
 		a = _getch();
@@ -82,14 +67,14 @@ void User::createAccount()
 {
 	system("cls");
 
-	haveAccess = true;
-	leave = false;
+	bool haveAccess = true;
+	bool leave = false;
 
 	do {
-		if (haveAccess) enterLogin(0);
-		else enterLogin(2);
+		if (haveAccess) enterLogin(0, haveAccess, leave);
+		else enterLogin(2, haveAccess, leave);
 		if (leave) break;
-		enterPassword();
+		enterPassword(leave);
 		if (leave) break;
 
 		for (auto i : users)
@@ -114,14 +99,14 @@ void User::createAccount()
 void User::enterAccount()
 {
 	system("cls");
-	haveAccess = true;
-	leave = false;
+	bool haveAccess = true;
+	bool leave = false;
 
 	do {
-		if (haveAccess) enterLogin(0);
-		else enterLogin(1);
+		if (haveAccess) enterLogin(0, haveAccess, leave);
+		else enterLogin(1, haveAccess, leave);
 		if (leave) break;
-		enterPassword();
+		enterPassword(leave);
 		if (leave) break;
 
 		haveAccess = true;
@@ -139,7 +124,7 @@ void User::enterAccount()
 }
 
 
-void User::enterLogin(int mode)
+void User::enterLogin(int8_t mode,bool &haveAccess, bool &leave)
 {
 	int8_t error;
 	switch (mode)
@@ -181,7 +166,7 @@ void User::enterLogin(int mode)
 	} while (error);
 }
 
-void User::enterPassword()
+void User::enterPassword(bool& leave)
 {
 	int8_t error;
 
@@ -356,7 +341,8 @@ void User::changePassword()
 			auto ptr = find(users.begin(), users.end(), tmp);
 			if (ptr != users.end())
 			{
-				enterPassword();
+				bool leave = false;
+				enterPassword(leave);
 				if (leave) return;
 
 				ptr->password = sha256(credentials.password);

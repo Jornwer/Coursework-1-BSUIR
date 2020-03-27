@@ -11,6 +11,7 @@
 
 void init();
 void mainMenu();
+void drawMenu(std::vector<std::string>, int8_t&);
 void userHaveAccount();
 void rewriteUserFile();
 void copyUserFile();
@@ -34,13 +35,10 @@ class User
 public:
 	Credentials credentials;
 
-	bool haveAccess;
-	bool leave;
-
 	void createAccount();
 	void enterAccount();
-	void enterLogin(int);
-	void enterPassword();
+	void enterLogin(int8_t,bool&,bool&);
+	void enterPassword(bool&);
 	void userMenu();
 	void addCredentials();
 	void changePassword();
