@@ -2,8 +2,6 @@
 
 void main()
 {
-	extern Catalog catalog;
-
-	init();
+	//init();
 	mainMenu();
 }

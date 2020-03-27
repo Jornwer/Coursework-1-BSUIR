@@ -5,6 +5,8 @@ using namespace std;
 void init()
 {
 	copyUserFile();
+	copyCatalogFile();
+	copyAdminFile();
 }
 
 void drawMenu(vector<string> msg, int8_t& row)
@@ -12,20 +14,21 @@ void drawMenu(vector<string> msg, int8_t& row)
 	for (int i = 0; i < msg.size(); ++i)
 	{
 		cout << msg[i];
-		if (row == i) cout << "<--";
+		if (row == i) cout << "   <--";
 	}
 	cout << "\n\n";
 }
 
 void mainMenu()
 {
-	setlocale(0, "");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	int8_t row = 0;
 
 	while (true)
 	{
 		system("cls");
-		drawMenu({"Войти как администратор  ","\n\nВойти как пользователь  ","\n\nВыход  "}, row);
+		drawMenu({"Войти как администратор","\n\nВойти как пользователь","\n\nВыход"}, row);
 
 		char a = ' ';
 		a = _getch();
