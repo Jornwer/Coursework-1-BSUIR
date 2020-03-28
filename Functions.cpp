@@ -35,8 +35,8 @@ void mainMenu()
 		else if (a == 80) row = (row + 1) % 3;
 		else if (a == 13)
 		{
-			if (row == 0) ;
-			else if (row == 1)userHaveAccount();
+			if (row == 0);
+			else if (row == 1) userHaveAccount();
 			else if (row == 2)
 			{
 				system("cls");
@@ -264,4 +264,10 @@ int getInt(string msg)
 			while (cin.get() != '\n') {}
 		}
 	}
+}
+
+ostream& operator<<(ostream& out, const Date& date)
+{
+	out << date.day << '.' << date.month << '.' << date.year;
+	return out;
 }

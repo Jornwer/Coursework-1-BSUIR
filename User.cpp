@@ -11,23 +11,46 @@ void userHaveAccount()
 	while (true)
 	{
 		system("cls");
-		cout << "У вас есть аккаунт?\n\n";
-		drawMenu({ "  Да", "\n\n  Нет","\n\n  Назад",}, row);
+		
+		if (users.empty()) drawMenu({ "  Создать аккаунт","\n\n  Назад", }, row);
+		else
+		{
+			cout << "У вас есть аккаунт?\n\n";
+			drawMenu({ "  Да", "\n\n  Нет","\n\n  Назад", }, row);
+		}
 
 		char a = ' ';
 		a = _getch();
-		if (a == 72) row = (row + 2) % 3;
-		else if (a == 80) row = (row + 1) % 3;
-		else if (a == 13)
+		if (!users.empty())
 		{
-			if (row == 0) user.enterAccount(users);
-			else if (row == 1) user.createAccount(users);
-			else if (row == 2)
+			if (a == 72) row = (row + 2) % 3;
+			else if (a == 80) row = (row + 1) % 3;
+			else if (a == 13)
 			{
-				system("cls");
-				break;
+				if (row == 0) user.enterAccount(users);
+				else if (row == 1) user.createAccount(users);
+				else if (row == 2)
+				{
+					system("cls");
+					break;
+				}
+				return;
 			}
-			return;
+		}
+		else
+		{
+			if (a == 72) row = (row + 1) % 2;
+			else if (a == 80) row = (row + 1) % 2;
+			else if (a == 13)
+			{
+				if (row == 0) user.createAccount(users);
+				else if (row == 1)
+				{
+					system("cls");
+					break;
+				}
+				return;
+			}
 		}
 	}
 }
@@ -343,7 +366,29 @@ void User::changePassword(vector<Credentials>& users)
 
 void Catalog::displayCatalog()
 {
+	
+	if (this->cars.empty()) {getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
+	int pages = ceil((double)this->cars.size() / 7.0), page = 0;
+	while (true)
+	{
+		system("cls");
+		cout << "Страница " << page+1 << " из " << pages <<
+			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl << endl;
+		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
+			displayElement(this->cars[i]);
 
+		char a = ' ';
+		a = _getch();
+
+		if (a == 75) page = (page + pages - 1) % pages;
+		else if (a == 77) page = (page + 1) % pages;
+		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		{
+			break;
+		}
+	}
+	/*for (auto i : this->cars)
+		displayElement(i);*/
 }
 
 void Catalog::addElement()
@@ -361,4 +406,10 @@ void Catalog::addElement()
 void Catalog::deleteElement()
 {
 
+}
+
+void Catalog::displayElement(Car car)
+{
+	cout << "Марка: " << car.brand << "     Модель: " << car.model << "    Цвет: " << car.color << endl;
+	cout << "Дата продажи: " << car.date << "    Цена: " << car.price << endl << endl;
 }

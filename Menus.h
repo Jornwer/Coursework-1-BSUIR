@@ -75,6 +75,7 @@ public:
 	bool dayCorrect(int8_t, int16_t, int8_t);
 
 	bool operator==(Date);
+	friend std::ostream& operator<<(std::ostream&,const Date&);
 };
 
 class Car
@@ -102,5 +103,6 @@ public:
 	void displayCatalog();
 	void addElement();
 	void deleteElement();
+	void displayElement(Car car);
 };
 #endif
