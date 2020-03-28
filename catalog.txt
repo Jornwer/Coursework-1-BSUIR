@@ -48,16 +48,6 @@ Kalina
 Красный
 666
 5 5 1980
-Lada
-Kalina
-Красный
-666
-5 5 1980
-Lada
-Kalina
-Красный
-666
-5 5 1980
 Tesla
 Model S
 белый

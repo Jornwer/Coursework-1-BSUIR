@@ -105,5 +105,6 @@ public:
 	void addElement();
 	void deleteElement();
 	void displayElement(Car car);
+	void approveDeletion(int, int);
 };
 #endif

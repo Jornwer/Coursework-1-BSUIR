@@ -373,7 +373,7 @@ void Catalog::displayCatalog()
 	{
 		system("cls");
 		cout << "Страница " << page+1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl << endl;
+			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 			displayElement(this->cars[i]);
 
@@ -402,11 +402,52 @@ void Catalog::addElement()
 
 void Catalog::deleteElement()
 {
+	if (this->cars.empty()) { getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
+	int pages = ceil((double)this->cars.size() / 7.0), page = 0, pos = 0, elInPage = 7;
+	while (true)
+	{
+		system("cls");
+		cout << "Страница " << page + 1 << " из " << pages <<
+			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
+			"Для удаления элемента нажмите Enter" << endl << endl;
 
+		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
+		{
+			if (i % 7 == pos) cout << endl << string(40, '/');
+			displayElement(this->cars[i]);
+			if (i % 7 == pos) cout << string(40, '\\') << endl;
+		}
+
+		char a = getCharCode();
+
+		if (a == VK_LEFT) page = (page + pages - 1) % pages;
+		else if (a == VK_RIGHT) page = (page + 1) % pages;
+		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
+		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
+		else if (a == 13) approveDeletion(page, pos);
+		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		{
+			return;
+		}
+		if (page == pages - 1) { elInPage = this->cars.size() - page * 7; pos = (pos >= elInPage ? 0 : pos);}
+		else elInPage = 7;
+	}
 }
 
 void Catalog::displayElement(Car car)
 {
-	cout << "Марка: " << car.brand << "     Модель: " << car.model << "    Цвет: " << car.color << endl;
-	cout << "Дата продажи: " << car.date << "    Цена: " << car.price << endl << endl;
+	cout << endl << "Марка: " << car.brand << "     Модель: " << car.model << "    Цвет: " << car.color << endl;
+	cout << "Дата продажи: " << car.date << "    Цена: " << car.price << endl;
+}
+
+void Catalog::approveDeletion(int page, int pos)
+{
+	string temp;
+	system("cls");
+	temp = getString("Введите \"yes\" для удаления элемента");
+	if (temp == "yes")
+	{
+		this->cars.erase(this->cars.begin() + pos + page * 7);
+		rewriteCatalogFile(*this);
+	}
 }
