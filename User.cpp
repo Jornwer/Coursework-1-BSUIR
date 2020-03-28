@@ -2,14 +2,12 @@
 
 using namespace std;
 
-vector<Credentials> users;
-Catalog catalog;
-User user;
-
 void userHaveAccount()
 {
 	int8_t row = 0;
-	copyUserFile();
+	User user;
+	vector<Credentials> users;
+	copyUserFile(users);
 	while (true)
 	{
 		system("cls");
@@ -22,8 +20,8 @@ void userHaveAccount()
 		else if (a == 80) row = (row + 1) % 3;
 		else if (a == 13)
 		{
-			if (row == 0) user.enterAccount();
-			else if (row == 1) user.createAccount();
+			if (row == 0) user.enterAccount(users);
+			else if (row == 1) user.createAccount(users);
 			else if (row == 2)
 			{
 				system("cls");
@@ -34,10 +32,11 @@ void userHaveAccount()
 	}
 }
 
-void User::userMenu()
+void User::userMenu(vector<Credentials>& users)
 {
 	int8_t row = 0;
 	int8_t colNum = 4;
+	Catalog catalog;
 	while (true)
 	{
 		system("cls");
@@ -50,8 +49,8 @@ void User::userMenu()
 		else if (a == 13)
 		{
 			if (row == 0) catalog.changeCatalog();
-			else if (row == 1) user.changePassword();
-			else if (row == 2) { user.deleteAccount(); break; }
+			else if (row == 1) changePassword(users);
+			else if (row == 2) { deleteAccount(users); break; }
 			else if (row == 3)
 			{
 				system("cls");
@@ -62,7 +61,7 @@ void User::userMenu()
 
 }
 
-void User::createAccount()
+void User::createAccount(vector<Credentials>& users)
 {
 	system("cls");
 
@@ -89,13 +88,13 @@ void User::createAccount()
 
 	if (!leave)
 	{
-		addCredentials();
-		rewriteUserFile();
-		userMenu();
+		addCredentials(users);
+		rewriteUserFile(users);
+		userMenu(users);
 	}
 }
 
-void User::enterAccount()
+void User::enterAccount(vector<Credentials>& users)
 {
 	system("cls");
 	bool haveAccess = true;
@@ -118,7 +117,7 @@ void User::enterAccount()
 
 	if (!leave)
 	{
-		userMenu();
+		userMenu(users);
 	}
 }
 
@@ -193,7 +192,7 @@ void User::enterPassword(bool& leave)
 	} while (error);
 }
 
-void rewriteUserFile()
+void rewriteUserFile(vector<Credentials>& users)
 {
 	ofstream file("users.txt", ios::trunc);
 
@@ -203,7 +202,7 @@ void rewriteUserFile()
 	file.close();
 }
 
-void rewriteCatalogFile()
+void rewriteCatalogFile(Catalog& catalog)
 {
 	ofstream file("catalog.txt", ios::trunc);
 	for (auto i : catalog.cars)
@@ -213,7 +212,7 @@ void rewriteCatalogFile()
 	file.close();
 }
 
-void copyUserFile()
+void copyUserFile(vector<Credentials>& users)
 {
 	ifstream file("users.txt");
 	while (file)
@@ -228,7 +227,7 @@ void copyUserFile()
 
 }
 
-void copyCatalogFile()
+void copyCatalogFile(Catalog& catalog)
 {
 	ifstream file("catalog.txt");
 	if (!catalog.cars.empty()) catalog.cars.erase(catalog.cars.begin(), catalog.cars.end());
@@ -246,13 +245,11 @@ void copyCatalogFile()
 	file.close();
 }
 
-
-void User::addCredentials()
+void User::addCredentials(vector<Credentials>& users)
 {
-	Credentials tmp(user.credentials.login, sha256(user.credentials.password));
+	Credentials tmp(this->credentials.login, sha256(this->credentials.password));
 	users.push_back(tmp);
 }
-
 
 int User::checkPasswords()
 {
@@ -273,7 +270,7 @@ void Catalog::changeCatalog()
 {
 	int8_t row = 0;
 	int8_t colNum = 4;
-	copyCatalogFile();
+	copyCatalogFile(*this);
 	while (true)
 	{
 		system("cls");
@@ -297,7 +294,7 @@ void Catalog::changeCatalog()
 	}
 }
 
-void User::deleteAccount()
+void User::deleteAccount(vector<Credentials>& users)
 {
 	do {
 		int i = checkPasswords();
@@ -310,7 +307,7 @@ void User::deleteAccount()
 			if (ptr != users.end())
 			{
 				users.erase(ptr);
-				rewriteUserFile();
+				rewriteUserFile(users);
 				return;
 			}
 		}
@@ -319,7 +316,7 @@ void User::deleteAccount()
 	} while (true);
 }
 
-void User::changePassword()
+void User::changePassword(vector<Credentials>& users)
 {
 	do {
 		int i = checkPasswords();
@@ -336,7 +333,7 @@ void User::changePassword()
 				if (leave) return;
 
 				ptr->password = sha256(credentials.password);
-				rewriteUserFile();
+				rewriteUserFile(users);
 				return;
 			}
 		}
@@ -358,7 +355,7 @@ void Catalog::addElement()
 	tmp.date.getDate();
 	tmp.price = to_string(getInt("Введите цену автомобиля"));
 	cars.push_back(tmp);
-	rewriteCatalogFile();
+	rewriteCatalogFile(*this);
 }
 
 void Catalog::deleteElement()

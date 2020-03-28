@@ -2,10 +2,7 @@
 
 using namespace std;
 
-Admin admin;
-vector<Credentials> admins;
-
-void copyAdminFile()
+void copyAdminFile(vector<Credentials>& admins)
 {
 	ifstream file("admins.txt");
 	while (file)
@@ -19,7 +16,7 @@ void copyAdminFile()
 	file.close();
 }
 
-void rewriteAdminFile()
+void rewriteAdminFile(vector<Credentials>& admins)
 {
 	ofstream file("admins.txt", ios::trunc);
 

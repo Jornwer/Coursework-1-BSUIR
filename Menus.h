@@ -11,18 +11,21 @@
 #include <cstdio>
 #include "SHA256.h"
 
+class Catalog;
+class Credentials;
+
 void mainMenu();
 void drawMenu(std::vector<std::string>, int8_t&);
 void userHaveAccount();
-void rewriteUserFile();
-void copyUserFile();
+void rewriteUserFile(std::vector<Credentials>&);
+void copyUserFile(std::vector<Credentials>&);
 std::string getString(std::string);
 std::string getPassword(std::string);
 void getCharacter(std::string);
-void copyCatalogFile();
-void rewriteCatalogFile();
-void copyAdminFile();
-void rewriteAdminFile();
+void copyCatalogFile(Catalog&);
+void rewriteCatalogFile(Catalog&);
+void copyAdminFile(std::vector<Credentials>&);
+void rewriteAdminFile(std::vector<Credentials>&);
 int getInt(std::string);
 
 class Credentials
@@ -41,14 +44,14 @@ class User
 public:
 	Credentials credentials;
 
-	void createAccount();
-	void enterAccount();
+	void createAccount(std::vector<Credentials>& users);
+	void enterAccount(std::vector<Credentials>& users);
 	void enterLogin(int8_t,bool&,bool&);
 	void enterPassword(bool&);
-	void userMenu();
-	void addCredentials();
-	void changePassword();
-	void deleteAccount();
+	void userMenu(std::vector<Credentials>& users);
+	void addCredentials(std::vector<Credentials>& users);
+	void changePassword(std::vector<Credentials>& users);
+	void deleteAccount(std::vector<Credentials>& users);
 	int checkPasswords();
 };
 
