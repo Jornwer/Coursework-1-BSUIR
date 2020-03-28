@@ -7,3 +7,5 @@ Coursework
 
 
 Тема : Учет продажи автомобилей
+
+Код написан в Visual Studio Community 2019
