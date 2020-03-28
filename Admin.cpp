@@ -4,7 +4,6 @@ using namespace std;
 
 Admin admin;
 vector<Credentials> admins;
-//vector<Credentials> users;
 
 void copyAdminFile()
 {

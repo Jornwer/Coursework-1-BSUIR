@@ -11,13 +11,6 @@
 #include <cstdio>
 #include "SHA256.h"
 
-class Credentials;
-class Catalog;
-//
-//extern Catalog catalog;
-//extern std::vector<Credentials> users;
-
-void init();
 void mainMenu();
 void drawMenu(std::vector<std::string>, int8_t&);
 void userHaveAccount();
@@ -31,7 +24,6 @@ void rewriteCatalogFile();
 void copyAdminFile();
 void rewriteAdminFile();
 int getInt(std::string);
-
 
 class Credentials
 {
@@ -60,12 +52,10 @@ public:
 	int checkPasswords();
 };
 
-class Admin
+class Admin: public User
 {
 public:
 	Credentials credentials;
-	bool haveAccess;
-
 };
 
 class Date

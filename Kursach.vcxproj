@@ -140,9 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="SHA256.cpp" />
-    <ClCompile Include="Start.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
