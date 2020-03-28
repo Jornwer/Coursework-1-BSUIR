@@ -27,6 +27,7 @@ void rewriteCatalogFile(Catalog&);
 void copyAdminFile(std::vector<Credentials>&);
 void rewriteAdminFile(std::vector<Credentials>&);
 int getInt(std::string);
+int8_t getCharCode();
 
 class Credentials
 {

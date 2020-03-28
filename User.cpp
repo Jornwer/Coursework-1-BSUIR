@@ -19,12 +19,12 @@ void userHaveAccount()
 			drawMenu({ "  Да", "\n\n  Нет","\n\n  Назад", }, row);
 		}
 
-		char a = ' ';
-		a = _getch();
+		char a = getCharCode();
+
 		if (!users.empty())
 		{
-			if (a == 72) row = (row + 2) % 3;
-			else if (a == 80) row = (row + 1) % 3;
+			if (a == VK_UP) row = (row + 2) % 3;
+			else if (a == VK_DOWN) row = (row + 1) % 3;
 			else if (a == 13)
 			{
 				if (row == 0) user.enterAccount(users);
@@ -39,8 +39,8 @@ void userHaveAccount()
 		}
 		else
 		{
-			if (a == 72) row = (row + 1) % 2;
-			else if (a == 80) row = (row + 1) % 2;
+			if (a == VK_UP) row = (row + 1) % 2;
+			else if (a == VK_DOWN) row = (row + 1) % 2;
 			else if (a == 13)
 			{
 				if (row == 0) user.createAccount(users);
@@ -65,10 +65,10 @@ void User::userMenu(vector<Credentials>& users)
 		system("cls");
 		drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт" ,"\n\n Назад" }, row);
 
-		char a = ' ';
-		a = _getch();
-		if (a == 72) row = (row + colNum - 1) % colNum;
-		else if (a == 80) row = (row + 1) % colNum;
+		char a = getCharCode();
+
+		if (a == VK_UP) row = (row + colNum - 1) % colNum;
+		else if (a == VK_DOWN) row = (row + 1) % colNum;
 		else if (a == 13)
 		{
 			if (row == 0) catalog.changeCatalog();
@@ -299,10 +299,10 @@ void Catalog::changeCatalog()
 		system("cls");
 		drawMenu({ " Просмотреть каталог", "\n\n Добавить элемент в каталог","\n\n Удалить элемент из каталога" ,"\n\n Назад" }, row);
 
-		char a = ' ';
-		a = _getch();
-		if (a == 72) row = (row + colNum - 1) % colNum;
-		else if (a == 80) row = (row + 1) % colNum;
+		char a = getCharCode();
+
+		if (a == VK_UP) row = (row + colNum - 1) % colNum;
+		else if (a == VK_DOWN) row = (row + 1) % colNum;
 		else if (a == 13)
 		{
 			if (row == 0) displayCatalog();
@@ -377,18 +377,15 @@ void Catalog::displayCatalog()
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 			displayElement(this->cars[i]);
 
-		char a = ' ';
-		a = _getch();
+		char a = getCharCode();
 
-		if (a == 75) page = (page + pages - 1) % pages;
-		else if (a == 77) page = (page + 1) % pages;
+		if (a == VK_LEFT) page = (page + pages - 1) % pages;
+		else if (a == VK_RIGHT) page = (page + 1) % pages;
 		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
 		{
 			break;
 		}
 	}
-	/*for (auto i : this->cars)
-		displayElement(i);*/
 }
 
 void Catalog::addElement()

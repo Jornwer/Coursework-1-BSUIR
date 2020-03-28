@@ -28,11 +28,10 @@ void mainMenu()
 		system("cls");
 		drawMenu({"Войти как администратор","\n\nВойти как пользователь","\n\nВыход"}, row);
 
-		char a = ' ';
-		a = _getch();
+		int8_t a = getCharCode();
 
-		if (a == 72) row = (row + 2) % 3;
-		else if (a == 80) row = (row + 1) % 3;
+		if (a == VK_UP) row = (row + 2) % 3;
+		else if (a == VK_DOWN) row = (row + 1) % 3;
 		else if (a == 13)
 		{
 			if (row == 0);
@@ -270,4 +269,16 @@ ostream& operator<<(ostream& out, const Date& date)
 {
 	out << date.day << '.' << date.month << '.' << date.year;
 	return out;
+}
+
+int8_t getCharCode()
+{
+	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+	INPUT_RECORD rec;
+	DWORD numRead;
+	while (ReadConsoleInput(hIn, &rec, 1, &numRead) && numRead == 1) {
+		if (rec.EventType == KEY_EVENT && rec.Event.KeyEvent.bKeyDown) {
+			return rec.Event.KeyEvent.wVirtualKeyCode;
+		}
+	}
 }
