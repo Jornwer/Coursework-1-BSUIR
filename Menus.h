@@ -1,6 +1,6 @@
 #ifndef MENUS_H
 #define MENUS_H
-
+//todo проверять правильный ввод в поиске каталога
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -28,6 +28,9 @@ void copyAdminFile(std::vector<Credentials>&);
 void rewriteAdminFile(std::vector<Credentials>&);
 int getInt(std::string);
 int8_t getCharCode();
+void displayDate(std::string);
+int stringToInt(std::string);
+void adminHaveAccount();
 
 class Credentials
 {
@@ -45,21 +48,26 @@ class User
 public:
 	Credentials credentials;
 
-	void createAccount(std::vector<Credentials>& users);
-	void enterAccount(std::vector<Credentials>& users);
+	virtual void createAccount(std::vector<Credentials>&);
+	virtual void enterAccount(std::vector<Credentials>&);
 	void enterLogin(int8_t,bool&,bool&);
 	void enterPassword(bool&);
-	void userMenu(std::vector<Credentials>& users);
-	void addCredentials(std::vector<Credentials>& users);
-	void changePassword(std::vector<Credentials>& users);
-	void deleteAccount(std::vector<Credentials>& users);
+	void userMenu(std::vector<Credentials>&);
+	void addCredentials(std::vector<Credentials>&);
+	void changePassword(std::vector<Credentials>&);
+	void deleteAccount(std::vector<Credentials>&);
 	int checkPasswords();
 };
 
 class Admin: public User
 {
 public:
-	Credentials credentials;
+	void createAccount(std::vector<Credentials>&) override;
+	void adminMenu(std::vector<Credentials>&);
+	void enterAccount(std::vector<Credentials>&) override;
+	void addAdmin(std::vector<Credentials>&);
+	void deleteUser();
+
 };
 
 class Date
@@ -69,7 +77,10 @@ public:
 	std::string month;
 	std::string year;
 
+	Date(std::string);
+	Date();
 	void getDate();
+	int countDays();
 	int8_t enterDay(int8_t, int16_t);
 	int8_t enterMonth();
 	int16_t enterYear();
@@ -77,6 +88,8 @@ public:
 
 	bool operator==(Date);
 	friend std::ostream& operator<<(std::ostream&,const Date&);
+	bool operator>(Date);
+	bool operator<(Date);
 };
 
 class Car
@@ -106,5 +119,7 @@ public:
 	void deleteElement();
 	void displayElement(Car car);
 	void approveDeletion(int, int);
+	void searchInCatalog();
+	void displaySearch(std::string, std::string, std::string, std::string, std::string, std::string, std::string);
 };
 #endif

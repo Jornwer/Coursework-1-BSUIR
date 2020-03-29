@@ -34,7 +34,7 @@ void mainMenu()
 		else if (a == VK_DOWN) row = (row + 1) % 3;
 		else if (a == 13)
 		{
-			if (row == 0);
+			if (row == 0) adminHaveAccount();
 			else if (row == 1) userHaveAccount();
 			else if (row == 2)
 			{
@@ -281,4 +281,63 @@ int8_t getCharCode()
 			return rec.Event.KeyEvent.wVirtualKeyCode;
 		}
 	}
+}
+
+int Date::countDays()
+{
+	return 372 * stringToInt(year) + 31 * stringToInt(month) + stringToInt(day);
+}
+
+void displayDate(string date)
+{
+	int8_t index = 0;
+	string str = "ƒƒ.ÃÃ.√√√√      ";
+	for (int8_t i = 0; i < 16; ++i)
+	{
+		if (index + 1 > date.size() || index == 8) cout << str[i];
+		else
+		{
+			if (i == 2 || i == 5) cout << '.';
+			else cout << date[index++];
+		}
+	}
+}
+
+bool Date::operator<(Date date)
+{
+	return (countDays() < date.countDays() ? true : false);
+}
+
+bool Date::operator>(Date date)
+{
+	return (countDays() > date.countDays() ? true : false);
+}
+
+Date::Date(string str)
+{
+	if (str.size() == 8)
+	{
+		day += str[0];
+		day += str[1];
+		month += str[2];
+		month += str[3];
+		year += str[4];
+		year += str[5];
+		year += str[6];
+		year += str[7];
+	}
+}
+
+Date::Date(){}
+
+int stringToInt(string str)
+{
+	int res = 0;
+	if (str.size() < 10)
+	{
+		for (auto i : str)
+			res = 10 * res + i - 48;
+		return res;
+	}
+	return -1;
 }
