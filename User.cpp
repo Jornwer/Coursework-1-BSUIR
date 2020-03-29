@@ -1,4 +1,4 @@
-#include "Menus.h"
+п»ї#include "Menus.h"
 
 using namespace std;
 
@@ -12,11 +12,11 @@ void userHaveAccount()
 	{
 		system("cls");
 		
-		if (users.empty()) drawMenu({ "  Создать аккаунт","\n\n  Назад", }, row);
+		if (users.empty()) drawMenu({ "  РЎРѕР·РґР°С‚СЊ Р°РєРєР°СѓРЅС‚","\n\n  РќР°Р·Р°Рґ", }, row);
 		else
 		{
-			cout << "У вас есть аккаунт?\n\n";
-			drawMenu({ "  Да", "\n\n  Нет","\n\n  Назад", }, row);
+			cout << "РЈ РІР°СЃ РµСЃС‚СЊ Р°РєРєР°СѓРЅС‚?\n\n";
+			drawMenu({ "  Р”Р°", "\n\n  РќРµС‚","\n\n  РќР°Р·Р°Рґ", }, row);
 		}
 
 		char a = getCharCode();
@@ -63,7 +63,7 @@ void User::userMenu(vector<Credentials>& users)
 	while (true)
 	{
 		system("cls");
-		drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт" ,"\n\n Назад" }, row);
+		drawMenu({ " РР·РјРµРЅРёС‚СЊ РєР°С‚Р°Р»РѕРі", "\n\n РР·РјРµРЅРёС‚СЊ РїР°СЂРѕР»СЊ","\n\n РЈРґР°Р»РёС‚СЊ Р°РєРєР°СѓРЅС‚" ,"\n\n РќР°Р·Р°Рґ" }, row);
 
 		char a = getCharCode();
 
@@ -158,11 +158,11 @@ void User::enterLogin(int8_t mode,bool &haveAccess, bool &leave)
 	int8_t error;
 	switch (mode)
 	{
-	case 0: this->credentials.login = (haveAccess ? getString("Введите логин. Для выхода введите exit")
-												: getString("Введите заново логин. Для выхода введите exit"));
+	case 0: this->credentials.login = (haveAccess ? getString("Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit")
+												: getString("Р’РІРµРґРёС‚Рµ Р·Р°РЅРѕРІРѕ Р»РѕРіРёРЅ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit"));
 		break;
-	case 1: this->credentials.login =  getString("Неправильный логин и/или пароль. Повторите ввод. Для выхода введите exit"); break;
-	case 2: this->credentials.login =  getString("Аккаунт с таким логином уже существует. Повторите ввод. Для выхода введите exit"); break;
+	case 1: this->credentials.login =  getString("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ Р»РѕРіРёРЅ Рё/РёР»Рё РїР°СЂРѕР»СЊ. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit"); break;
+	case 2: this->credentials.login =  getString("РђРєРєР°СѓРЅС‚ СЃ С‚Р°РєРёРј Р»РѕРіРёРЅРѕРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit"); break;
 	}
 
 	do
@@ -178,7 +178,7 @@ void User::enterLogin(int8_t mode,bool &haveAccess, bool &leave)
 		if (this->credentials.login.size() < 4)
 		{
 			error = 1;
-			this->credentials.login = getString("Введите логин из 4 или более символов. Для выхода введите exit");
+			this->credentials.login = getString("Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ РёР· 4 РёР»Рё Р±РѕР»РµРµ СЃРёРјРІРѕР»РѕРІ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 		}
 		if (this->credentials.login[0] == ' ') { error = 2; continue;}
 		for (int i = 1; i < this->credentials.login.size(); ++i)
@@ -187,7 +187,7 @@ void User::enterLogin(int8_t mode,bool &haveAccess, bool &leave)
 				|| (this->credentials.login[i] >= '0' && this->credentials.login[i] <= '0')))
 			{
 				error = 2;
-				this->credentials.login = getString("Логин содержит недопустимые символы. Для выхода введите exit");
+				this->credentials.login = getString("Р›РѕРіРёРЅ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 				break;
 			}
 
@@ -198,7 +198,7 @@ void User::enterPassword(bool& leave)
 {
 	int8_t error;
 
-	this->credentials.password = getPassword("Введите пароль. Для выхода введите exit");
+	this->credentials.password = getPassword("Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 
 	do{
 		error = 0;
@@ -213,14 +213,14 @@ void User::enterPassword(bool& leave)
 			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_' || (a >= '0' && a <= '0')))
 			{
 				error = 1;
-				this->credentials.password = getPassword("Пароль содержит недопустимые символы. Для выхода введите exit");
+				this->credentials.password = getPassword("РџР°СЂРѕР»СЊ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 				break;
 			}
 
 		if (this->credentials.password.size() < 8)
 		{
 			error = 2;
-			this->credentials.password = getPassword("Пароль должен содержать минимум 8 символов. Для выхода введите exit");
+			this->credentials.password = getPassword("РџР°СЂРѕР»СЊ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РјРёРЅРёРјСѓРј 8 СЃРёРјРІРѕР»РѕРІ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 		}
 
 	} while (error);
@@ -288,14 +288,14 @@ void User::addCredentials(vector<Credentials>& users)
 
 int User::checkPasswords()
 {
-	string pass1 = getPassword("Ведите пароль от аккаунта. Для выхода введите exit");
+	string pass1 = getPassword("Р’РµРґРёС‚Рµ РїР°СЂРѕР»СЊ РѕС‚ Р°РєРєР°СѓРЅС‚Р°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 	if (pass1 == "exit") return 2;
-	string pass2 = getPassword("Ведите пароль от аккаунта еще раз. Для выхода введите exit");
+	string pass2 = getPassword("Р’РµРґРёС‚Рµ РїР°СЂРѕР»СЊ РѕС‚ Р°РєРєР°СѓРЅС‚Р° РµС‰Рµ СЂР°Р·. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
 	if (pass2 == "exit") return 2;
 
 	if (pass1 != pass2 || pass1 != this->credentials.password)
 	{
-		getCharacter("Пароли не совпадают. Для продолжения нажмите любую клавишу");
+		getCharacter("РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return 1;
 	}
 	return 0;
@@ -309,8 +309,8 @@ void Catalog::changeCatalog()
 	while (true)
 	{
 		system("cls");
-		drawMenu({ " Просмотреть каталог", "\n\n Добавить элемент в каталог",
-						"\n\n Удалить элемент из каталога","\n\n Поиск в каталоге" ,"\n\n Назад" }, row);
+		drawMenu({ " РџСЂРѕСЃРјРѕС‚СЂРµС‚СЊ РєР°С‚Р°Р»РѕРі", "\n\n Р”РѕР±Р°РІРёС‚СЊ СЌР»РµРјРµРЅС‚ РІ РєР°С‚Р°Р»РѕРі",
+						"\n\n РЈРґР°Р»РёС‚СЊ СЌР»РµРјРµРЅС‚ РёР· РєР°С‚Р°Р»РѕРіР°","\n\n РџРѕРёСЃРє РІ РєР°С‚Р°Р»РѕРіРµ" ,"\n\n РќР°Р·Р°Рґ" }, row);
 
 		char a = getCharCode();
 
@@ -381,13 +381,13 @@ void User::changePassword(vector<Credentials>& users)
 void Catalog::displayCatalog()
 {
 	
-	if (this->cars.empty()) {getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
+	if (this->cars.empty()) {getCharacter("РљР°С‚Р°Р»РѕРі РїСѓСЃС‚. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєРЅРѕРїРєСѓ"); return;}
 	int pages = ceil((double)this->cars.size() / 7.0), page = 0;
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page+1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+		cout << "РЎС‚СЂР°РЅРёС†Р° " << page+1 << " РёР· " << pages <<
+			". Р”Р»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ СЃС‚СЂР°РЅРёС† РёСЃРїРѕР»СЊСѓР№С‚Рµ СЃС‚СЂРµР»РєРё РІРїСЂР°РІРѕ/РІР»РµРІРѕ. Р”Р»СЏ РІС‹С…РѕРґР° РЅР°Р¶РјРёС‚Рµ Рµ(Р•)" << endl;
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 			displayElement(this->cars[i]);
 
@@ -395,7 +395,7 @@ void Catalog::displayCatalog()
 
 		if (a == VK_LEFT) page = (page + pages - 1) % pages;
 		else if (a == VK_RIGHT) page = (page + 1) % pages;
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		else if (a == 'e' || a == 'E' || a == 'Рµ' || a == 'Р•') //СЂСѓСЃСЃРєРёРµ Рё Р°РЅРіР»РёР№СЃРєРёРµ Рµ
 		{
 			break;
 		}
@@ -412,8 +412,8 @@ void Catalog::addElement()
 	int temp = 0;
 	while (true)
 	{
-		if (!temp) temp = getInt("Введите цену автомобиля");
-		else temp = getInt("Введите цену до 1000000000");
+		if (!temp) temp = getInt("Р’РІРµРґРёС‚Рµ С†РµРЅСѓ Р°РІС‚РѕРјРѕР±РёР»СЏ");
+		else temp = getInt("Р’РІРµРґРёС‚Рµ С†РµРЅСѓ РґРѕ 1000000000");
 		if (temp < 1000000000) break;
 	}
 	tmp.price = to_string(temp);
@@ -423,14 +423,14 @@ void Catalog::addElement()
 
 void Catalog::deleteElement()
 {
-	if (this->cars.empty()) { getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
+	if (this->cars.empty()) { getCharacter("РљР°С‚Р°Р»РѕРі РїСѓСЃС‚. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєРЅРѕРїРєСѓ"); return; }
 	int pages = ceil((double)this->cars.size() / 7.0), page = 0, pos = 0, elInPage = 7;
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page + 1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
-			"Для удаления элемента нажмите Enter" << endl << endl;
+		cout << "РЎС‚СЂР°РЅРёС†Р° " << page + 1 << " РёР· " << pages <<
+			". Р”Р»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ СЃС‚СЂР°РЅРёС† РёСЃРїРѕР»СЊСѓР№С‚Рµ СЃС‚СЂРµР»РєРё РІРїСЂР°РІРѕ/РІР»РµРІРѕ. Р”Р»СЏ РІС‹С…РѕРґР° РЅР°Р¶РјРёС‚Рµ Рµ(Р•)" << endl <<
+			"Р”Р»СЏ СѓРґР°Р»РµРЅРёСЏ СЌР»РµРјРµРЅС‚Р° РЅР°Р¶РјРёС‚Рµ Enter" << endl << endl;
 
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 		{
@@ -446,7 +446,7 @@ void Catalog::deleteElement()
 		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
 		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
 		else if (a == 13) approveDeletion(page, pos);
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		else if (a == 'e' || a == 'E' || a == 'Рµ' || a == 'Р•') //СЂСѓСЃСЃРєРёРµ Рё Р°РЅРіР»РёР№СЃРєРёРµ Рµ
 		{
 			return;
 		}
@@ -457,15 +457,15 @@ void Catalog::deleteElement()
 
 void Catalog::displayElement(Car car)
 {
-	cout << endl << "Марка: " << car.brand << "     Модель: " << car.model << "    Цвет: " << car.color << endl;
-	cout << "Дата продажи: " << car.date << "    Цена: " << car.price << endl;
+	cout << endl << "РњР°СЂРєР°: " << car.brand << "     РњРѕРґРµР»СЊ: " << car.model << "    Р¦РІРµС‚: " << car.color << endl;
+	cout << "Р”Р°С‚Р° РїСЂРѕРґР°Р¶Рё: " << car.date << "    Р¦РµРЅР°: " << car.price << endl;
 }
 
 void Catalog::approveDeletion(int page, int pos)
 {
 	string temp;
 	system("cls");
-	temp = getString("Введите \"yes\" для удаления элемента");
+	temp = getString("Р’РІРµРґРёС‚Рµ \"yes\" РґР»СЏ СѓРґР°Р»РµРЅРёСЏ СЌР»РµРјРµРЅС‚Р°");
 	if (temp == "yes")
 	{
 		this->cars.erase(this->cars.begin() + pos + page * 7);
@@ -480,30 +480,30 @@ void Catalog::searchInCatalog()
 	while (true)
 	{
 		system("cls");
-		cout << "Марка   :";
+		cout << "РњР°СЂРєР°   :";
 		cout << brand << string(16 - brand.size(), ' ');
-		cout << '|' << (!row ? " <--\n" : "\n") << "Модель  :";
+		cout << '|' << (!row ? " <--\n" : "\n") << "РњРѕРґРµР»СЊ  :";
 		cout << model << string(16 - model.size(), ' ');
-		cout << '|' << (row == 1 ? " <--\n" : "\n") << "Цвет    :";
+		cout << '|' << (row == 1 ? " <--\n" : "\n") << "Р¦РІРµС‚    :";
 		cout << color << string(16 - color.size(), ' ');
-		cout << '|' << (row == 2 ? " <--\n" : "\n") << "Цена с  :";
+		cout << '|' << (row == 2 ? " <--\n" : "\n") << "Р¦РµРЅР° СЃ  :";
 		cout << priceFrom << string(16 - priceFrom.size(), ' ');
-		cout << '|' << (row == 3 ? " <--\n" : "\n") << "Цена до :";
+		cout << '|' << (row == 3 ? " <--\n" : "\n") << "Р¦РµРЅР° РґРѕ :";
 		cout << priceTo << string(16 - priceTo.size(), ' ');
-		cout << '|' << (row == 4 ? " <--\n" : "\n") << "С       :"; displayDate(dateFrom);
-		cout << '|' << (row == 5 ? " <--\n" : "\n") << "До      :"; displayDate(dateTo);
+		cout << '|' << (row == 4 ? " <--\n" : "\n") << "РЎ       :"; displayDate(dateFrom);
+		cout << '|' << (row == 5 ? " <--\n" : "\n") << "Р”Рѕ      :"; displayDate(dateTo);
 		cout << '|' << (row == 6 ? " <--\n" : "\n") 
-			<< "Найти    " << (row == 7 ? " <--\n" : "\n") << "Назад    " << (row == 8 ? " <--\n" : "\n");
+			<< "РќР°Р№С‚Рё    " << (row == 7 ? " <--\n" : "\n") << "РќР°Р·Р°Рґ    " << (row == 8 ? " <--\n" : "\n");
 
 		int8_t a = _getch();
 
-		if (a == 'а')
+		if (a == 'Р°')
 		{
 			if (GetAsyncKeyState('F') == -32767)
 			{
-				if (!row && brand.size() < 16) brand += 'а';
-				else if (row == 1 && model.size() < 16) model += 'а';
-				else if (row == 2 && color.size() < 16) color += 'а';
+				if (!row && brand.size() < 16) brand += 'Р°';
+				else if (row == 1 && model.size() < 16) model += 'Р°';
+				else if (row == 2 && color.size() < 16) color += 'Р°';
 			}
 			else
 			{
@@ -519,7 +519,7 @@ void Catalog::searchInCatalog()
 				if ((dateTo.size() > 0 && dateTo.size() < 8) || (dateFrom.size() > 0 && dateFrom.size() < 8))
 				{
 					system("cls");
-					string str = getString("Введенная дата не соответствует правилам.\nВ случае продолжения поиск будет прозведен без учета даты.\nЕсли вы хотите начать поиск введите \"да\"\n");
+					string str = getString("Р’РІРµРґРµРЅРЅР°СЏ РґР°С‚Р° РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїСЂР°РІРёР»Р°Рј.\nР’ СЃР»СѓС‡Р°Рµ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РїРѕРёСЃРє Р±СѓРґРµС‚ РїСЂРѕР·РІРµРґРµРЅ Р±РµР· СѓС‡РµС‚Р° РґР°С‚С‹.\nР•СЃР»Рё РІС‹ С…РѕС‚РёС‚Рµ РЅР°С‡Р°С‚СЊ РїРѕРёСЃРє РІРІРµРґРёС‚Рµ \"РґР°\"\n");
 					if (str == "yes") displaySearch(brand, model, color, priceFrom, priceTo, dateFrom, dateTo);
 					else continue;
 				}
@@ -617,13 +617,13 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 	}
 				
 
-	if (cat.empty()) { getCharacter("В каталоге нет подходящих элементов. Для возвращения нажмите любую кнопку"); return; }
+	if (cat.empty()) { getCharacter("Р’ РєР°С‚Р°Р»РѕРіРµ РЅРµС‚ РїРѕРґС…РѕРґСЏС‰РёС… СЌР»РµРјРµРЅС‚РѕРІ. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєРЅРѕРїРєСѓ"); return; }
 	int pages = ceil((double)cat.size() / 7.0), page = 0;
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page + 1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+		cout << "РЎС‚СЂР°РЅРёС†Р° " << page + 1 << " РёР· " << pages <<
+			". Р”Р»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ СЃС‚СЂР°РЅРёС† РёСЃРїРѕР»СЊСѓР№С‚Рµ СЃС‚СЂРµР»РєРё РІРїСЂР°РІРѕ/РІР»РµРІРѕ. Р”Р»СЏ РІС‹С…РѕРґР° РЅР°Р¶РјРёС‚Рµ Рµ(Р•)" << endl;
 		for (int i = page * 7; i < (page + 1) * 7 && i < cat.size(); ++i)
 			displayElement(cat[i]);
 
@@ -631,7 +631,7 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 
 		if (a == VK_LEFT) page = (page + pages - 1) % pages;
 		else if (a == VK_RIGHT) page = (page + 1) % pages;
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		else if (a == 'e' || a == 'E' || a == 'Рµ' || a == 'Р•') //СЂСѓСЃСЃРєРёРµ Рё Р°РЅРіР»РёР№СЃРєРёРµ Рµ
 		{
 			break;
 		}

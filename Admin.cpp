@@ -1,4 +1,4 @@
-#include "Menus.h"
+п»ї#include "Menus.h"
 
 using namespace std;
 
@@ -37,8 +37,8 @@ void adminHaveAccount()
 	{
 		system("cls");
 
-		if (admins.empty()) drawMenu({ "  Создать аккаунт","\n\n  Назад", }, row);
-		else drawMenu({ "  Войти в аккаунт","\n\n  Назад", }, row);
+		if (admins.empty()) drawMenu({ "  РЎРѕР·РґР°С‚СЊ Р°РєРєР°СѓРЅС‚","\n\n  РќР°Р·Р°Рґ", }, row);
+		else drawMenu({ "  Р’РѕР№С‚Рё РІ Р°РєРєР°СѓРЅС‚","\n\n  РќР°Р·Р°Рґ", }, row);
 
 		char a = getCharCode();
 
@@ -140,7 +140,7 @@ void Admin::adminMenu(vector<Credentials>& admins)
 	while (true)
 	{
 		system("cls");
-		drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт" , "\n\n Назначить нового администратора", "\n\n Удалить пользователя", "\n\n Назад" }, row);
+		drawMenu({ " РР·РјРµРЅРёС‚СЊ РєР°С‚Р°Р»РѕРі", "\n\n РР·РјРµРЅРёС‚СЊ РїР°СЂРѕР»СЊ","\n\n РЈРґР°Р»РёС‚СЊ Р°РєРєР°СѓРЅС‚" , "\n\n РќР°Р·РЅР°С‡РёС‚СЊ РЅРѕРІРѕРіРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°", "\n\n РЈРґР°Р»РёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ", "\n\n РќР°Р·Р°Рґ" }, row);
 
 		char a = getCharCode();
 
@@ -164,7 +164,7 @@ void Admin::adminMenu(vector<Credentials>& admins)
 
 void Admin::addAdmin(vector<Credentials>& admins)
 {
-	string str = getString("Введите имя пользователя. Введите exit для выхода");
+	string str = getString("Р’РІРµРґРёС‚Рµ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. Р’РІРµРґРёС‚Рµ exit РґР»СЏ РІС‹С…РѕРґР°");
 	if (str == "exit") return;
 	vector<Credentials> users;
 
@@ -182,15 +182,15 @@ void Admin::addAdmin(vector<Credentials>& admins)
 		rewriteAdminFile(admins);
 		users.erase(it);
 		rewriteUserFile(users);
-		getCharacter("Пользователь повышен. Для возвращения в меню нажмите любую клавишу");
+		getCharacter("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РїРѕРІС‹С€РµРЅ. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РІ РјРµРЅСЋ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return;
 	}
-	else getCharacter("Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
+	else getCharacter("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РІ РјРµРЅСЋ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 }
 
 void Admin::deleteUser()
 {
-	string str = getString("Введите имя пользователя. Введите exit для выхода");
+	string str = getString("Р’РІРµРґРёС‚Рµ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. Р’РІРµРґРёС‚Рµ exit РґР»СЏ РІС‹С…РѕРґР°");
 	if (str == "exit") return;
 	vector<Credentials> users;
 
@@ -205,8 +205,8 @@ void Admin::deleteUser()
 	{
 		users.erase(it);
 		rewriteUserFile(users);
-		getCharacter("Пользователь удален. Для возвращения в меню нажмите любую клавишу");
+		getCharacter("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓРґР°Р»РµРЅ. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РІ РјРµРЅСЋ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return;
 	}
-	else getCharacter("Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
+	else getCharacter("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ. Р”Р»СЏ РІРѕР·РІСЂР°С‰РµРЅРёСЏ РІ РјРµРЅСЋ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 }
