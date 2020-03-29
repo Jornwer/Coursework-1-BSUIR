@@ -417,7 +417,7 @@ void Catalog::addElement()
 		else temp = getInt("¬ведите цену до 1000000000");
 		if (temp < 1000000000) break;
 	}
-	tmp.price = temp;
+	tmp.price = to_string(temp);
 	cars.push_back(tmp);
 	rewriteCatalogFile(*this);
 }

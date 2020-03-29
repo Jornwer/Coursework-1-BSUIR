@@ -38,7 +38,7 @@ void adminHaveAccount()
 		system("cls");
 
 		if (admins.empty()) drawMenu({ "  Создать аккаунт","\n\n  Назад", }, row);
-		else drawMenu({ "  Да","\n\n  Назад", }, row);
+		else drawMenu({ "  Войти в аккаунт","\n\n  Назад", }, row);
 
 		char a = getCharCode();
 
