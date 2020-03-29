@@ -89,7 +89,6 @@ void User::createAccount(vector<Credentials>& users)
 
 	bool haveAccess = true;
 	bool leave = false;
-
 	do {
 		if (haveAccess) enterLogin(0, haveAccess, leave);
 		else enterLogin(2, haveAccess, leave);
