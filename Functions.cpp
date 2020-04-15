@@ -4,29 +4,28 @@ using namespace std;
 
 void main()
 {
+	locale::global(locale(""));
 	mainMenu();
 }
 
-void drawMenu(vector<string> msg, int8_t& row)
+void drawMenu(vector<wstring> msg, int8_t& row)
 {
 	for (int i = 0; i < msg.size(); ++i)
 	{
-		cout << msg[i];
-		if (row == i) cout << "   <--";
+		wcout << msg[i];
+		if (row == i) wcout << L"   <--";
 	}
-	cout << "\n\n";
+	wcout << L"\n\n";;
 }
 
 void mainMenu()
 {
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
 	int8_t row = 0;
 
 	while (true)
 	{
 		system("cls");
-		drawMenu({"Войти как администратор","\n\nВойти как пользователь","\n\nВыход"}, row);
+		drawMenu({L"Войти как администратор",L"\n\nВойти как пользователь",L"\n\nВыход"}, row);
 
 		int8_t a = getCharCode();
 
@@ -45,29 +44,29 @@ void mainMenu()
 	}
 }
 
-string getString(string msg)
+string getString(wstring msg)
 {
 	system("cls");
 	string tmp;
-	cout << msg << endl;
+	wcout << msg << endl;
 	getline(cin, tmp);
 	return tmp;
 }
 
-string getPassword(string msg)
+string getPassword(wstring msg)
 {
 	string password = "";
 	char a = '1';
 
 	system("cls");
-	cout << msg << endl;
+	wcout << msg << endl;
 
 	while ((a = _getch()) != 13)
 	{
 		if ((int)a == 8)
 		{
 			if (password.empty()) continue;
-
+			
 			password.erase(password.size() - 1, password.size());
 
 			cout << '\b' << ' ' << '\b';
@@ -81,10 +80,10 @@ string getPassword(string msg)
 	return password;
 }
 
-void getCharacter(string msg)
+void getCharacter(wstring msg)
 {
 	system("cls");
-	cout << msg << endl;
+	wcout << msg << endl;
 	char a = _getch();
 }
 
@@ -99,19 +98,17 @@ Credentials::Credentials(string login, string password)
 	this->password = password;
 }
 
-Credentials::Credentials() {}
-
 void Car::getBrand()
 {
-	string tmp;
+	wstring tmp;
 	do
 	{
 		bool isOk = true;
-		tmp = getString("Введте марку автомобиля");
+		tmp = getWstring(L"Введите марку автомобиля");
 		for (auto i : tmp)
 			if (!isalpha(i))
 			{
-				getCharacter("Название должно состоять из английских букв. Для повторного ввода нажмите любую клавишу");
+				getCharacter(L"Название должно состоять из английских букв. Для повторного ввода нажмите любую клавишу");
 				isOk = false;
 				break;
 			}
@@ -125,15 +122,15 @@ void Car::getBrand()
 
 void Car::getModel()
 {
-	string tmp;
+	wstring tmp;
 	do
 	{
 		bool isOk = true;
-		tmp = getString("Введте модель автомобиля");
+		tmp = getWstring(L"Введите модель автомобиля");
 		for (auto i : tmp)
 			if (!(isalnum(i) || i == ' '))
 			{
-				getCharacter("Название должно состоять из английских букв и цифр. Для повторного ввода нажмите любую клавишу");
+				getCharacter(L"Название должно состоять из английских букв и цифр. Для повторного ввода нажмите любую клавишу");
 				isOk = false;
 				break;
 			}
@@ -147,15 +144,15 @@ void Car::getModel()
 
 void Car::getColor()
 {
-	string tmp;
+	wstring tmp;
 	do
 	{
 		bool isOk = true;
-		tmp = getString("Введите цвет автомобиля");
+		tmp = getWstring(L"Введите цвет автомобиля");
 		for (auto i : tmp)
 			if (!(i >= -64 && i < 0))
 			{
-				getCharacter("Цвет должен состоять из русских букв. Для повторного ввода нажмите любую клавишу   " + to_string((int)i));
+				getCharacter(L"Цвет должен состоять из русских букв. Для повторного ввода нажмите любую клавишу   " + to_wstring((int)i));
 				isOk = false;
 				break;
 			}
@@ -182,9 +179,9 @@ bool Date::operator==(Date a)
 void Date::getDate()
 {
 	int iYear = enterYear(), iMonth = enterMonth();
-	year = to_string(iYear);
-	month = to_string(iMonth);
-	day = to_string(enterDay(iMonth, iYear));
+	year = to_wstring(iYear);
+	month = to_wstring(iMonth);
+	day = to_wstring(enterDay(iMonth, iYear));
 }
 
 int8_t Date::enterDay(int8_t month, int16_t year)
@@ -192,9 +189,9 @@ int8_t Date::enterDay(int8_t month, int16_t year)
 	int8_t tmp;
 	do
 	{
-		tmp = getInt("Введите день продажи");
+		tmp = getInt(L"Введите день продажи");
 		if (dayCorrect(month, year, tmp)) return tmp;
-		else getCharacter("Введенного дня не существует. Для повторного ввода дня нажмите любую клавишу");
+		else getCharacter(L"Введенного дня не существует. Для повторного ввода дня нажмите любую клавишу");
 	} while (true);
 }
 
@@ -203,9 +200,9 @@ int8_t Date::enterMonth()
 	int8_t tmp;
 	do
 	{
-		tmp = getInt("Введите месяц продажи");
+		tmp = getInt(L"Введите месяц продажи");
 		if (tmp > 0 && tmp < 13) return tmp;
-		else getCharacter("Месяц должен быть от 1 до 12. Для повторного ввода нажмите любую клавишу");
+		else getCharacter(L"Месяц должен быть от 1 до 12. Для повторного ввода нажмите любую клавишу");
 	} while (true);
 }
 
@@ -214,9 +211,9 @@ int16_t Date::enterYear()
 	int16_t tmp;
 	do
 	{
-		tmp = getInt("Введите год продажи");
+		tmp = getInt(L"Введите год продажи");
 		if (tmp >= 1000 && tmp <= 9999) return tmp;
-		else getCharacter("Год должен состоять из 4 цифр. Для повторного ввода нажмите любую клавишу");
+		else getCharacter(L"Год должен состоять из 4 цифр. Для повторного ввода нажмите любую клавишу");
 	} while (true);
 }
 
@@ -245,11 +242,11 @@ bool Date::dayCorrect(int8_t month, int16_t year, int8_t day)
 	}
 }
 
-int getInt(string msg)
+int getInt(wstring msg)
 {
 	int a;
 	system("cls");
-	cout << msg << endl;
+	wcout << msg << endl;
 	while (true) {
 		cin >> a;
 		if (cin.peek() == '\n') {
@@ -258,17 +255,11 @@ int getInt(string msg)
 		}
 		else {
 			system("cls");
-			cout << "Повторите ввод (ожидается целое число):" << endl;
+			wcout << "Повторите ввод (ожидается целое число):" << endl;
 			cin.clear();
 			while (cin.get() != '\n') {}
 		}
 	}
-}
-
-ostream& operator<<(ostream& out, const Date& date)
-{
-	out << date.day << '.' << date.month << '.' << date.year;
-	return out;
 }
 
 int8_t getCharCode()
@@ -285,20 +276,20 @@ int8_t getCharCode()
 
 int Date::countDays()
 {
-	return 372 * stringToInt(year) + 31 * stringToInt(month) + stringToInt(day);
+	return 372 * wstringToInt(year) + 31 * wstringToInt(month) + wstringToInt(day);
 }
 
-void displayDate(string date)
+void displayDate(wstring date)
 {
 	int8_t index = 0;
-	string str = "ДД.ММ.ГГГГ      ";
+	wstring str = L"ДД.ММ.ГГГГ      ";
 	for (int8_t i = 0; i < 16; ++i)
 	{
-		if (index + 1 > date.size() || index == 8) cout << str[i];
+		if (index + 1 > date.size() || index == 8) wcout << str[i];
 		else
 		{
-			if (i == 2 || i == 5) cout << '.';
-			else cout << date[index++];
+			if (i == 2 || i == 5) wcout << L'.';
+			else wcout << date[index++];
 		}
 	}
 }
@@ -313,7 +304,7 @@ bool Date::operator>(Date date)
 	return (countDays() > date.countDays() ? true : false);
 }
 
-Date::Date(string str)
+Date::Date(wstring str)
 {
 	if (str.size() == 8)
 	{
@@ -328,16 +319,106 @@ Date::Date(string str)
 	}
 }
 
-Date::Date(){}
+Date::Date()
+{
+}
 
-int stringToInt(string str)
+int wstringToInt(wstring str)
 {
 	int res = 0;
 	if (str.size() < 10)
 	{
 		for (auto i : str)
-			res = 10 * res + i - 48;
+			res = 10 * res + i - '0';
 		return res;
 	}
 	return -1;
+}
+
+wstring getWstring(wstring msg)
+{
+	system("cls");
+	wstring tmp;
+	wcout << msg << endl;
+	getline(wcin, tmp);
+	return tmp;
+}
+
+string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
+{
+	string login;
+	int8_t error;
+	switch (mode)
+	{
+	case 0: login = (haveAccess ? getString(L"Введите логин. Для выхода введите exit")
+		: getString(L"Введите заново логин. Для выхода введите exit"));
+		break;
+	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод. Для выхода введите exit"); break;
+	case 2: login = getString(L"Аккаунт с таким логином уже существует. Повторите ввод. Для выхода введите exit"); break;
+	}
+
+	do
+	{
+		error = 0;
+
+		if (login == "exit")
+		{
+			leave = true;
+			break;
+		}
+
+		if (login.size() < 4)
+		{
+			error = 1;
+			login = getString(L"Введите логин из 4 или более символов. Для выхода введите exit");
+		}
+		if (login[0] == ' ') { error = 2; continue; }
+		for (auto a : login)
+		{
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') || (a >= 'а' && a <= 'я') || (a >= 'А' && a <= 'Я')))
+			{
+				error = 2;
+				login = getString(L"Логин содержит недопустимые символы. Для выхода введите exit");
+				break;
+			}
+		}
+
+	} while (error);
+
+	return login;
+}
+
+string enterPassword(bool& leave)
+{
+	int8_t error;
+	string password;
+
+	password = getPassword(L"Введите пароль. Для выхода введите exit");
+
+	do {
+		error = 0;
+
+		if (password == "exit")
+		{
+			leave = true;
+			return "";
+		}
+
+		for (auto a : password)
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_' || (a >= '0' && a <= '0')))
+			{
+				error = 1;
+				password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");
+				break;
+			}
+
+		if (password.size() < 8)
+		{
+			error = 2;
+			password = getPassword(L"Пароль должен содержать минимум 8 символов. Для выхода введите exit");
+		}
+
+	} while (error);
+
+	return password;
 }

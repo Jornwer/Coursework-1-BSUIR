@@ -37,8 +37,8 @@ void adminHaveAccount()
 	{
 		system("cls");
 
-		if (admins.empty()) drawMenu({ "  Создать аккаунт","\n\n  Назад", }, row);
-		else drawMenu({ "  Войти в аккаунт","\n\n  Назад", }, row);
+		if (admins.empty()) drawMenu({ L"  Создать аккаунт",L"\n\n  Назад" }, row);
+		else drawMenu({ L"  Войти в аккаунт",L"\n\n  Назад" }, row);
 
 		char a = getCharCode();
 
@@ -77,10 +77,10 @@ void Admin::createAccount(vector<Credentials>& admins)
 	bool leave = false;
 
 	do {
-		if (haveAccess) enterLogin(0, haveAccess, leave);
-		else enterLogin(2, haveAccess, leave);
+		if (haveAccess) this->credentials.login = enterLogin(0, haveAccess, leave);
+		else this->credentials.login = enterLogin(2, haveAccess, leave);
 		if (leave) break;
-		enterPassword(leave);
+		this->credentials.password = enterPassword(leave);
 		if (leave) break;
 
 		vector<Credentials> users;
@@ -112,10 +112,10 @@ void Admin::enterAccount(vector<Credentials>& admins)
 	bool leave = false;
 
 	do {
-		if (haveAccess) enterLogin(0, haveAccess, leave);
-		else enterLogin(1, haveAccess, leave);
+		if (haveAccess) this->credentials.login = enterLogin(0, haveAccess, leave);
+		else this->credentials.login = enterLogin(1, haveAccess, leave);
 		if (leave) break;
-		enterPassword(leave);
+		this->credentials.password = enterPassword(leave);
 		if (leave) break;
 
 		haveAccess = true;
@@ -135,12 +135,13 @@ void Admin::enterAccount(vector<Credentials>& admins)
 void Admin::adminMenu(vector<Credentials>& admins)
 {
 	int8_t row = 0;
-	int8_t colNum = 6;
+	int8_t colNum = 7;
 	Catalog catalog;
 	while (true)
 	{
 		system("cls");
-		drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт" , "\n\n Назначить нового администратора", "\n\n Удалить пользователя", "\n\n Назад" }, row);
+		drawMenu({ L" Изменить каталог", L"\n\n Изменить пароль",L"\n\n Удалить аккаунт",
+			L"\n\n Назначить нового администратора", L"\n\n Удалить пользователя", L"\n\nДобавить нового пользователя", L"\n\n Назад" }, row);
 
 		char a = getCharCode();
 
@@ -153,7 +154,8 @@ void Admin::adminMenu(vector<Credentials>& admins)
 			else if (row == 2) { deleteAccount(admins); break; }
 			else if (row == 3) addAdmin(admins);
 			else if (row == 4) deleteUser();
-			else if (row == 5)
+			else if (row == 5) addUser();
+			else if (row == 6)
 			{
 				system("cls");
 				break;
@@ -164,7 +166,7 @@ void Admin::adminMenu(vector<Credentials>& admins)
 
 void Admin::addAdmin(vector<Credentials>& admins)
 {
-	string str = getString("Введите имя пользователя. Введите exit для выхода");
+	string str = getString(L"Введите имя пользователя. Введите exit для выхода");
 	if (str == "exit") return;
 	vector<Credentials> users;
 
@@ -182,15 +184,15 @@ void Admin::addAdmin(vector<Credentials>& admins)
 		rewriteAdminFile(admins);
 		users.erase(it);
 		rewriteUserFile(users);
-		getCharacter("Пользователь повышен. Для возвращения в меню нажмите любую клавишу");
+		getCharacter(L"Пользователь повышен. Для возвращения в меню нажмите любую клавишу");
 		return;
 	}
-	else getCharacter("Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
+	else getCharacter(L"Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
 }
 
 void Admin::deleteUser()
 {
-	string str = getString("Введите имя пользователя. Введите exit для выхода");
+	string str = getString(L"Введите имя пользователя. Введите exit для выхода");
 	if (str == "exit") return;
 	vector<Credentials> users;
 
@@ -205,8 +207,62 @@ void Admin::deleteUser()
 	{
 		users.erase(it);
 		rewriteUserFile(users);
-		getCharacter("Пользователь удален. Для возвращения в меню нажмите любую клавишу");
+		getCharacter(L"Пользователь удален. Для возвращения в меню нажмите любую клавишу");
 		return;
 	}
-	else getCharacter("Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
+	else getCharacter(L"Пользователь не найден. Для возвращения в меню нажмите любую клавишу");
+}
+
+void Admin::addUser()
+{
+	system("cls");
+
+	Credentials user;
+
+	bool haveAccess = true;
+	bool leave = false;
+	do {
+		if (haveAccess) user.login = enterLogin(0, haveAccess, leave);
+		else user.password = enterLogin(2, haveAccess, leave);
+		if (leave) break;
+
+		user.password = enterPassword(leave);
+		if (leave) break;
+
+		haveAccess = true;
+
+		ifstream file("admins.txt");
+		while (file)
+		{
+			string tmp;
+			getline(file, tmp);
+			if (tmp == user.login)
+			{
+				haveAccess = false;
+				break;
+			}
+			getline(file, tmp);
+		}
+		file.close();
+		file.open("users.txt");
+		while (file)
+		{
+			string tmp;
+			getline(file, tmp);
+			if (tmp == user.login)
+			{
+				haveAccess = false;
+				break;
+			}
+			getline(file, tmp);
+		}
+
+	} while (!haveAccess);
+
+	if (!leave)
+	{
+		ofstream file("users.txt", ios::app);
+		file << user.login << endl << sha256(user.password) << endl;
+		getCharacter(L"Пользователь успешно добавлен. Для продолжения нажмите любую клавишу");
+	}
 }
