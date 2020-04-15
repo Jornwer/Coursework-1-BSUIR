@@ -1,6 +1,7 @@
 ﻿#ifndef MENUS_H
 #define MENUS_H
 //todo проверять правильный ввод в поиске каталога и сам поиск по каталогу
+//todo сделать нормальное добавление товара
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -25,7 +26,6 @@ void getCharacter(std::wstring); //функция для нажатия любо
 void copyCatalogFile(Catalog&); //функция копирования данных с файла каталога
 void rewriteCatalogFile(Catalog&); //функция перезаписи файла каталога
 void copyAdminFile(std::vector<Credentials>&); //функция копирования данных с файла админа
-void rewriteAdminFile(std::vector<Credentials>&); //функция перезаписи файла админа
 int getInt(std::wstring); //функция ввода целого числа с проверкой
 int8_t getCharCode(); //функция выводящая код нажатой клавиши
 void displayDate(std::wstring); //функция вывода даты в формате ДД.ММ.ГГГГ
@@ -66,7 +66,7 @@ public:
 	void createAccount(std::vector<Credentials>&); //функция создания аккаунта
 	void adminMenu(std::vector<Credentials>&); //основное меню админа
 	void enterAccount(std::vector<Credentials>&) override; // переопределение функции входа в аккаунт
-	void addAdmin(std::vector<Credentials>&); // функция превращения пользователя в админа
+	void addAdmin(); // функция превращения пользователя в админа
 	void deleteUser(); //функция удаления пользователя
 	void addUser(); //функция добавления пользователя
 };

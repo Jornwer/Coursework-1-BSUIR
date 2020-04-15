@@ -16,16 +16,6 @@ void copyAdminFile(vector<Credentials>& admins)
 	file.close();
 }
 
-void rewriteAdminFile(vector<Credentials>& admins)
-{
-	ofstream file("admins.txt", ios::trunc);
-
-	for (auto i : admins)
-		file << i.login << endl << i.password << endl;
-
-	file.close();
-}
-
 void adminHaveAccount()
 {
 	int8_t row = 0;
@@ -99,8 +89,10 @@ void Admin::createAccount(vector<Credentials>& admins)
 
 	if (!leave)
 	{
-		addCredentials(admins);
-		rewriteAdminFile(admins);
+		ofstream file("users.txt", ios::app);
+		file << this->credentials.login << endl << sha256(this->credentials.password) << endl;
+		file.close();
+		delete &file;
 		adminMenu(admins);
 	}
 }
@@ -152,7 +144,7 @@ void Admin::adminMenu(vector<Credentials>& admins)
 			if (row == 0) catalog.changeCatalog();
 			else if (row == 1) changePassword(admins);
 			else if (row == 2) { deleteAccount(admins); break; }
-			else if (row == 3) addAdmin(admins);
+			else if (row == 3) addAdmin();
 			else if (row == 4) deleteUser();
 			else if (row == 5) addUser();
 			else if (row == 6)
@@ -164,7 +156,7 @@ void Admin::adminMenu(vector<Credentials>& admins)
 	}
 }
 
-void Admin::addAdmin(vector<Credentials>& admins)
+void Admin::addAdmin()
 {
 	string str = getString(L"Введите имя пользователя. Введите exit для выхода");
 	if (str == "exit") return;
@@ -179,11 +171,12 @@ void Admin::addAdmin(vector<Credentials>& admins)
 
 	if (it != users.end())
 	{
-		Credentials tmp(it->login, it->password);
-		admins.push_back(tmp);
-		rewriteAdminFile(admins);
+		ofstream file("admins.txt", ios::trunc);
+		file << it->login << endl << it->password << endl;
+
 		users.erase(it);
 		rewriteUserFile(users);
+
 		getCharacter(L"Пользователь повышен. Для возвращения в меню нажмите любую клавишу");
 		return;
 	}
