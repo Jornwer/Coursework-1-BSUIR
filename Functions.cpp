@@ -98,72 +98,6 @@ Credentials::Credentials(string login, string password)
 	this->password = password;
 }
 
-void Car::getBrand()
-{
-	wstring tmp;
-	do
-	{
-		bool isOk = true;
-		tmp = getWstring(L"Введите марку автомобиля");
-		for (auto i : tmp)
-			if (!isalpha(i))
-			{
-				getCharacter(L"Название должно состоять из английских букв. Для повторного ввода нажмите любую клавишу");
-				isOk = false;
-				break;
-			}
-		if (isOk && tmp.size())
-		{
-			brand = tmp;
-			return;
-		}
-	} while (true);
-}
-
-void Car::getModel()
-{
-	wstring tmp;
-	do
-	{
-		bool isOk = true;
-		tmp = getWstring(L"Введите модель автомобиля");
-		for (auto i : tmp)
-			if (!(isalnum(i) || i == ' '))
-			{
-				getCharacter(L"Название должно состоять из английских букв и цифр. Для повторного ввода нажмите любую клавишу");
-				isOk = false;
-				break;
-			}
-		if (isOk && tmp.size())
-		{
-			model = tmp;
-			return;
-		}
-	} while (true);
-}
-
-void Car::getColor()
-{
-	wstring tmp;
-	do
-	{
-		bool isOk = true;
-		tmp = getWstring(L"Введите цвет автомобиля");
-		for (auto i : tmp)
-			if (!(i >= -64 && i < 0))
-			{
-				getCharacter(L"Цвет должен состоять из русских букв. Для повторного ввода нажмите любую клавишу   " + to_wstring((int)i));
-				isOk = false;
-				break;
-			}
-		if (isOk && tmp.size())
-		{
-			color = tmp;
-			return;
-		}
-	} while (true);
-}
-
 bool Car::operator==(Car a)
 {
 	if (a.brand == brand && a.color == color && a.date == date && a.model == model && a.price == price) return true;
@@ -176,57 +110,21 @@ bool Date::operator==(Date a)
 	else return false;
 }
 
-void Date::getDate()
-{
-	int iYear = enterYear(), iMonth = enterMonth();
-	year = to_wstring(iYear);
-	month = to_wstring(iMonth);
-	day = to_wstring(enterDay(iMonth, iYear));
-}
-
-int8_t Date::enterDay(int8_t month, int16_t year)
-{
-	int8_t tmp;
-	do
-	{
-		tmp = getInt(L"Введите день продажи");
-		if (dayCorrect(month, year, tmp)) return tmp;
-		else getCharacter(L"Введенного дня не существует. Для повторного ввода дня нажмите любую клавишу");
-	} while (true);
-}
-
-int8_t Date::enterMonth()
-{
-	int8_t tmp;
-	do
-	{
-		tmp = getInt(L"Введите месяц продажи");
-		if (tmp > 0 && tmp < 13) return tmp;
-		else getCharacter(L"Месяц должен быть от 1 до 12. Для повторного ввода нажмите любую клавишу");
-	} while (true);
-}
-
-int16_t Date::enterYear()
-{
-	int16_t tmp;
-	do
-	{
-		tmp = getInt(L"Введите год продажи");
-		if (tmp >= 1000 && tmp <= 9999) return tmp;
-		else getCharacter(L"Год должен состоять из 4 цифр. Для повторного ввода нажмите любую клавишу");
-	} while (true);
-}
-
-bool Date::dayCorrect(int8_t month, int16_t year, int8_t day)
+bool dayCorrect(int8_t month, int16_t year, int8_t day)
 {
 	if (day > 31 || !day) return false;
 	if (day < 29) return true;
 	if (month == 2)
 	{
-		if (year % 4) return false;
-		if (!year % 100)
-			if (year % 400) return false;
-		return true;
+		if (day == 29)
+		{
+			if (year % 4) return false;
+			if (!(year % 400)) return true;
+			if (!(year % 100)) return false;
+				
+			return true;
+		}
+		return false;
 	}
 	if (month <= 7)
 	{
@@ -239,26 +137,6 @@ bool Date::dayCorrect(int8_t month, int16_t year, int8_t day)
 		if (!month % 2) return true;
 		else if (day != 31) return true;
 		else return false;
-	}
-}
-
-int getInt(wstring msg)
-{
-	int a;
-	system("cls");
-	wcout << msg << endl;
-	while (true) {
-		cin >> a;
-		if (cin.peek() == '\n') {
-			cin.get();
-			return a;
-		}
-		else {
-			system("cls");
-			wcout << "Повторите ввод (ожидается целое число):" << endl;
-			cin.clear();
-			while (cin.get() != '\n') {}
-		}
 	}
 }
 
@@ -276,20 +154,20 @@ int8_t getCharCode()
 
 int Date::countDays()
 {
-	return 372 * wstringToInt(year) + 31 * wstringToInt(month) + wstringToInt(day);
+	return 372 * stringToInt(year) + 31 * stringToInt(month) + stringToInt(day);
 }
 
-void displayDate(wstring date)
+void displayDate(string date)
 {
 	int8_t index = 0;
-	wstring str = L"ДД.ММ.ГГГГ      ";
+	string str = "ДД.ММ.ГГГГ      ";
 	for (int8_t i = 0; i < 16; ++i)
 	{
-		if (index + 1 > date.size() || index == 8) wcout << str[i];
+		if (index + 1 > date.size() || index == 8) cout << str[i];
 		else
 		{
-			if (i == 2 || i == 5) wcout << L'.';
-			else wcout << date[index++];
+			if (i == 2 || i == 5) cout << '.';
+			else cout << date[index++];
 		}
 	}
 }
@@ -304,7 +182,7 @@ bool Date::operator>(Date date)
 	return (countDays() > date.countDays() ? true : false);
 }
 
-Date::Date(wstring str)
+Date::Date(string str)
 {
 	if (str.size() == 8)
 	{
@@ -323,7 +201,7 @@ Date::Date()
 {
 }
 
-int wstringToInt(wstring str)
+int stringToInt(string str)
 {
 	int res = 0;
 	if (str.size() < 10)
@@ -333,15 +211,6 @@ int wstringToInt(wstring str)
 		return res;
 	}
 	return -1;
-}
-
-wstring getWstring(wstring msg)
-{
-	system("cls");
-	wstring tmp;
-	wcout << msg << endl;
-	getline(wcin, tmp);
-	return tmp;
 }
 
 string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
@@ -421,4 +290,34 @@ string enterPassword(bool& leave)
 	} while (error);
 
 	return password;
+}
+
+bool carCorrect(Car car, string date)
+{
+	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8)
+	{
+		getCharacter(L"Данные введены неправильно. Для повторного ввода данных нажмите любую клавишу");
+		return false;
+	}
+
+	if (car.price.size() > 9)
+	{
+		getCharacter(L"Стоимость машины должна быть меньше 1000000000. Для продолжения нажмите любую клавишу");
+		return false;
+	}
+
+	if (stringToInt(car.price) == 0)
+	{
+		getCharacter(L"Стоимость машины должна быть больше 0. Для продолжения намите любую клавишу");
+		return false;
+	}
+
+	Date tmp(date);
+	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day)))
+	{
+		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
+		return false;
+	}
+	
+	return true;
 }

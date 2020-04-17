@@ -2,27 +2,13 @@
 
 using namespace std;
 
-void copyAdminFile(vector<Credentials>& admins)
-{
-	ifstream file("admins.txt");
-	while (file)
-	{
-		Credentials temp;
-		getline(file, temp.login);
-		getline(file, temp.password);
-		admins.push_back(temp);
-	}
-	if (!admins.empty()) admins.erase(admins.end() - 1);
-	file.close();
-}
-
 void adminHaveAccount()
 {
 	int8_t row = 0;
 
 	Admin admin;
 	vector<Credentials> admins;
-	copyAdminFile(admins);
+	copyFile(admins, "admins.txt");
 	while (true)
 	{
 		system("cls");
@@ -74,7 +60,7 @@ void Admin::createAccount(vector<Credentials>& admins)
 		if (leave) break;
 
 		vector<Credentials> users;
-		copyUserFile(users);
+		copyFile(users, "users.txt");
 
 		for (auto i : users)
 		{
@@ -160,9 +146,9 @@ void Admin::addAdmin()
 {
 	string str = getString(L"Введите имя пользователя. Введите exit для выхода");
 	if (str == "exit") return;
-	vector<Credentials> users;
 
-	copyUserFile(users);
+	vector<Credentials> users;
+	copyFile(users, "users.txt");
 	auto it = users.begin();
 
 	for (; it != users.end(); ++it)
@@ -171,11 +157,11 @@ void Admin::addAdmin()
 
 	if (it != users.end())
 	{
-		ofstream file("admins.txt", ios::trunc);
+		ofstream file("admins.txt", ios::app);
 		file << it->login << endl << it->password << endl;
 
 		users.erase(it);
-		rewriteUserFile(users);
+		rewriteFile(users, "users.txt");
 
 		getCharacter(L"Пользователь повышен. Для возвращения в меню нажмите любую клавишу");
 		return;
@@ -189,7 +175,7 @@ void Admin::deleteUser()
 	if (str == "exit") return;
 	vector<Credentials> users;
 
-	copyUserFile(users);
+	copyFile(users, "users.txt");
 	auto it = users.begin();
 
 	for (; it != users.end(); ++it)
@@ -199,7 +185,7 @@ void Admin::deleteUser()
 	if (it != users.end())
 	{
 		users.erase(it);
-		rewriteUserFile(users);
+		rewriteFile(users, "users.txt");
 		getCharacter(L"Пользователь удален. Для возвращения в меню нажмите любую клавишу");
 		return;
 	}
@@ -258,4 +244,26 @@ void Admin::addUser()
 		file << user.login << endl << sha256(user.password) << endl;
 		getCharacter(L"Пользователь успешно добавлен. Для продолжения нажмите любую клавишу");
 	}
+}
+
+void Admin::deleteAccount(vector<Credentials>& admins)
+{
+	do {
+		int i = checkPasswords();
+
+		if (!i)
+		{
+			Credentials tmp(this->credentials.login, sha256(this->credentials.password));
+
+			auto ptr = find(admins.begin(), admins.end(), tmp);
+			if (ptr != admins.end())
+			{
+				admins.erase(ptr);
+				rewriteFile(admins, "admins.txt");
+				return;
+			}
+		}
+		else if (i == 2) break;
+
+	} while (true);
 }

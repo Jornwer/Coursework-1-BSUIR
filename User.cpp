@@ -7,7 +7,7 @@ void userHaveAccount()
 	int8_t row = 0;
 	User user;
 	vector<Credentials> users;
-	copyUserFile(users);
+	copyFile(users, "users.txt");
 	while (true)
 	{
 		system("cls");
@@ -35,46 +35,6 @@ void userHaveAccount()
 				return;
 			}
 		}
-		/*if (users.empty()) drawMenu({ L"  Создать аккаунт",L"\n\n  Назад" }, row);
-		else
-		{
-			cout << "У вас есть аккаунт?\n\n";
-			drawMenu({ L" Да", L"\n\n Нет", L"\n\n Назад"}, row);
-		}
-
-		char a = getCharCode();
-
-		if (!users.empty())
-		{
-			if (a == VK_UP) row = (row + 2) % 3;
-			else if (a == VK_DOWN) row = (row + 1) % 3;
-			else if (a == 13)
-			{
-				if (row == 0) user.enterAccount(users);
-				else if (row == 1) user.createAccount(users);
-				else if (row == 2)
-				{
-					system("cls");
-					break;
-				}
-				return;
-			}
-		}
-		else
-		{
-			if (a == VK_UP) row = (row + 1) % 2;
-			else if (a == VK_DOWN) row = (row + 1) % 2;
-			else if (a == 13)
-			{
-				if (row == 0) user.createAccount(users);
-				else if (row == 1)
-				{
-					system("cls");
-					break;
-				}
-				return;
-			}
-		}*/
 	}
 }
 
@@ -133,9 +93,9 @@ void User::enterAccount(vector<Credentials>& users)
 	}
 }
 
-void rewriteUserFile(vector<Credentials>& users)
+void rewriteFile(vector<Credentials>& users, string path)
 {
-	ofstream file("users.txt", ios::trunc);
+	ofstream file(path, ios::trunc);
 
 	for (auto i : users)
 		file << i.login << endl << i.password << endl;
@@ -145,18 +105,18 @@ void rewriteUserFile(vector<Credentials>& users)
 
 void rewriteCatalogFile(Catalog& catalog)
 {
-	wofstream file("catalog.txt", ios::trunc);
+	ofstream file("catalog.txt", ios::trunc);
 	for (auto i : catalog.cars)
 		file << i.brand << endl << i.model << endl << i.color << endl << i.price << endl
-		<< (i.date.day.size() == 1 ? L'0' + i.date.day : i.date.day) << ' ' << (i.date.month.size() == 1 ? L'0' + i.date.month : i.date.month) 
-					<< L' ' << (i.date.year.size() == 1 ? L'0' + i.date.year : i.date.year) << endl;
+		<< (i.date.day.size() == 1 ? '0' + i.date.day : i.date.day) << ' ' << (i.date.month.size() == 1 ? '0' + i.date.month : i.date.month) 
+					<< ' ' << (i.date.year.size() == 1 ? '0' + i.date.year : i.date.year) << endl;
 
 	file.close();
 }
 
-void copyUserFile(vector<Credentials>& users)
+void copyFile(vector<Credentials>& users, string path)
 {
-	ifstream file("users.txt");
+	ifstream file(path);
 	while (file)
 	{
 		Credentials temp;
@@ -171,7 +131,7 @@ void copyUserFile(vector<Credentials>& users)
 
 void copyCatalogFile(Catalog& catalog)
 {
-	wifstream file("catalog.txt");
+	ifstream file("catalog.txt");
 	if (!catalog.cars.empty()) catalog.cars.erase(catalog.cars.begin(), catalog.cars.end());
 	while (file)
 	{
@@ -185,12 +145,6 @@ void copyCatalogFile(Catalog& catalog)
 	}
 	if (!catalog.cars.empty()) catalog.cars.erase(catalog.cars.end() - 1);
 	file.close();
-}
-
-void User::addCredentials(vector<Credentials>& users)
-{
-	Credentials tmp(this->credentials.login, sha256(this->credentials.password));
-	users.push_back(tmp);
 }
 
 int User::checkPasswords()
@@ -251,7 +205,7 @@ void User::deleteAccount(vector<Credentials>& users)
 			if (ptr != users.end())
 			{
 				users.erase(ptr);
-				rewriteUserFile(users);
+				rewriteFile(users, "users.txt");
 				return;
 			}
 		}
@@ -277,7 +231,7 @@ void User::changePassword(vector<Credentials>& users)
 				if (leave) return;
 
 				ptr->password = sha256(credentials.password);
-				rewriteUserFile(users);
+				rewriteFile(users, "users.txt");
 				return;
 			}
 		}
@@ -293,8 +247,8 @@ void Catalog::displayCatalog()
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page+1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+		wcout << L"Страница " << page+1 << L" из " << pages <<
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 			displayElement(this->cars[i]);
 
@@ -311,21 +265,81 @@ void Catalog::displayCatalog()
 
 void Catalog::addElement()
 {
-	Car tmp;
-	tmp.getBrand();
-	tmp.getModel();
-	tmp.getColor();
-	tmp.date.getDate();
-	int temp = 0;
+	Car car;
+	string date;
+	int8_t row = 0;
+
 	while (true)
 	{
-		if (!temp) temp = getInt(L"Введите цену автомобиля");
-		else temp = getInt(L"Введите цену до 1000000000");
-		if (temp < 1000000000) break;
+		system("cls");
+		wcout << L"Марка   :";
+		cout << car.brand << string(16 - car.brand.size(), ' ') << '|' << (!row ? " <--\n" : "\n");
+
+		wcout << L"Модель  :";
+		cout << car.model << string(16 - car.model.size(), ' ') << '|' << (row == 1 ? " <--\n" : "\n");
+
+		wcout << L"Цвет    :";
+		cout << car.color << string(16 - car.color.size(), ' ') << '|' << (row == 2 ? " <--\n" : "\n");
+
+		wcout << L"Цена    :";
+		cout << car.price << string(16 - car.price.size(), ' ') << '|' << (row == 3 ? " <--\n" : "\n");
+
+		wcout << L"Дата    :"; displayDate(date);
+		cout << '|' << (row == 4 ? " <--\n" : "\n");
+
+		wcout << L"Добавить    " << (row == 5 ? L" <--\n" : L"\n") << L"Назад    " << (row == 6 ? L" <--\n" : L"\n\n");
+
+		int8_t a = _getch();
+
+		if (a == 'а')
+		{
+			if (GetAsyncKeyState('F') != -32767)
+			{
+				a = _getch();
+				if (a == 'H') row = (row + 6) % 7;
+				else if (a == 'P') row = (row + 1) % 7;
+			}
+		}
+		else
+		{
+			if (a == 13 && row == 5)
+			{
+				if (carCorrect(car, date))
+				{
+					ofstream file("catalog.txt", ios::app);
+
+					file << car.brand << endl << car.model << endl << car.color << endl << car.price << endl
+					<< date[0] << date[1] << ' ' << date[2] << date[3]
+					<< ' ' << date[4] << date[5] << date[6] << date[7] << endl;
+
+					file.close();
+
+					getCharacter(L"Машина успешно добавлена. Для продолжения нажмите любую клавишу");
+				}
+				continue;
+			}
+			else if (a == 13 && row == 6) return;
+			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') && row < 3)
+			{
+				if (!row && car.brand.size() < 16) car.brand += a;
+				else if (row == 1 && car.model.size() < 16) car.model += a;
+				else if (row == 2 && car.color.size() < 16) car.color += a;
+			}
+			else if ((a >= '0' && a <= '9'))
+			{
+				if (row == 3 && car.price.size() < 16) car.price += a;
+				else if (row == 4 && date.size() < 8) date += a;
+			}
+			else if (a == 8 && row < 5)
+			{
+				if (!row && !car.brand.empty()) car.brand.erase(car.brand.end() - 1);
+				else if (row == 1 && !car.model.empty()) car.model.erase(car.model.end() - 1);
+				else if (row == 2 && !car.color.empty()) car.color.erase(car.color.end() - 1);
+				else if (row == 3 && !car.price.empty()) car.price.erase(car.price.end() - 1);
+				else if (row == 4 && !date.empty()) date.erase(date.end() - 1);
+			}
+		}
 	}
-	tmp.price = to_wstring(temp);
-	cars.push_back(tmp);
-	rewriteCatalogFile(*this);
 }
 
 void Catalog::deleteElement()
@@ -335,9 +349,9 @@ void Catalog::deleteElement()
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page + 1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
-			"Для удаления элемента нажмите Enter" << endl << endl;
+		wcout << L"Страница " << page + 1 << " из " << pages <<
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
+			L"Для удаления элемента нажмите Enter" << endl << endl;
 
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 		{
@@ -364,9 +378,16 @@ void Catalog::deleteElement()
 
 void Catalog::displayElement(Car car)
 {
-	wcout << endl << L"Марка: " << car.brand << L"     Модель: " << car.model << L"    Цвет: " << car.color << endl;
-	wcout << L"Дата продажи: " << car.date.day << L'.' << car.date.month << L'.' << car.date.year;
-	wcout << L"    Цена: " << car.price << endl;
+	wcout << endl << L"Марка: ";
+	cout << car.brand;
+	wcout << L"     Модель: ";
+	cout << car.model;
+	wcout << L"    Цвет: ";
+	cout << car.color << endl;
+	wcout << L"Дата продажи: ";
+	cout << car.date.day << '.' << car.date.month << '.' << car.date.year;
+	wcout << L"    Цена: ";
+	cout << car.price << endl;
 }
 
 void Catalog::approveDeletion(int page, int pos)
@@ -383,25 +404,25 @@ void Catalog::approveDeletion(int page, int pos)
 
 void Catalog::searchInCatalog()
 {
-	wstring brand = L"", model = L"", color = L"", priceFrom = L"", priceTo = L"", dateFrom = L"", dateTo = L"";
+	string brand = "", model = "", color = "", priceFrom = "", priceTo = "", dateFrom = "", dateTo = "";
 	int8_t row = 0;
 	while (true)
 	{
 		system("cls");
-		wcout << L"Марка   :" << brand;
-		cout  << string(16 - brand.size(), ' ') << '|' << (!row ? " <--\n" : "\n");
+		wcout << L"Марка   :";
+		cout  << brand << string(16 - brand.size(), ' ') << '|' << (!row ? " <--\n" : "\n");
 
-		wcout << L"Модель  :" << model;
-		cout  << string(16 - model.size(), ' ') << '|' << (row == 1 ? " <--\n" : "\n");
+		wcout << L"Модель  :";
+		cout  << model << string(16 - model.size(), ' ') << '|' << (row == 1 ? " <--\n" : "\n");
 
-		wcout << L"Цвет    :" << color;
-		cout  << string(16 - color.size(), ' ')<< '|' << (row == 2 ? " <--\n" : "\n");
+		wcout << L"Цвет    :";
+		cout  << color << string(16 - color.size(), ' ')<< '|' << (row == 2 ? " <--\n" : "\n");
 
-		wcout << L"Цена с  :" << priceFrom;
-		cout  << string(16 - priceFrom.size(), ' ')<< '|' << (row == 3 ? " <--\n" : "\n");
+		wcout << L"Цена с  :";
+		cout  << priceFrom << string(16 - priceFrom.size(), ' ')<< '|' << (row == 3 ? " <--\n" : "\n");
 
-		wcout << L"Цена до :" << priceTo;
-		cout  << string(16 - priceTo.size(), ' ') << '|' << (row == 4 ? " <--\n" : "\n");
+		wcout << L"Цена до :";
+		cout  << priceTo << string(16 - priceTo.size(), ' ') << '|' << (row == 4 ? " <--\n" : "\n");
 
 		wcout << L"С       :"; displayDate(dateFrom);
 		cout  << '|' << (row == 5 ? " <--\n" : "\n");
@@ -411,17 +432,11 @@ void Catalog::searchInCatalog()
 
 		wcout << L"Найти    " << (row == 7 ? L" <--\n" : L"\n") << L"Назад    " << (row == 8 ? L" <--\n" : L"\n\n");
 
-		int16_t a = _getwch();
+		int8_t a = _getch();
 
 		if (a == 'а')
 		{
-			if (GetAsyncKeyState('F') == -32767)
-			{
-				if (!row && brand.size() < 16) brand += 'а';
-				else if (row == 1 && model.size() < 16) model += 'а';
-				else if (row == 2 && color.size() < 16) color += 'а';
-			}
-			else
+			if (GetAsyncKeyState('F') != -32767)
 			{
 				a = _getch();
 				if (a == 'H') row = (row + 8) % 9;
@@ -430,19 +445,9 @@ void Catalog::searchInCatalog()
 		}
 		else
 		{
-			if (a == 13 && row == 7)
-			{
-				if ((dateTo.size() > 0 && dateTo.size() < 8) || (dateFrom.size() > 0 && dateFrom.size() < 8))
-				{
-					system("cls");
-					string str = getString(L"Введенная дата не соответствует правилам.\nВ случае продолжения поиск будет прозведен без учета даты.\nЕсли вы хотите начать поиск введите \"да\"\n");
-					if (str == "yes") displaySearch(brand, model, color, priceFrom, priceTo, dateFrom, dateTo);
-					else continue;
-				}
-				else displaySearch(brand, model, color, priceFrom, priceTo, dateFrom, dateTo);
-			}
+			if (a == 13 && row == 7) displaySearch(brand, model, color, priceFrom, priceTo, dateFrom, dateTo);
 			else if (a == 13 && row == 8) return;
-			else if ((a >= -64 && a < 0) || (a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') && row < 5 )
+			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') && row < 5 )
 			{
 				if (!row && brand.size() < 16) brand += a;
 				else if (row == 1 && model.size() < 16) model += a;
@@ -450,7 +455,7 @@ void Catalog::searchInCatalog()
 				else if (row == 3 && priceFrom.size() < 11) priceFrom += a;
 				else if (row == 4 && priceTo.size() < 11) priceTo += a;
 			}
-			else if ((a >= '0' && a <= '9') && row < 7)
+			else if ((a >= '0' && a <= '9'))
 			{
 				if (row == 5 && dateFrom.size() < 8) dateFrom += a;
 				else if (row == 6 && dateTo.size() < 8) dateTo += a;
@@ -469,11 +474,16 @@ void Catalog::searchInCatalog()
 	}
 }
 
-void Catalog::displaySearch(wstring brand, wstring model, wstring color, wstring priceFrom, wstring priceTo, wstring dateFrom, wstring dateTo)
+void Catalog::displaySearch(string brand, string model, string color, string priceFrom, string priceTo, string dateFrom, string dateTo)
 {
+	if ((dateFrom.size() != 8 && !dateFrom.empty()) || (dateTo.size() != 8 && !dateTo.empty()))
+	{
+		getCharacter(L"Дата введена неправильно. Для возвращения нажмите любую кнопку");
+		return;
+	}
+
 	vector<Car> cat;
-	if (priceFrom.size() != 8) priceFrom = L"";
-	if (priceTo.size() != 8) priceTo = L"";
+
 	for (auto i : this->cars)
 	{
 		int8_t j;
@@ -481,35 +491,32 @@ void Catalog::displaySearch(wstring brand, wstring model, wstring color, wstring
 		else
 		{
 			for (j = 0; j < brand.size(); ++j)
-				if (!(brand[j] = i.brand[j])) j = brand.size();
-			if (j == brand.size() + 1) continue;
+				if (brand[j] != i.brand[j]) goto again;
 		}
 		if (model.size() > i.model.size()) continue;
 		else
 		{
 			for (j = 0; j < model.size(); ++j)
-				if (!(model[j] = i.model[j])) j = model.size();
-			if (j == model.size() + 1) continue;
+				if (model[j] != i.model[j]) goto again;
 		}
 		if (color.size() > i.color.size()) continue;
 		else
 		{
 			for (j = 0; j < color.size(); ++j)
-				if (!(color[j] = i.color[j])) j = color.size();
-			if (j == color.size() + 1) continue;
+				if (color[j] != i.color[j]) goto again;
 		}
 		if (!(priceTo.empty() && priceFrom.empty()))
 		{
 			if (priceTo.empty())
 			{
-				if (wstringToInt(i.price) < wstringToInt(priceFrom)) continue;
+				if (stringToInt(i.price) < stringToInt(priceFrom)) continue;
 			}
 			if (priceFrom.empty())
 			{
-				if (wstringToInt(i.price) > wstringToInt(priceTo)) continue;
+				if (stringToInt(i.price) > stringToInt(priceTo)) continue;
 			}
-			if (!(priceFrom.empty() || priceTo.empty()))
-				if (wstringToInt(priceFrom) > wstringToInt(i.price) || wstringToInt(priceTo) < wstringToInt(i.price)) continue;
+			if (!priceFrom.empty() && !priceTo.empty())
+				if (stringToInt(priceFrom) > stringToInt(i.price) || stringToInt(priceTo) < stringToInt(i.price)) continue;
 		}
 		if (!(dateTo.empty() && dateFrom.empty()))
 		{
@@ -530,6 +537,8 @@ void Catalog::displaySearch(wstring brand, wstring model, wstring color, wstring
 			}
 		}
 		cat.push_back(i);
+	again:
+		continue;
 	}
 				
 
@@ -538,8 +547,8 @@ void Catalog::displaySearch(wstring brand, wstring model, wstring color, wstring
 	while (true)
 	{
 		system("cls");
-		cout << "Страница " << page + 1 << " из " << pages <<
-			". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+		wcout << L"Страница " << page + 1 << L" из " << pages <<
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
 		for (int i = page * 7; i < (page + 1) * 7 && i < cat.size(); ++i)
 			displayElement(cat[i]);
 

@@ -1,100 +1,100 @@
 Tesla
 Model S
-белый
+white
 5000
 03 02 3000
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Lada
 Kalina
-Красный
+white
 666
 05 05 1980
 Tesla
 Model S
-белый
+white
 5000
 03 02 3000
 Tesla
 Model S
-белый
+white
 5000
 03 02 3000
 Tesla
 Model S
-белый
+white
 5000
 03 02 3000
 Tesla
 Model S
-белый
+white
 5000
 03 02 3000
 Tesla
 Model S
-белый
-5000
-03 02 3000
-Tesla
-Model S
-белый
+white
 5000
 03 02 3000
 Tesla
 Model S
 белый
+5000
+03 02 3000
+Tesla
+Model S
+white
 5000
 03 02 3002
 Toyota
 hz
-Белый
+white
 1800
 01 01 2000
 BMW
 X9
-Черный
+white
 7000
 06 03 3000
