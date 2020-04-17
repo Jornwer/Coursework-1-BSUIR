@@ -222,8 +222,8 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 	case 0: login = (haveAccess ? getString(L"Введите логин. Для выхода введите exit")
 		: getString(L"Введите заново логин. Для выхода введите exit"));
 		break;
-	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод. Для выхода введите exit"); break;
-	case 2: login = getString(L"Аккаунт с таким логином уже существует. Повторите ввод. Для выхода введите exit"); break;
+	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод логи и пароля. Для выхода введите exit"); break;
+	case 2: login = getString(L"Аккаунт с таким логином уже существует. Повторите ввод логина и пароля. Для выхода введите exit"); break;
 	}
 
 	do
