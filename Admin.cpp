@@ -128,8 +128,8 @@ void Admin::adminMenu(vector<Credentials>& admins)
 		else if (a == 13)
 		{
 			if (row == 0) catalog.changeCatalog();
-			else if (row == 1) changePassword(admins);
-			else if (row == 2) { deleteAccount(admins); break; }
+			else if (row == 1) changePassword(admins, "admins.txt");
+			else if (row == 2) { deleteAccount(admins, "admins.txt"); break; }
 			else if (row == 3) addAdmin();
 			else if (row == 4) deleteUser();
 			else if (row == 5) addUser();
@@ -246,24 +246,3 @@ void Admin::addUser()
 	}
 }
 
-void Admin::deleteAccount(vector<Credentials>& admins)
-{
-	do {
-		int i = checkPasswords();
-
-		if (!i)
-		{
-			Credentials tmp(this->credentials.login, sha256(this->credentials.password));
-
-			auto ptr = find(admins.begin(), admins.end(), tmp);
-			if (ptr != admins.end())
-			{
-				admins.erase(ptr);
-				rewriteFile(admins, "admins.txt");
-				return;
-			}
-		}
-		else if (i == 2) break;
-
-	} while (true);
-}

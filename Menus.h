@@ -22,7 +22,7 @@ void copyFile(std::vector<Credentials>&, std::string); //функция копи
 std::string getString(std::wstring); //функция ввода строки с сообщение
 std::string getPassword(std::wstring); //функция ввода пароля в формате **** с сообщением
 void getCharacter(std::wstring); //функция для нажатия любой клавишы без вывода
-void copyCatalogFile(Catalog&); //функция копирования данных с файла каталога
+bool copyCatalogFile(Catalog&); //функция копирования данных с файла каталога
 void rewriteCatalogFile(Catalog&); //функция перезаписи файла каталога
 int8_t getCharCode(); //функция выводящая код нажатой клавиши
 void displayDate(std::string); //функция вывода даты в формате ДД.ММ.ГГГГ
@@ -31,6 +31,7 @@ void adminHaveAccount(); //функция спрашиавющая у админ
 std::string enterLogin(int8_t,bool&,bool&); //функция ввода логина с проверкой на правильность
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
 bool carCorrect(Car, std::string);
+bool carCorrect(Car);
 bool dayCorrect(int8_t, int16_t, int8_t); //проверяет введенный день на правильность
 
 class Credentials
@@ -52,8 +53,8 @@ public:
 	virtual void enterAccount(std::vector<Credentials>&); //функция входа в аккаунт
 	
 	void userMenu(std::vector<Credentials>&); //основное меню пользователя
-	void changePassword(std::vector<Credentials>&); //функция смены пароля
-	virtual void deleteAccount(std::vector<Credentials>&);// функция удаления аккаунта
+	void changePassword(std::vector<Credentials>&, std::string); //функция смены пароля
+	void deleteAccount(std::vector<Credentials>&, std::string);// функция удаления аккаунта
 	int checkPasswords();//функция ввода пароля и проверки его с существующим
 };
 
@@ -66,7 +67,6 @@ public:
 	void addAdmin(); // функция превращения пользователя в админа
 	void deleteUser(); //функция удаления пользователя
 	void addUser(); //функция добавления пользователя
-	void deleteAccount(std::vector<Credentials>&) override;
 };
 
 class Date

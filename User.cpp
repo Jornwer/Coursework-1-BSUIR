@@ -55,8 +55,8 @@ void User::userMenu(vector<Credentials>& users)
 		else if (a == 13)
 		{
 			if (row == 0) catalog.changeCatalog();
-			else if (row == 1) changePassword(users);
-			else if (row == 2) { deleteAccount(users); break; }
+			else if (row == 1) changePassword(users, "users.txt");
+			else if (row == 2) { deleteAccount(users, "users.txt"); break; }
 			else if (row == 3)
 			{
 				system("cls");
@@ -129,7 +129,7 @@ void copyFile(vector<Credentials>& users, string path)
 
 }
 
-void copyCatalogFile(Catalog& catalog)
+bool copyCatalogFile(Catalog& catalog)
 {
 	ifstream file("catalog.txt");
 	if (!catalog.cars.empty()) catalog.cars.erase(catalog.cars.begin(), catalog.cars.end());
@@ -141,10 +141,16 @@ void copyCatalogFile(Catalog& catalog)
 		getline(file, temp.model);
 		getline(file, temp.color);
 		file >> temp.price >> temp.date.day >> temp.date.month >> temp.date.year;
-		catalog.cars.push_back(temp);
+		if (carCorrect(temp)) catalog.cars.push_back(temp);
+		else
+		{
+			getCharacter(L"Файл каталога поврежден. Для возвращения в меню нажмите любую клавишу");
+			return true;
+		}
 	}
 	if (!catalog.cars.empty()) catalog.cars.erase(catalog.cars.end() - 1);
 	file.close();
+	return false;
 }
 
 int User::checkPasswords()
@@ -166,7 +172,7 @@ void Catalog::changeCatalog()
 {
 	int8_t row = 0;
 	int8_t colNum = 5;
-	copyCatalogFile(*this);
+	if(copyCatalogFile(*this)) return;
 	while (true)
 	{
 		system("cls");
@@ -192,7 +198,7 @@ void Catalog::changeCatalog()
 	}
 }
 
-void User::deleteAccount(vector<Credentials>& users)
+void User::deleteAccount(vector<Credentials>& users, string path)
 {
 	do {
 		int i = checkPasswords();
@@ -214,7 +220,7 @@ void User::deleteAccount(vector<Credentials>& users)
 	} while (true);
 }
 
-void User::changePassword(vector<Credentials>& users)
+void User::changePassword(vector<Credentials>& users, string path)
 {
 	do {
 		int i = checkPasswords();
@@ -231,7 +237,7 @@ void User::changePassword(vector<Credentials>& users)
 				if (leave) return;
 
 				ptr->password = sha256(credentials.password);
-				rewriteFile(users, "users.txt");
+				rewriteFile(users, path);
 				return;
 			}
 		}

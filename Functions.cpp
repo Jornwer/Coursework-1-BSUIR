@@ -331,3 +331,39 @@ bool carCorrect(Car car, string date)
 	
 	return true;
 }
+
+bool carCorrect(Car car)
+{
+	string date = "";
+	date += car.date.day;
+	date += car.date.month;
+	date += car.date.year;
+
+	if (car.brand.empty() && car.color.empty() && car.model.empty() && car.price.empty() && date.size() == 0) return true;
+
+	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8)
+	{
+		return false;
+	}
+
+	if (car.price.size() > 9)
+	{
+		return false;
+	}
+
+	if (stringToInt(car.price) == 0)
+	{
+		return false;
+	}
+
+	for (auto a : date)
+		if (a < '0' || a > '9') return false;
+
+	Date tmp(date);
+	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day)))
+	{
+		return false;
+	}
+
+	return true;
+}
