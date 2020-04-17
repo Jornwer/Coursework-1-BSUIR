@@ -355,7 +355,7 @@ void Catalog::deleteElement()
 	while (true)
 	{
 		system("cls");
-		wcout << L"Страница " << page + 1 << " из " << pages <<
+		wcout << L"Страница " << page + 1 << L" из " << pages <<
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
 			L"Для удаления элемента нажмите Enter" << endl << endl;
 
