@@ -289,9 +289,9 @@ void Catalog::addElement()
 
 		wcout << L"Добавить    " << (row == 5 ? L" <--\n" : L"\n") << L"Назад    " << (row == 6 ? L" <--\n" : L"\n\n");
 
-		int8_t a = _getch();
+		uint8_t a = _getch();
 
-		if (a == 'а')
+		if (a == 224)
 		{
 			if (GetAsyncKeyState('F') != -32767)
 			{
@@ -432,9 +432,9 @@ void Catalog::searchInCatalog()
 
 		wcout << L"Найти    " << (row == 7 ? L" <--\n" : L"\n") << L"Назад    " << (row == 8 ? L" <--\n" : L"\n\n");
 
-		int8_t a = _getch();
+		uint8_t a = _getch();
 
-		if (a == 'а')
+		if (a == 224)
 		{
 			if (GetAsyncKeyState('F') != -32767)
 			{

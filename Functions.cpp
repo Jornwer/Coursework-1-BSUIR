@@ -160,10 +160,10 @@ int Date::countDays()
 void displayDate(string date)
 {
 	int8_t index = 0;
-	string str = "ДД.ММ.ГГГГ      ";
+	wstring str = L"ДД.ММ.ГГГГ      ";
 	for (int8_t i = 0; i < 16; ++i)
 	{
-		if (index + 1 > date.size() || index == 8) cout << str[i];
+		if (index + 1 > date.size() || index == 8) wcout << str[i];
 		else
 		{
 			if (i == 2 || i == 5) cout << '.';
@@ -273,13 +273,23 @@ string enterPassword(bool& leave)
 			return "";
 		}
 
+		string symbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 		for (auto a : password)
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_' || (a >= '0' && a <= '0')))
+		{
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_' || (a >= '0' && a <= '9')))
 			{
 				error = 1;
 				password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");
 				break;
 			}
+			for (auto b : symbols)
+				if (a == b)
+				{
+					error = 1;
+					password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");
+					break;
+				}
+		}
 
 		if (password.size() < 8)
 		{
