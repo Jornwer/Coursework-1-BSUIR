@@ -202,7 +202,7 @@ void Admin::addUser()
 	bool leave = false;
 	do {
 		if (haveAccess) user.login = enterLogin(0, haveAccess, leave);
-		else user.password = enterLogin(2, haveAccess, leave);
+		else user.login = enterLogin(2, haveAccess, leave);
 		if (leave) break;
 
 		user.password = enterPassword(leave);
