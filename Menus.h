@@ -81,8 +81,8 @@ public:
 	int countDays();//функция подсчета дней с 0 года(приблизительно)
 
 	bool operator==(Date);
-	bool operator>(Date);// перегрузка оператора больше
-	bool operator<(Date);//перегрузка оператора меньше
+	bool operator>(Date&);// перегрузка оператора больше
+	bool operator<(Date&);//перегрузка оператора меньше
 };
 
 class Car

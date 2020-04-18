@@ -172,12 +172,12 @@ void displayDate(string date)
 	}
 }
 
-bool Date::operator<(Date date)
+bool Date::operator<(Date& date)
 {
 	return (countDays() < date.countDays() ? true : false);
 }
 
-bool Date::operator>(Date date)
+bool Date::operator>(Date& date)
 {
 	return (countDays() > date.countDays() ? true : false);
 }
@@ -341,29 +341,20 @@ bool carCorrect(Car car)
 
 	if (car.brand.empty() && car.color.empty() && car.model.empty() && car.price.empty() && date.size() == 0) return true;
 
-	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8)
-	{
-		return false;
-	}
+	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8) return false;
 
-	if (car.price.size() > 9)
-	{
-		return false;
-	}
+	if (car.price.size() > 9) return false;
 
-	if (stringToInt(car.price) == 0)
-	{
-		return false;
-	}
+	for (auto a : car.price) 
+		if (a < '0' || a > '9') return false;
+
+	if (stringToInt(car.price) == 0) return false;
 
 	for (auto a : date)
 		if (a < '0' || a > '9') return false;
 
 	Date tmp(date);
-	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day)))
-	{
-		return false;
-	}
+	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day))) return false;
 
 	return true;
 }

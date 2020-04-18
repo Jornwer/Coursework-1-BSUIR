@@ -350,20 +350,23 @@ void Catalog::addElement()
 
 void Catalog::deleteElement()
 {
-	if (this->cars.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
-	int pages = ceil((double)this->cars.size() / 7.0), page = 0, pos = 0, elInPage = 7;
+	
+	int pages, page = 0, pos = 0, elInPage = 7;
 	while (true)
 	{
+		if (this->cars.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
+		pages = ceil((double)this->cars.size() / 7.0);
 		system("cls");
+
 		wcout << L"Страница " << page + 1 << L" из " << pages <<
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
 			L"Для удаления элемента нажмите Enter" << endl << endl;
 
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 		{
-			if (i % 7 == pos) cout << endl << string(40, '/');
+			if (i % 7 == pos) cout << string(40, '/');
 			displayElement(this->cars[i]);
-			if (i % 7 == pos) cout << string(40, '\\') << endl;
+			if (i % 7 == pos) cout << string(40, '\\');
 		}
 
 		char a = getCharCode();
@@ -372,7 +375,30 @@ void Catalog::deleteElement()
 		else if (a == VK_RIGHT) page = (page + 1) % pages;
 		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
 		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
-		else if (a == 13) approveDeletion(page, pos);
+		else if (a == 13)
+		{
+			approveDeletion(page, pos);
+			if (pos + page * 7 == cars.size())
+			{
+				if (pos == 0)
+				{
+					if (page == 0)
+					{
+						getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку");
+						return;
+					}
+					else
+					{
+						page--;
+						pos = 6;
+					}
+				}
+				else
+				{
+					pos--;
+				}
+			}
+		}
 		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
 		{
 			return;
