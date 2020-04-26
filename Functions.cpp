@@ -243,7 +243,7 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 		if (login[0] == ' ') { error = 2; continue; }
 		for (auto a : login)
 		{
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') || (a >= 'а' && a <= 'я') || (a >= 'А' && a <= 'Я')))
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')))
 			{
 				error = 2;
 				login = getString(L"Логин содержит недопустимые символы. Для выхода введите exit");
@@ -275,7 +275,7 @@ string enterPassword(bool& leave)
 		string symbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 		for (auto a : password)
 		{
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || a == '_' || (a >= '0' && a <= '9')))
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')))
 			{
 				error = 1;
 				password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");

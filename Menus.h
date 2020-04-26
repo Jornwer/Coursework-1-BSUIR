@@ -50,9 +50,8 @@ class User
 public:
 	Credentials credentials; //логин+пароль
 
-	virtual void enterAccount(std::vector<Credentials>&); //функция входа в аккаунт
-	
-	void userMenu(std::vector<Credentials>&); //основное меню пользователя
+	void enterAccount(std::vector<Credentials>&); //функция входа в аккаунт
+	virtual void userMenu(std::vector<Credentials>&); //основное меню пользователя
 	void changePassword(std::vector<Credentials>&, std::string); //функция смены пароля
 	void deleteAccount(std::vector<Credentials>&, std::string);// функция удаления аккаунта
 	int checkPasswords();//функция ввода пароля и проверки его с существующим
@@ -62,8 +61,7 @@ class Admin: public User
 {
 public:
 	void createAccount(std::vector<Credentials>&); //функция создания аккаунта
-	void adminMenu(std::vector<Credentials>&); //основное меню админа
-	void enterAccount(std::vector<Credentials>&) override; // переопределение функции входа в аккаунт
+	void userMenu(std::vector<Credentials>&) override; //основное меню админа
 	void addAdmin(); // функция превращения пользователя в админа
 	void deleteUser(); //функция удаления пользователя
 	void addUser(); //функция добавления пользователя
@@ -80,7 +78,6 @@ public:
 
 	Date(std::string); //конструктор в формате ДДММГГГГ
 	Date();
-	
 
 	friend bool operator==(const Date&, const Date&);
 	friend bool operator>(const Date&, const Date&);// перегрузка оператора больше

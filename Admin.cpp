@@ -79,38 +79,11 @@ void Admin::createAccount(vector<Credentials>& admins)
 		file << this->credentials.login << endl << sha256(this->credentials.password) << endl;
 		file.close();
 		delete &file;
-		adminMenu(admins);
+		userMenu(admins);
 	}
 }
 
-void Admin::enterAccount(vector<Credentials>& admins)
-{
-	system("cls");
-	bool haveAccess = true;
-	bool leave = false;
-
-	do {
-		if (haveAccess) this->credentials.login = enterLogin(0, haveAccess, leave);
-		else this->credentials.login = enterLogin(1, haveAccess, leave);
-		if (leave) break;
-		this->credentials.password = enterPassword(leave);
-		if (leave) break;
-
-		haveAccess = true;
-
-		Credentials tmp(credentials.login, sha256(credentials.password));
-		if (find(admins.begin(), admins.end(), tmp) == admins.end())
-			haveAccess = false;
-
-	} while (!haveAccess);
-
-	if (!leave)
-	{
-		adminMenu(admins);
-	}
-}
-
-void Admin::adminMenu(vector<Credentials>& admins)
+void Admin::userMenu(vector<Credentials>& admins)
 {
 	int8_t row = 0;
 	int8_t colNum = 7;
