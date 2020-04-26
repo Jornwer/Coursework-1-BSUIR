@@ -87,32 +87,25 @@ void getCharacter(wstring msg)
 	char a = _getch();
 }
 
-bool Credentials::operator==(Credentials a)
-{
-	return (this->login == a.login && this->password == a.password) ? true : false;
-}
-
 Credentials::Credentials(string login, string password)
 {
 	this->login = login;
 	this->password = password;
 }
 
-bool Car::operator==(Car a)
+bool operator==(const Car& l, const Car& r)
 {
-	if (a.brand == brand && a.color == color && a.date == date && a.model == model && a.price == price) return true;
-	else return false;
+	return (l.brand == r.brand && l.color == r.color && l.date == r.date && l.model == r.model && l.price == r.price);
 }
 
-bool Date::operator==(Date a)
+bool operator==(const Date& l, const Date& r)
 {
-	if (a.day == day && a.year == year && a.month == month) return true;
-	else return false;
+	return (l.day == r.day && l.year == r.year && l.month == r.month);
 }
 
-bool dayCorrect(int8_t month, int16_t year, int8_t day)
+bool dayCorrect(int8_t day, int8_t month, int16_t year)
 {
-	if (day > 31 || !day) return false;
+	if (day > 31 || day == 0 || month == 0 || month > 12 || year == 0) return false;
 	if (day < 29) return true;
 	if (month == 2)
 	{
@@ -140,6 +133,11 @@ bool dayCorrect(int8_t month, int16_t year, int8_t day)
 	}
 }
 
+bool operator==(const Credentials& l, const Credentials& r)
+{
+	return (l.login == r.login && l.password == r.password);
+}
+
 int8_t getCharCode()
 {
 	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
@@ -152,7 +150,7 @@ int8_t getCharCode()
 	}
 }
 
-int Date::countDays()
+int Date::countDays() const
 {
 	return 372 * stringToInt(year) + 31 * stringToInt(month) + stringToInt(day);
 }
@@ -172,14 +170,14 @@ void displayDate(string date)
 	}
 }
 
-bool Date::operator<(Date& date)
+bool operator<(const Date& l, const Date& r)
 {
-	return (countDays() < date.countDays() ? true : false);
+	return l.countDays() < r.countDays();
 }
 
-bool Date::operator>(Date& date)
+bool operator>(const Date& l, const Date& r)
 {
-	return (countDays() > date.countDays() ? true : false);
+	return l.countDays() > r.countDays();
 }
 
 Date::Date(string str)
@@ -207,7 +205,8 @@ int stringToInt(string str)
 	if (str.size() < 10)
 	{
 		for (auto i : str)
-			res = 10 * res + i - '0';
+			if (i >= '0' && i <= '9') res = 10 * res + i - '0';
+			else return -1;
 		return res;
 	}
 	return -1;
@@ -323,7 +322,7 @@ bool carCorrect(Car car, string date)
 	}
 
 	Date tmp(date);
-	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day)))
+	if (!dayCorrect(stringToInt(tmp.day), stringToInt(tmp.month), stringToInt(tmp.year)))
 	{
 		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
 		return false;
@@ -343,18 +342,12 @@ bool carCorrect(Car car)
 
 	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8) return false;
 
-	if (car.price.size() > 9) return false;
-
-	for (auto a : car.price) 
-		if (a < '0' || a > '9') return false;
-
-	if (stringToInt(car.price) == 0) return false;
+	if (stringToInt(car.price) == 0 || stringToInt(car.price) == -1) return false;
 
 	for (auto a : date)
 		if (a < '0' || a > '9') return false;
 
-	Date tmp(date);
-	if (!dayCorrect(stringToInt(tmp.month), stringToInt(tmp.year), stringToInt(tmp.day))) return false;
+	if (!dayCorrect(stringToInt(car.date.day), stringToInt(car.date.month), stringToInt(car.date.year))) return false;
 
 	return true;
 }

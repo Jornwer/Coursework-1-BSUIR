@@ -32,7 +32,7 @@ std::string enterLogin(int8_t,bool&,bool&); //функция ввода логи
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
 bool carCorrect(Car, std::string);
 bool carCorrect(Car);
-bool dayCorrect(int8_t, int16_t, int8_t); //проверяет введенный день на правильность
+bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
 
 class Credentials
 {
@@ -42,7 +42,7 @@ public:
 	std::string login; //логин
 	std::string password; //пароль
 
-	bool operator==(Credentials); //перегрузка оператора ==
+	friend bool operator==(const Credentials&, const Credentials&); //перегрузка оператора ==
 };
 
 class User
@@ -71,6 +71,8 @@ public:
 
 class Date
 {
+private:
+	int countDays() const;//функция подсчета дней с 0 года(приблизительно)
 public:
 	std::string day;//день
 	std::string month;//месяц
@@ -78,11 +80,11 @@ public:
 
 	Date(std::string); //конструктор в формате ДДММГГГГ
 	Date();
-	int countDays();//функция подсчета дней с 0 года(приблизительно)
+	
 
-	bool operator==(Date);
-	bool operator>(Date&);// перегрузка оператора больше
-	bool operator<(Date&);//перегрузка оператора меньше
+	friend bool operator==(const Date&, const Date&);
+	friend bool operator>(const Date&, const Date&);// перегрузка оператора больше
+	friend bool operator<(const Date&, const Date&);//перегрузка оператора меньше
 };
 
 class Car
@@ -94,7 +96,7 @@ public:
 	std::string price;//стоимость
 	Date date;//дата
 
-	bool operator==(Car);
+	friend bool operator==(const Car&, const Car&);
 };
 
 class Catalog
