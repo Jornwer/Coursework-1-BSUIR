@@ -171,13 +171,13 @@ int User::checkPasswords()
 void Catalog::changeCatalog()
 {
 	int8_t row = 0;
-	int8_t colNum = 5;
+	int8_t colNum = 6;
 	if(copyCatalogFile(*this)) return;
 	while (true)
 	{
 		system("cls");
 		drawMenu({ L" Просмотреть каталог", L"\n\n Добавить элемент в каталог",
-						L"\n\n Удалить элемент из каталога",L"\n\n Поиск в каталоге" ,L"\n\n Назад" }, row);
+						L"\n\n Удалить элемент из каталога",L"\n\n Поиск в каталоге", L"\n\n Изменить элемент",L"\n\n Назад" }, row);
 
 		char a = getCharCode();
 
@@ -186,10 +186,15 @@ void Catalog::changeCatalog()
 		else if (a == 13)
 		{
 			if (row == 0) displayCatalog();
-			else if (row == 1) addElement();
-			else if (row == 2) deleteElement();
+			else if (row == 1)
+			{
+				Car car = Car();
+				enterElement(car, string());
+			}
+			else if (row == 2) modifyElement(&Catalog::approveDeletion);
 			else if (row == 3) searchInCatalog();
-			else if (row == 4)
+			else if (row == 4) modifyElement(&Catalog::changeElement);
+			else if (row == 5)
 			{
 				system("cls");
 				break;
@@ -269,10 +274,10 @@ void Catalog::displayCatalog()
 	}
 }
 
-void Catalog::addElement()
+void Catalog::enterElement(Car& car, string date)
 {
-	Car car;
-	string date;
+	bool carEmpty = (car == Car());
+	Car save = car;
 	int8_t row = 0;
 
 	while (true)
@@ -293,7 +298,7 @@ void Catalog::addElement()
 		wcout << L"Дата    :"; displayDate(date);
 		cout << '|' << (row == 4 ? " <--\n" : "\n");
 
-		wcout << L"Добавить    " << (row == 5 ? L" <--\n" : L"\n") << L"Назад    " << (row == 6 ? L" <--\n" : L"\n\n");
+		wcout << L"Ввести      " << (row == 5 ? L" <--\n" : L"\n") << L"Назад    " << (row == 6 ? L" <--\n" : L"\n\n");
 
 		uint8_t a = _getch();
 
@@ -312,6 +317,7 @@ void Catalog::addElement()
 			{
 				if (carCorrect(car, date))
 				{
+					if (!carEmpty) break;
 					ofstream file("catalog.txt", ios::app);
 
 					file << car.brand << endl << car.model << endl << car.color << endl << car.price << endl
@@ -321,10 +327,14 @@ void Catalog::addElement()
 					file.close();
 
 					getCharacter(L"Машина успешно добавлена. Для продолжения нажмите любую клавишу");
+					continue;
 				}
-				continue;
 			}
-			else if (a == 13 && row == 6) return;
+			else if (a == 13 && row == 6)
+			{
+				if (!carEmpty) car = save;
+				return;
+			}
 			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') && row < 3)
 			{
 				if (!row && car.brand.size() < 16) car.brand += a;
@@ -348,66 +358,6 @@ void Catalog::addElement()
 	}
 }
 
-void Catalog::deleteElement()
-{
-	
-	int pages, page = 0, pos = 0, elInPage = 7;
-	while (true)
-	{
-		if (this->cars.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
-		pages = ceil((double)this->cars.size() / 7.0);
-		system("cls");
-
-		wcout << L"Страница " << page + 1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
-			L"Для удаления элемента нажмите Enter" << endl << endl;
-
-		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
-		{
-			if (i % 7 == pos) cout << string(40, '/');
-			displayElement(this->cars[i]);
-			if (i % 7 == pos) cout << string(40, '\\');
-		}
-
-		char a = getCharCode();
-
-		if (a == VK_LEFT) page = (page + pages - 1) % pages;
-		else if (a == VK_RIGHT) page = (page + 1) % pages;
-		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
-		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
-		else if (a == 13)
-		{
-			approveDeletion(page, pos);
-			if (pos + page * 7 == cars.size())
-			{
-				if (pos == 0)
-				{
-					if (page == 0)
-					{
-						getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку");
-						return;
-					}
-					else
-					{
-						page--;
-						pos = 6;
-					}
-				}
-				else
-				{
-					pos--;
-				}
-			}
-		}
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
-		{
-			return;
-		}
-		if (page == pages - 1) { elInPage = this->cars.size() - page * 7; pos = (pos >= elInPage ? 0 : pos);}
-		else elInPage = 7;
-	}
-}
-
 void Catalog::displayElement(Car car)
 {
 	wcout << endl << L"Марка: ";
@@ -422,7 +372,7 @@ void Catalog::displayElement(Car car)
 	cout << car.price << endl;
 }
 
-void Catalog::approveDeletion(int page, int pos)
+void Catalog::approveDeletion(int &page, int &pos)
 {
 	string temp;
 	system("cls");
@@ -484,12 +434,13 @@ void Catalog::searchInCatalog()
 				if (!row && brand.size() < 16) brand += a;
 				else if (row == 1 && model.size() < 16) model += a;
 				else if (row == 2 && color.size() < 16) color += a;
-				else if (row == 3 && priceFrom.size() < 11) priceFrom += a;
-				else if (row == 4 && priceTo.size() < 11) priceTo += a;
+				
 			}
 			else if ((a >= '0' && a <= '9'))
 			{
-				if (row == 5 && dateFrom.size() < 8) dateFrom += a;
+				if (row == 3 && priceFrom.size() < 11) priceFrom += a;
+				else if (row == 4 && priceTo.size() < 11) priceTo += a;
+				else if (row == 5 && dateFrom.size() < 8) dateFrom += a;
 				else if (row == 6 && dateTo.size() < 8) dateTo += a;
 			}
 			else if (a == 8 && row < 7)
@@ -591,6 +542,73 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
 		{
 			break;
+		}
+	}
+}
+
+void Catalog::changeElement(int& page, int& pos)
+{
+	enterElement(cars[pos + page * 7], cars[pos + page * 7].date.day + cars[pos + page * 7].date.month + cars[pos + page * 7].date.year);
+	rewriteCatalogFile(*this);
+}
+
+void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
+{
+	int pages, page = 0, pos = 0, elInPage = 7;
+	while (true)
+	{
+		if (this->cars.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
+		pages = ceil((double)this->cars.size() / 7.0);
+		if (page == pages - 1) { elInPage = this->cars.size() - page * 7; pos = (pos >= elInPage ? 0 : pos); }
+		else elInPage = 7;
+		system("cls");
+
+		wcout << L"Страница " << page + 1 << L" из " << pages <<
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
+			L"Для выбора элемента нажмите Enter" << endl << endl;
+
+		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
+		{
+			if (i % 7 == pos) cout << string(40, '/');
+			displayElement(this->cars[i]);
+			if (i % 7 == pos) cout << string(40, '\\');
+		}
+
+		char a = getCharCode();
+
+		if (a == VK_LEFT) page = (page + pages - 1) % pages;
+		else if (a == VK_RIGHT) page = (page + 1) % pages;
+		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
+		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
+		else if (a == 13)
+		{
+			int num = cars.size();
+			(this->*f)(page, pos);
+			if (num != cars.size())
+				if (pos + page * 7 == cars.size())
+				{
+					if (pos == 0)
+					{
+						if (page == 0)
+						{
+							getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку");
+							return;
+						}
+						else
+						{
+							page--;
+							pos = 6;
+						}
+					}
+					else
+					{
+						pos--;
+					}
+				}
+		}
+		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		{
+			return;
 		}
 	}
 }

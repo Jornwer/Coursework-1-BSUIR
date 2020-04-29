@@ -103,11 +103,12 @@ public:
 
 	void changeCatalog(); //функция меню каталога
 	void displayCatalog(); //вывод каталога
-	void addElement(); //функция добавления элемента в каталог
-	void deleteElement();//функция удаления элемента из каталога
+	void enterElement(Car&, std::string); //функция добавления элемента в каталог
 	void displayElement(Car car);//функция вывода 1 элемента каталога
-	void approveDeletion(int, int);//функция подтверждения удаления
+	void approveDeletion(int&, int&);//функция подтверждения удаления
 	void searchInCatalog();//функция поиска в каталоге
+	void changeElement(int&, int&);
+	void modifyElement(void (Catalog::*)(int&, int&));
 	void displaySearch(std::string, std::string, std::string, std::string, std::string, std::string, std::string);//функция выводящая найденные элементы в каталоге
 };
 #endif
