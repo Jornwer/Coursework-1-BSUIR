@@ -76,7 +76,7 @@ void Admin::createAccount(vector<Credentials>& admins)
 	if (!leave)
 	{
 		ofstream file("users.txt", ios::app);
-		file << this->credentials.login << endl << sha256(this->credentials.password) << endl;
+		file << this->credentials.login << '\n' << sha256(this->credentials.password) << endl;
 		file.close();
 		delete &file;
 		userMenu(admins);
@@ -131,7 +131,7 @@ void Admin::addAdmin()
 	if (it != users.end())
 	{
 		ofstream file("admins.txt", ios::app);
-		file << it->login << endl << it->password << endl;
+		file << it->login << '\n' << it->password << endl;
 
 		users.erase(it);
 		rewriteFile(users, "users.txt");
@@ -214,7 +214,7 @@ void Admin::addUser()
 	if (!leave)
 	{
 		ofstream file("users.txt", ios::app);
-		file << user.login << endl << sha256(user.password) << endl;
+		file << user.login << '\n' << sha256(user.password) << endl;
 		getCharacter(L"Пользователь успешно добавлен. Для продолжения нажмите любую клавишу");
 	}
 }

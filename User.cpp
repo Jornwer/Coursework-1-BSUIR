@@ -98,7 +98,8 @@ void rewriteFile(vector<Credentials>& users, string path)
 	ofstream file(path, ios::trunc);
 
 	for (auto i : users)
-		file << i.login << endl << i.password << endl;
+		file << i.login << '\n' << i.password << '\n';
+	file << flush;
 
 	file.close();
 }
@@ -107,9 +108,10 @@ void rewriteCatalogFile(Catalog& catalog)
 {
 	ofstream file("catalog.txt", ios::trunc);
 	for (auto i : catalog.cars)
-		file << i.brand << endl << i.model << endl << i.color << endl << i.price << endl
+		file << i.brand << '\n' << i.model << '\n' << i.color << '\n' << i.price << '\n'
 		<< (i.date.day.size() == 1 ? '0' + i.date.day : i.date.day) << ' ' << (i.date.month.size() == 1 ? '0' + i.date.month : i.date.month) 
-					<< ' ' << (i.date.year.size() == 1 ? '0' + i.date.year : i.date.year) << endl;
+					<< ' ' << (i.date.year.size() == 1 ? '0' + i.date.year : i.date.year) << '\n';
+	file << flush;
 
 	file.close();
 }
@@ -259,7 +261,7 @@ void Catalog::displayCatalog()
 	{
 		system("cls");
 		wcout << L"Страница " << page+1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n';
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 			displayElement(this->cars[i]);
 
@@ -320,7 +322,7 @@ void Catalog::enterElement(Car& car, string date)
 					if (!carEmpty) break;
 					ofstream file("catalog.txt", ios::app);
 
-					file << car.brand << endl << car.model << endl << car.color << endl << car.price << endl
+					file << car.brand << '\n' << car.model << '\n' << car.color << '\n' << car.price << '\n'
 					<< date[0] << date[1] << ' ' << date[2] << date[3]
 					<< ' ' << date[4] << date[5] << date[6] << date[7] << endl;
 
@@ -360,16 +362,16 @@ void Catalog::enterElement(Car& car, string date)
 
 void Catalog::displayElement(Car car)
 {
-	wcout << endl << L"Марка: ";
+	wcout << L'\n' << L"Марка: ";
 	cout << car.brand;
 	wcout << L"     Модель: ";
 	cout << car.model;
 	wcout << L"    Цвет: ";
-	cout << car.color << endl;
+	cout << car.color << '\n';
 	wcout << L"Дата продажи: ";
 	cout << car.date.day << '.' << car.date.month << '.' << car.date.year;
 	wcout << L"    Цена: ";
-	cout << car.price << endl;
+	cout << car.price << '\n';
 }
 
 void Catalog::approveDeletion(int &page, int &pos)
@@ -531,7 +533,7 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 	{
 		system("cls");
 		wcout << L"Страница " << page + 1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl;
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n';
 		for (int i = page * 7; i < (page + 1) * 7 && i < cat.size(); ++i)
 			displayElement(cat[i]);
 
@@ -564,8 +566,8 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 		system("cls");
 
 		wcout << L"Страница " << page + 1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << endl <<
-			L"Для выбора элемента нажмите Enter" << endl << endl;
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n' <<
+			L"Для выбора элемента нажмите Enter" << L'\n' << L'\n';
 
 		for (int i = page * 7; i < (page + 1) * 7 && i < this->cars.size(); ++i)
 		{

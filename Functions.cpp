@@ -15,7 +15,7 @@ void drawMenu(vector<wstring> msg, int8_t& row)
 		wcout << msg[i];
 		if (row == i) wcout << L"   <--";
 	}
-	wcout << L"\n\n";;
+	wcout << L"\n\n" << flush;
 }
 
 void mainMenu()
@@ -48,7 +48,7 @@ string getString(wstring msg)
 {
 	system("cls");
 	string tmp;
-	wcout << msg << endl;
+	wcout << msg << L'\n';
 	getline(cin, tmp);
 	return tmp;
 }
@@ -59,7 +59,7 @@ string getPassword(wstring msg)
 	char a = '1';
 
 	system("cls");
-	wcout << msg << endl;
+	wcout << msg << L'\n';
 
 	while ((a = _getch()) != 13)
 	{
@@ -83,7 +83,7 @@ string getPassword(wstring msg)
 void getCharacter(wstring msg)
 {
 	system("cls");
-	wcout << msg << endl;
+	wcout << msg << L'\n';
 	char a = _getch();
 }
 
@@ -333,12 +333,12 @@ bool carCorrect(Car car, string date)
 
 bool carCorrect(Car car)
 {
-	string date = "";
-	date += car.date.day;
-	date += car.date.month;
-	date += car.date.year;
+	string date = car.date.day + car.date.month + car.date.year;
+
 
 	if (car.brand.empty() && car.color.empty() && car.model.empty() && car.price.empty() && date.size() == 0) return true;
+
+	if (car.date.day.size() != 2 || car.date.month.size() != 2 || car.date.year.size() != 4) return false;
 
 	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8) return false;
 
@@ -351,3 +351,9 @@ bool carCorrect(Car car)
 
 	return true;
 }
+
+
+
+
+
+
