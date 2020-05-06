@@ -8,4 +8,4 @@ Coursework
 
 Тема : Учет продажи автомобилей
 
-Код написан в Visual Studio Community 2019
+Версия языка C++20
