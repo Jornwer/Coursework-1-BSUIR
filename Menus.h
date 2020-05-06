@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <algorithm>
 #include <cstdio>
+#include <ctime>
 #include "SHA256.h"
 
 class Catalog;

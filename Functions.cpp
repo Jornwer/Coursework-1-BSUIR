@@ -342,6 +342,24 @@ bool dealCorrect(Deal deal, string date)
 		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
 		return false;
 	}
+
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+	string currTime = (ltm->tm_mday < 10 ? "0" + to_string(ltm->tm_mday) : to_string(ltm->tm_mday))
+		+ (ltm->tm_mon < 9 ? "0" + to_string(1 + ltm->tm_mon) : to_string(1 + ltm->tm_mon))
+		+ to_string(1900 + ltm->tm_year);
+
+	if (deal.date > Date(currTime))
+	{
+		getCharacter(L"Введенная дата больше настоящей даты. Для продолжения нажмите любую клавишу");
+		return false;
+	}
+
+	if (deal.date < Date("01011990"))
+	{
+		getCharacter(L"Введенная дата дожна быть больше 01.01.1990. Для продолжения нажмите любую клавишу");
+		return false;
+	}
 	
 	return true;
 }
@@ -371,6 +389,16 @@ bool dealCorrect(Deal deal)
 		if (a < '0' || a > '9') return false;
 
 	if (!dayCorrect(stringToInt(deal.date.day), stringToInt(deal.date.month), stringToInt(deal.date.year))) return false;
+
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+
+	string currTime = (ltm->tm_mday < 10 ? "0" + to_string(ltm->tm_mday) : to_string(ltm->tm_mday)) 
+					+ (ltm->tm_mon < 9 ? "0" + to_string(1 + ltm->tm_mon) : to_string(1 + ltm->tm_mon))
+					+ to_string(1900 + ltm->tm_year);
+	if (deal.date > Date(currTime)) return false;
+
+	if (deal.date < Date("01011990")) return false;
 
 	return true;
 }

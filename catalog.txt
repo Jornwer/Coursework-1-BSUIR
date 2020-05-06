@@ -1,11 +1,4 @@
 BMW X9 Black 1000 06 05 2020 Ivan Ivanov Jornwer
-BMW X9 Black 1000 06 05 2020 Ivan Ivanov Jornwer
-BMW X9 Black 1000 06 05 2020 Ivan Ivanov Jornwer
-Toyota
-jgdv
-hfb
-500
-11 11 1111
-khui
-sdfsdf
-test
+Toyota jgdv hfb 500 01 01 1990 khui sdfsdf test
+Tesla ModelS White 2000 12 12 1990 Elon Musk test
+Lada Razvaluha Rusty 666 29 05 2000 Petr Ogyrcov Jornwer

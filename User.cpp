@@ -260,13 +260,13 @@ void Catalog::displayCatalog()
 {
 	
 	if (this->deals.empty()) {getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
-	int pages = ceil((double)this->deals.size() / 7.0), page = 0;
+	int pages = ceil((double)this->deals.size() / 6.0), page = 0;
 	while (true)
 	{
 		system("cls");
 		wcout << L"Страница " << page+1 << L" из " << pages <<
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n';
-		for (int i = page * 7; i < (page + 1) * 7 && i < this->deals.size(); ++i)
+		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i)
 			this->deals[i].displayElement();
 
 		char a = getCharCode();
@@ -336,13 +336,14 @@ void Catalog::enterElement(Deal& deal, string date)
 					if (!dealEmpty) break;
 					ofstream file("catalog.txt", ios::app);
 
-					file << deal.car.brand << '\n' << deal.car.model << '\n' << deal.car.color << '\n' << deal.car.price << '\n'
+					file << deal.car.brand << ' ' << deal.car.model << ' ' << deal.car.color << ' ' << deal.car.price << ' '
 						<< date[0] << date[1] << ' ' << date[2] << date[3]
-						<< ' ' << date[4] << date[5] << date[6] << date[7] << '\n'
-						<< deal.buyerName << '\n' << deal.buyerSurname << '\n' << deal.seller << '\n';
+						<< ' ' << date[4] << date[5] << date[6] << date[7] << ' '
+						<< deal.buyerName << ' ' << deal.buyerSurname << ' ' << deal.seller << '\n';
 
 					file.close();
-
+					deal.date = Date(date);
+					this->deals.push_back(deal);
 					getCharacter(L"Машина успешно добавлена. Для продолжения нажмите любую клавишу");
 					continue;
 				}
@@ -404,7 +405,7 @@ void Catalog::approveDeletion(int &page, int &pos)
 	temp = getString(L"Введите \"yes\" для удаления элемента");
 	if (temp == "yes")
 	{
-		this->deals.erase(this->deals.begin() + pos + page * 7);
+		this->deals.erase(this->deals.begin() + pos + page * 6);
 		rewriteCatalogFile(*this);
 	}
 }
@@ -551,30 +552,30 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 
 void Catalog::changeElement(int& page, int& pos)
 {
-	enterElement(deals[pos + page * 7], deals[pos + page * 7].date.day + deals[pos + page * 7].date.month + deals[pos + page * 7].date.year);
+	enterElement(deals[pos + page * 6], deals[pos + page * 6].date.day + deals[pos + page * 6].date.month + deals[pos + page * 6].date.year);
 	rewriteCatalogFile(*this);
 }
 
 void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 {
-	int pages, page = 0, pos = 0, elInPage = 7;
+	int pages, page = 0, pos = 0, elInPage;
 	while (true)
 	{
 		if (this->deals.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
-		pages = ceil((double)this->deals.size() / 7.0);
-		if (page == pages - 1) { elInPage = this->deals.size() - page * 7; pos = (pos >= elInPage ? 0 : pos); }
-		else elInPage = 7;
+		pages = ceil((double)this->deals.size() / 6.0);
+		if (page == pages - 1) { elInPage = this->deals.size() - page * 6; pos = (pos >= elInPage ? 0 : pos); }
+		else elInPage = 6;
 		system("cls");
 
 		wcout << L"Страница " << page + 1 << L" из " << pages <<
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n' <<
 			L"Для выбора элемента нажмите Enter" << L'\n' << L'\n';
 
-		for (int i = page * 7; i < (page + 1) * 7 && i < this->deals.size(); ++i)
+		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i)
 		{
-			if (i % 7 == pos) cout << string(40, '/');
+			if (i % 6 == pos) cout << string(40, '/');
 			this->deals[i].displayElement();
-			if (i % 7 == pos) cout << string(40, '\\');
+			if (i % 6 == pos) cout << string(40, '\\');
 		}
 
 		char a = getCharCode();
@@ -587,8 +588,8 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 		{
 			int num = deals.size();
 			(this->*f)(page, pos);
-			if (num != deals.size())   //если элемент удален то правда, иначе ложь
-				if (pos + page * 7 == deals.size())
+			if (num != deals.size())   //если элемент не удален то правда, иначе ложь
+				if (pos + page * 6 == deals.size())
 				{
 					if (pos == 0)
 					{
