@@ -93,9 +93,11 @@ Credentials::Credentials(string login, string password)
 	this->password = password;
 }
 
-bool operator==(const Car& l, const Car& r)
+bool operator==(const Deal& l, const Deal& r)
 {
-	return (l.brand == r.brand && l.color == r.color && l.date == r.date && l.model == r.model && l.price == r.price);
+	return (l.car.brand == r.car.brand && l.car.color == r.car.color && l.date == r.date 
+		&& l.car.model == r.car.model && l.car.price == r.car.price
+		&& l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
 }
 
 bool operator==(const Date& l, const Date& r)
@@ -195,10 +197,6 @@ Date::Date(string str)
 	}
 }
 
-Date::Date()
-{
-}
-
 int stringToInt(string str)
 {
 	int res = 0;
@@ -221,7 +219,7 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 	case 0: login = (haveAccess ? getString(L"Введите логин. Для выхода введите exit")
 		: getString(L"Введите заново логин. Для выхода введите exit"));
 		break;
-	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод логи и пароля. Для выхода введите exit"); break;
+	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод логина и пароля. Для выхода введите exit"); break;
 	case 2: login = getString(L"Аккаунт с таким логином уже существует. Повторите ввод логина и пароля. Для выхода введите exit"); break;
 	}
 
@@ -238,15 +236,25 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 		if (login.size() < 4)
 		{
 			error = 1;
-			login = getString(L"Введите логин из 4 или более символов. Для выхода введите exit");
+			if (login != "")
+				login = getString(L"Длина логина должна быть больше 3 символов. Повторите ввод логина. Для выхода введите exit");
+			else
+				getline(cin, login);
+			continue;
 		}
-		if (login[0] == ' ') { error = 2; continue; }
+
+		if (login.size() > 16)
+		{
+			error = 1;
+			login = getString(L"Длина логина должна быть меньше 17 символов. Повторите ввод логина. Для выхода введите exit");
+		}
+
 		for (auto a : login)
 		{
 			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')))
 			{
 				error = 2;
-				login = getString(L"Логин содержит недопустимые символы. Для выхода введите exit");
+				login = getString(L"Логин содержит недопустимые символы. Повторите ввод логина. Для выхода введите exit");
 				break;
 			}
 		}
@@ -278,14 +286,14 @@ string enterPassword(bool& leave)
 			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')))
 			{
 				error = 1;
-				password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");
+				password = getPassword(L"Пароль содержит недопустимые символы. Повторите ввод пароля. Для выхода введите exit");
 				break;
 			}
 			for (auto b : symbols)
 				if (a == b)
 				{
 					error = 1;
-					password = getPassword(L"Пароль содержит недопустимые символы. Для выхода введите exit");
+					password = getPassword(L"Пароль содержит недопустимые символы. Повторите ввод пароля. Для выхода введите exit");
 					break;
 				}
 		}
@@ -293,7 +301,7 @@ string enterPassword(bool& leave)
 		if (password.size() < 8)
 		{
 			error = 2;
-			password = getPassword(L"Пароль должен содержать минимум 8 символов. Для выхода введите exit");
+			password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
 		}
 
 	} while (error);
@@ -301,21 +309,28 @@ string enterPassword(bool& leave)
 	return password;
 }
 
-bool carCorrect(Car car, string date)
+bool dealCorrect(Deal deal, string date)
 {
-	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8)
+	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
+			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty())
 	{
-		getCharacter(L"Данные введены неправильно. Для повторного ввода данных нажмите любую клавишу");
+		getCharacter(L"Одно из полей пустое. Для повторного ввода данных нажмите любую клавишу");
 		return false;
 	}
 
-	if (car.price.size() > 9)
+	if (date.size() != 8)
+	{
+		getCharacter(L"Дата должна состоять из 8 цифр. Для повторного ввода данных нажмите любую клавишу");
+		return false;
+	}
+
+	if (deal.car.price.size() > 9)
 	{
 		getCharacter(L"Стоимость машины должна быть меньше 1000000000. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 
-	if (stringToInt(car.price) == 0)
+	if (stringToInt(deal.car.price) == 0)
 	{
 		getCharacter(L"Стоимость машины должна быть больше 0. Для продолжения намите любую клавишу");
 		return false;
@@ -331,29 +346,41 @@ bool carCorrect(Car car, string date)
 	return true;
 }
 
-bool carCorrect(Car car)
+bool dealCorrect(Deal deal)
 {
-	string date = car.date.day + car.date.month + car.date.year;
+	string date = deal.date.day + deal.date.month + deal.date.year;
 
+	if (deal.car.brand.empty() && deal.car.color.empty() && deal.car.model.empty() && deal.car.price.empty()
+		&& date.size() == 0 && deal.buyerName.empty() && deal.buyerSurname.empty() && deal.seller.empty()) return true;
 
-	if (car.brand.empty() && car.color.empty() && car.model.empty() && car.price.empty() && date.size() == 0) return true;
+	if (deal.date.day.size() != 2 || deal.date.month.size() != 2 || deal.date.year.size() != 4) return false;
 
-	if (car.date.day.size() != 2 || car.date.month.size() != 2 || car.date.year.size() != 4) return false;
+	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty() || deal.car.price.empty()
+		|| deal.buyerName.empty() || deal.buyerSurname.empty() || deal.seller.empty()) return false;
 
-	if (car.brand.empty() || car.color.empty() || car.model.empty() || car.price.empty() || date.size() != 8) return false;
+	if (stringToInt(deal.car.price) == 0 || stringToInt(deal.car.price) == -1) return false;
 
-	if (stringToInt(car.price) == 0 || stringToInt(car.price) == -1) return false;
+	if (deal.car.price.size() > 9) return false;
+
+	for (auto str : vector<string>{ deal.car.color, deal.car.brand, deal.car.model, deal.buyerName, deal.buyerSurname, deal.seller })
+		for (auto i : str)
+			if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i >= '0' && i <= '9')))
+				return false;
 
 	for (auto a : date)
 		if (a < '0' || a > '9') return false;
 
-	if (!dayCorrect(stringToInt(car.date.day), stringToInt(car.date.month), stringToInt(car.date.year))) return false;
+	if (!dayCorrect(stringToInt(deal.date.day), stringToInt(deal.date.month), stringToInt(deal.date.year))) return false;
 
 	return true;
 }
 
+bool stringContainString(string& stringForSearch, string& searchingString)
+{
+	if (stringForSearch.size() < searchingString.size()) return false;
+	for (int i = 0; i < searchingString.size(); ++i)
+		if (stringForSearch[i] != searchingString[i])
+			return false;
+	return true;
 
-
-
-
-
+}

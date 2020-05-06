@@ -13,6 +13,9 @@
 class Catalog;
 class Credentials;
 class Car;
+class Deal;
+
+extern std::string currentUser;
 
 void mainMenu(); //функция вывода главного меню
 void drawMenu(std::vector<std::wstring>, int8_t&); //функция вывода строк со стрелочкой на строке
@@ -30,9 +33,10 @@ int stringToInt(std::string); //функция перевода строки в 
 void adminHaveAccount(); //функция спрашиавющая у админа способ входа
 std::string enterLogin(int8_t,bool&,bool&); //функция ввода логина с проверкой на правильность
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
-bool carCorrect(Car, std::string);
-bool carCorrect(Car);
+bool dealCorrect(Deal, std::string);
+bool dealCorrect(Deal);
 bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
+bool stringContainString(std::string&, std::string&);
 
 class Credentials
 {
@@ -77,7 +81,7 @@ public:
 	std::string year;//год
 
 	Date(std::string); //конструктор в формате ДДММГГГГ
-	Date();
+	Date() = default;
 
 	friend bool operator==(const Date&, const Date&);
 	friend bool operator>(const Date&, const Date&);// перегрузка оператора больше
@@ -91,24 +95,35 @@ public:
 	std::string model;//модель
 	std::string color;//цвет
 	std::string price;//стоимость
-	Date date;//дата
+};
 
-	friend bool operator==(const Car&, const Car&);
+class Deal
+{
+public:
+	Car car;
+	Date date;
+	std::string seller;
+	std::string buyerName;
+	std::string buyerSurname;
+
+	void displayElement();//функция вывода 1 элемента каталога
+
+	friend bool operator==(const Deal&, const Deal&);
 };
 
 class Catalog
 {
 public:
-	std::vector<Car> cars; // вектор машин
+	std::vector<Deal> deals; 
 
 	void changeCatalog(); //функция меню каталога
 	void displayCatalog(); //вывод каталога
-	void enterElement(Car&, std::string); //функция добавления элемента в каталог
-	void displayElement(Car car);//функция вывода 1 элемента каталога
+	void enterElement(Deal&, std::string); //функция добавления элемента в каталог
 	void approveDeletion(int&, int&);//функция подтверждения удаления
 	void searchInCatalog();//функция поиска в каталоге
 	void changeElement(int&, int&);
 	void modifyElement(void (Catalog::*)(int&, int&));
-	void displaySearch(std::string, std::string, std::string, std::string, std::string, std::string, std::string);//функция выводящая найденные элементы в каталоге
+	void displaySearch(std::string, std::string, std::string, std::string,
+						std::string, std::string, std::string, std::string, std::string);//функция выводящая найденные элементы в каталоге
 };
 #endif

@@ -88,11 +88,12 @@ void Admin::userMenu(vector<Credentials>& admins)
 	int8_t row = 0;
 	int8_t colNum = 7;
 	Catalog catalog;
+	currentUser = this->credentials.login;
 	while (true)
 	{
 		system("cls");
 		drawMenu({ L" Изменить каталог", L"\n\n Изменить пароль",L"\n\n Удалить аккаунт",
-			L"\n\n Назначить нового администратора", L"\n\n Удалить пользователя", L"\n\nДобавить нового пользователя", L"\n\n Назад" }, row);
+			L"\n\n Назначить нового администратора", L"\n\n Удалить пользователя", L"\n\n Добавить нового пользователя", L"\n\n Назад" }, row);
 
 		char a = getCharCode();
 
