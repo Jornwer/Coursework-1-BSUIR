@@ -410,5 +410,9 @@ bool stringContainString(string& stringForSearch, string& searchingString)
 		if (stringForSearch[i] != searchingString[i])
 			return false;
 	return true;
+}
 
+bool comparePairs(pair<string, int> l, pair<string, int> r)
+{
+	return l.second > r.second;
 }

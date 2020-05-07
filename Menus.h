@@ -9,14 +9,13 @@
 #include <algorithm>
 #include <cstdio>
 #include <ctime>
+#include <unordered_map>
 #include "SHA256.h"
 
 class Catalog;
 class Credentials;
 class Car;
 class Deal;
-
-extern std::string currentUser;
 
 void mainMenu(); //функция вывода главного меню
 void drawMenu(std::vector<std::wstring>, int8_t&); //функция вывода строк со стрелочкой на строке
@@ -38,6 +37,7 @@ bool dealCorrect(Deal, std::string);
 bool dealCorrect(Deal);
 bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
 bool stringContainString(std::string&, std::string&);
+bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);
 
 class Credentials
 {
@@ -46,6 +46,7 @@ public:
 	Credentials() = default; // конструктор по умолчанию
 	std::string login; //логин
 	std::string password; //пароль
+	inline static std::string currentUser;
 
 	friend bool operator==(const Credentials&, const Credentials&); //перегрузка оператора ==
 };
@@ -59,7 +60,7 @@ public:
 	virtual void userMenu(std::vector<Credentials>&); //основное меню пользователя
 	void changePassword(std::vector<Credentials>&, std::string); //функция смены пароля
 	void deleteAccount(std::vector<Credentials>&, std::string);// функция удаления аккаунта
-	int checkPasswords();//функция ввода пароля и проверки его с существующим
+	int8_t checkPasswords();//функция ввода пароля и проверки его с существующим
 };
 
 class Admin: public User
@@ -126,5 +127,6 @@ public:
 	void modifyElement(void (Catalog::*)(int&, int&));
 	void displaySearch(std::string, std::string, std::string, std::string,
 						std::string, std::string, std::string, std::string, std::string);//функция выводящая найденные элементы в каталоге
+	void showBestBrands();
 };
 #endif

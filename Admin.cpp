@@ -88,7 +88,7 @@ void Admin::userMenu(vector<Credentials>& admins)
 	int8_t row = 0;
 	int8_t colNum = 7;
 	Catalog catalog;
-	currentUser = this->credentials.login;
+	Credentials::currentUser = this->credentials.login;
 	while (true)
 	{
 		system("cls");

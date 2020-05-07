@@ -2,8 +2,6 @@
 
 using namespace std;
 
-string currentUser;
-
 void userHaveAccount()
 {
 	int8_t row = 0;
@@ -45,7 +43,7 @@ void User::userMenu(vector<Credentials>& users)
 	int8_t row = 0;
 	int8_t colNum = 4;
 	Catalog catalog;
-	currentUser = this->credentials.login;
+	Credentials::currentUser = this->credentials.login;
 	while (true)
 	{
 		system("cls");
@@ -159,7 +157,7 @@ bool copyCatalogFile(Catalog& catalog)
 	return false;
 }
 
-int User::checkPasswords()
+int8_t User::checkPasswords()
 {
 	string pass1 = getPassword(L"Ведите пароль от аккаунта. Для выхода введите exit");
 	if (pass1 == "exit") return 2;
@@ -177,13 +175,13 @@ int User::checkPasswords()
 void Catalog::changeCatalog()
 {
 	int8_t row = 0;
-	int8_t colNum = 6;
+	int8_t colNum = 7;
 	if(copyCatalogFile(*this)) return;
 	while (true)
 	{
 		system("cls");
-		drawMenu({ L" Просмотреть каталог", L"\n\n Добавить элемент в каталог",
-						L"\n\n Удалить элемент из каталога",L"\n\n Поиск в каталоге", L"\n\n Изменить элемент",L"\n\n Назад" }, row);
+		drawMenu({ L" Просмотреть каталог", L"\n\n Добавить элемент в каталог", L"\n\n Удалить элемент из каталога",
+					L"\n\n Поиск в каталоге", L"\n\n Изменить элемент", L"\n\n Показать самые продаваемые марки", L"\n\n Назад" }, row);
 
 		char a = getCharCode();
 
@@ -200,7 +198,8 @@ void Catalog::changeCatalog()
 			else if (row == 2) modifyElement(&Catalog::approveDeletion);
 			else if (row == 3) searchInCatalog();
 			else if (row == 4) modifyElement(&Catalog::changeElement);
-			else if (row == 5)
+			else if (row == 5) showBestBrands();
+			else if (row == 6)
 			{
 				system("cls");
 				break;
@@ -212,7 +211,7 @@ void Catalog::changeCatalog()
 void User::deleteAccount(vector<Credentials>& users, string path)
 {
 	do {
-		int i = checkPasswords();
+		int8_t i = checkPasswords();
 
 		if (!i)
 		{
@@ -234,7 +233,7 @@ void User::deleteAccount(vector<Credentials>& users, string path)
 void User::changePassword(vector<Credentials>& users, string path)
 {
 	do {
-		int i = checkPasswords();
+		int8_t i = checkPasswords();
 
 		if (!i)
 		{
@@ -285,7 +284,7 @@ void Catalog::enterElement(Deal& deal, string date)
 	bool dealEmpty = (deal == Deal());
 	Deal save = deal;
 	int8_t row = 0;
-	deal.seller = currentUser;
+	deal.seller = Credentials::currentUser;
 
 	while (true)
 	{
@@ -615,4 +614,21 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 			return;
 		}
 	}
+}
+
+void Catalog::showBestBrands()
+{
+	unordered_map<string, int> umap;
+	for (auto i : this->deals)
+		umap[i.car.brand]++;
+	vector<pair<string, int>> vec(umap.begin(), umap.end());
+	sort(vec.begin(), vec.end(), comparePairs);
+	system("cls");
+	wcout << L"Самые продаваемые марки. Для выхода нажмите любую клавишу\n";
+	for (int8_t i = 0; i < 3 && i < vec.size(); ++i)
+	{
+		cout << vec[i].first << " - " << vec[i].second;
+		wcout << L" машин продано\n";
+	}
+	char a = getCharCode();
 }
