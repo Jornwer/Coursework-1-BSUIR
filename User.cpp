@@ -618,6 +618,11 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 
 void Catalog::showBestBrands()
 {
+	if (this->deals.empty())
+	{
+		getCharacter(L"Каталог пуст. Для продолжения введите любую клавишу");
+		return;
+	}
 	unordered_map<string, int> umap;
 	for (auto i : this->deals)
 		umap[i.car.brand]++;

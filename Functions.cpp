@@ -279,6 +279,16 @@ string enterPassword(bool& leave)
 			leave = true;
 			return "";
 		}
+		
+		if (password.size() < 8)
+		{
+			error = 2;
+			if (password != "")
+				password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
+			else
+				getline(cin, password);
+			continue;
+		}
 
 		string symbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 		for (auto a : password)
@@ -297,13 +307,6 @@ string enterPassword(bool& leave)
 					break;
 				}
 		}
-
-		if (password.size() < 8)
-		{
-			error = 2;
-			password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
-		}
-
 	} while (error);
 
 	return password;

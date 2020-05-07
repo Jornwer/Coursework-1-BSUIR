@@ -75,10 +75,9 @@ void Admin::createAccount(vector<Credentials>& admins)
 
 	if (!leave)
 	{
-		ofstream file("users.txt", ios::app);
+		ofstream file("admins.txt", ios::trunc);
 		file << this->credentials.login << '\n' << sha256(this->credentials.password) << endl;
 		file.close();
-		delete &file;
 		userMenu(admins);
 	}
 }
