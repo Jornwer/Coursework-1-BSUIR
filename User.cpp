@@ -159,9 +159,9 @@ bool copyCatalogFile(Catalog& catalog)
 
 int8_t User::checkPasswords()
 {
-	string pass1 = getPassword(L"Ведите пароль от аккаунта. Для выхода введите exit");
+	string pass1 = getPassword(L"Введите пароль от аккаунта. Для выхода введите exit");
 	if (pass1 == "exit") return 2;
-	string pass2 = getPassword(L"Ведите пароль от аккаунта еще раз. Для выхода введите exit");
+	string pass2 = getPassword(L"Введите пароль от аккаунта еще раз. Для выхода введите exit");
 	if (pass2 == "exit") return 2;
 
 	if (pass1 != pass2 || pass1 != this->credentials.password)
@@ -332,7 +332,11 @@ void Catalog::enterElement(Deal& deal, string date)
 			{
 				if (dealCorrect(deal, date))
 				{
-					if (!dealEmpty) break;
+					if (!dealEmpty)
+					{
+						deal.date = date;
+						break;
+					}
 					ofstream file("catalog.txt", ios::app);
 
 					file << deal.car.brand << ' ' << deal.car.model << ' ' << deal.car.color << ' ' << deal.car.price << ' '
@@ -372,7 +376,7 @@ void Catalog::enterElement(Deal& deal, string date)
 				else if (row == 2 && !deal.car.color.empty()) deal.car.color.erase(deal.car.color.end() - 1);
 				else if (row == 3 && !deal.car.price.empty()) deal.car.price.erase(deal.car.price.end() - 1);
 				else if (row == 4 && !date.empty()) date.erase(date.end() - 1);
-				else if (row == 5 && !deal.buyerName.empty()) deal.buyerName.erase(deal.buyerSurname.end() - 1);
+				else if (row == 5 && !deal.buyerName.empty()) deal.buyerName.erase(deal.buyerName.end() - 1);
 				else if (row == 6 && !deal.buyerSurname.empty()) deal.buyerSurname.erase(deal.buyerSurname.end() - 1);
 			}
 		}

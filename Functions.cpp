@@ -6,6 +6,7 @@ void main()
 {
 	locale::global(locale(""));
 	mainMenu();
+	Catalog Catalog;
 }
 
 void drawMenu(vector<wstring> msg, int8_t& row)
@@ -233,6 +234,12 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 			break;
 		}
 
+		if (login[0] == ' ')
+		{
+			error = 1;
+			login = getString(L"Логин не может начинаться с пробела . Повторите ввод логина. Для выхода введите exit");
+		}
+
 		if (login.size() < 4)
 		{
 			error = 1;
@@ -251,7 +258,7 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 
 		for (auto a : login)
 		{
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')))
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') || a == ' '))
 			{
 				error = 2;
 				login = getString(L"Логин содержит недопустимые символы. Повторите ввод логина. Для выхода введите exit");
@@ -352,13 +359,13 @@ bool dealCorrect(Deal deal, string date)
 		+ (ltm->tm_mon < 9 ? "0" + to_string(1 + ltm->tm_mon) : to_string(1 + ltm->tm_mon))
 		+ to_string(1900 + ltm->tm_year);
 
-	if (deal.date > Date(currTime))
+	if (tmp > Date(currTime))
 	{
 		getCharacter(L"Введенная дата больше настоящей даты. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 
-	if (deal.date < Date("01011990"))
+	if (tmp < Date("01011990"))
 	{
 		getCharacter(L"Введенная дата дожна быть больше 01.01.1990. Для продолжения нажмите любую клавишу");
 		return false;
