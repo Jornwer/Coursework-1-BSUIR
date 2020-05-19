@@ -6,7 +6,6 @@ void main()
 {
 	locale::global(locale(""));
 	mainMenu();
-	Catalog Catalog;
 }
 
 void drawMenu(vector<wstring> msg, int8_t& row)
@@ -54,13 +53,16 @@ string getString(wstring msg)
 	return tmp;
 }
 
-string getPassword(wstring msg)
+string getPassword(wstring msg, bool boo)
 {
 	string password = "";
 	char a = '1';
 
-	system("cls");
-	wcout << msg << L'\n';
+	if (boo)
+	{
+		system("cls");
+		wcout << msg << L'\n';
+	}
 
 	while ((a = _getch()) != 13)
 	{
@@ -85,7 +87,7 @@ void getCharacter(wstring msg)
 {
 	system("cls");
 	wcout << msg << L'\n';
-	char a = _getch();
+	char a = getCharCode();
 }
 
 Credentials::Credentials(string login, string password)
@@ -183,7 +185,7 @@ bool operator>(const Date& l, const Date& r)
 	return l.countDays() > r.countDays();
 }
 
-Date::Date(string str)
+Date::Date(const string& str)
 {
 	if (str.size() == 8)
 	{
@@ -237,7 +239,8 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 		if (login[0] == ' ')
 		{
 			error = 1;
-			login = getString(L"Логин не может начинаться с пробела . Повторите ввод логина. Для выхода введите exit");
+			login = getString(L"Логин не может начинаться с пробела. Повторите ввод логина. Для выхода введите exit");
+			continue;
 		}
 
 		if (login.size() < 4)
@@ -254,6 +257,7 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 		{
 			error = 1;
 			login = getString(L"Длина логина должна быть меньше 17 символов. Повторите ввод логина. Для выхода введите exit");
+			continue;
 		}
 
 		for (auto a : login)
@@ -293,7 +297,7 @@ string enterPassword(bool& leave)
 			if (password != "")
 				password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
 			else
-				getline(cin, password);
+				password = getPassword(L"", false);
 			continue;
 		}
 
@@ -390,10 +394,15 @@ bool dealCorrect(Deal deal)
 
 	if (deal.car.price.size() > 9) return false;
 
-	for (auto str : vector<string>{ deal.car.color, deal.car.brand, deal.car.model, deal.buyerName, deal.buyerSurname, deal.seller })
+	for (auto str : vector<string>{ deal.car.color, deal.car.brand, deal.car.model, deal.buyerName, deal.buyerSurname})
 		for (auto i : str)
 			if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i >= '0' && i <= '9')))
 				return false;
+
+	for (auto i : deal.seller)
+		if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i >= '0' && i <= '9') || i == ' '))
+			return false;
+
 
 	for (auto a : date)
 		if (a < '0' || a > '9') return false;

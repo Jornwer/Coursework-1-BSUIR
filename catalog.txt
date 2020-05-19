@@ -1,8 +1,17 @@
-BMW X9 Black 2000 06 05 2000 Ivan Ivanov test
-Toyota jgdv hfb 500 01 01 1990 khui sdfsdf test
-Tesla ModelS White 2000 12 12 1990 Elon Musk test
-Lada Razvaluha Rusty 666 29 05 2000 Petr Ogyrcov Jornwer
-Lada Razvaluha Rusty 666 29 05 2000 Petr Ogyrcov Jornwer
-Lada Razvaluha Rusty 666 29 05 2000 Petr Ogyrcov Jornwer
-Lada Razvaluha Rusty 666 29 05 2000 Petr Ogyrcov Jornwer
-Tesla ModelS White 2000 12 12 1990 Elon Musk test
+BMW X9 Black 20000 06 05 2000 Ivan Ivanov Rob
+Tesla ModelS White 28000 12 12 1990 Elon Musk Bob
+Ford Mondeo Brown 7828 13 07 2002 Anna Sablina Jornwer
+Infinity EX White 24095 26 01 2008 Nikita Vaizin Fedor
+Volkswagen Polo Red 19567 06 09 2015 Ivan Misura Fedor
+Nissan Qashqai Brown 33391 19 05 2012 Aleksei Krutsko Jornwer
+Audi A6 Silver 5100 03 08 1997 Egor Fedorenko Annette
+Mercedes Benz Gray 5382 14 11 1992 Vladimir Putin Dmitry
+Ford Escape Red 36669 12 06 2019 Juilius Caesar Bob
+Hyundai Sonata Silver 4892 30 03 2001 Ivan Grozniy Jornwer
+Opel Insignia Black 24951 23 12 2012 Aleksandr Makedonskiy Rob
+BMW X5 Black 25685 01 02 2008 Aleksandr Druz Annette
+Jeep Grand Black 8562 06 10 1993 Kadzuto Kirigaya Dmitry
+Chrysler Voyager White 15900 03 04 2006 Kazuma Satou Fedor
+Tesla Model3 White 190382 29 01 2020 Asuna Yukki Jornwer
+Mercedes Benz Black 56018 04 07 2012 Nagisa Shioto Rob
+Lada Kalina Red 1000 12 12 2010 Bill Gates Dmitry Betanov

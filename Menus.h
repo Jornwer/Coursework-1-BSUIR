@@ -23,7 +23,7 @@ void userHaveAccount(); //функция спрашиавющая у польз�
 void rewriteFile(std::vector<Credentials>&, std::string); //функция перезаписи пользовательского файла
 void copyFile(std::vector<Credentials>&, std::string); //функция копирования данных с пользовательского файла
 std::string getString(std::wstring); //функция ввода строки с сообщение
-std::string getPassword(std::wstring); //функция ввода пароля в формате **** с сообщением
+std::string getPassword(std::wstring, bool = true); //функция ввода пароля в формате **** с сообщением
 void getCharacter(std::wstring); //функция для нажатия любой клавишы без вывода
 bool copyCatalogFile(Catalog&); //функция копирования данных с файла каталога
 void rewriteCatalogFile(Catalog&); //функция перезаписи файла каталога
@@ -33,11 +33,11 @@ int stringToInt(std::string); //функция перевода строки в 
 void adminHaveAccount(); //функция спрашиавющая у админа способ входа
 std::string enterLogin(int8_t,bool&,bool&); //функция ввода логина с проверкой на правильность
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
-bool dealCorrect(Deal, std::string);
-bool dealCorrect(Deal);
+bool dealCorrect(Deal, std::string);//функция проверки сделки на правильность введенных данных
+bool dealCorrect(Deal);//функция проверки сделки на правильность введенных данных
 bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
-bool stringContainString(std::string&, std::string&);
-bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);
+bool stringContainString(std::string&, std::string&);//функция которая проверят начинается ли 1 строка со 2 строки
+bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);//функция сравнения пар
 
 class Credentials
 {
@@ -82,7 +82,7 @@ public:
 	std::string month;//месяц
 	std::string year;//год
 
-	Date(std::string); //конструктор в формате ДДММГГГГ
+	Date(const std::string&); //конструктор в формате ДДММГГГГ
 	Date() = default;
 
 	friend bool operator==(const Date&, const Date&);

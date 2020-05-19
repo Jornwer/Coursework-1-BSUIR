@@ -142,7 +142,9 @@ bool copyCatalogFile(Catalog& catalog)
 
 		file >> temp.car.brand >> temp.car.model >> temp.car.color >> temp.car.price
 			>> temp.date.day >> temp.date.month >> temp.date.year
-			>> temp.buyerName >> temp.buyerSurname >> temp.seller;
+			>> temp.buyerName >> temp.buyerSurname;
+		getline(file, temp.seller);
+		temp.seller.erase(temp.seller.begin());
 
 		if (dealCorrect(temp)) 
 			catalog.deals.push_back(temp);
@@ -248,6 +250,7 @@ void User::changePassword(vector<Credentials>& users, string path)
 
 				ptr->password = sha256(credentials.password);
 				rewriteFile(users, path);
+				getCharacter(L"Пароль успешно изменен. Для продолжения нажмите любую клавишу");
 				return;
 			}
 		}
@@ -257,14 +260,13 @@ void User::changePassword(vector<Credentials>& users, string path)
 
 void Catalog::displayCatalog()
 {
-	
 	if (this->deals.empty()) {getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
 	int pages = ceil((double)this->deals.size() / 6.0), page = 0;
 	while (true)
 	{
 		system("cls");
 		wcout << L"Страница " << page+1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n';
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите Escape" << L'\n';
 		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i)
 			this->deals[i].displayElement();
 
@@ -272,10 +274,7 @@ void Catalog::displayCatalog()
 
 		if (a == VK_LEFT) page = (page + pages - 1) % pages;
 		else if (a == VK_RIGHT) page = (page + 1) % pages;
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
-		{
-			break;
-		}
+		else if (a == VK_ESCAPE) break;
 	}
 }
 
@@ -571,7 +570,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 		system("cls");
 
 		wcout << L"Страница " << page + 1 << L" из " << pages <<
-			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите е(Е)" << L'\n' <<
+			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите Escape" << L'\n' <<
 			L"Для выбора элемента нажмите Enter" << L'\n' << L'\n';
 
 		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i)
@@ -613,7 +612,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 					}
 				}
 		}
-		else if (a == 'e' || a == 'E' || a == 'е' || a == 'Е') //русские и английские е
+		else if (a == VK_ESCAPE)
 		{
 			return;
 		}
