@@ -2,15 +2,15 @@
 
 using namespace std;
 
-void main()
+int main()
 {
-	locale::global(locale(""));
 	mainMenu();
+    return 0;
 }
 
 void drawMenu(vector<wstring> msg, int8_t& row)
 {
-	for (int i = 0; i < msg.size(); ++i)
+	for (int i = 0; (unsigned long long)i < msg.size(); ++i)
 	{
 		wcout << msg[i];
 		if (row == i) wcout << L"   <--";
@@ -44,7 +44,7 @@ void mainMenu()
 	}
 }
 
-string getString(wstring msg)
+string getString(const wstring& msg)
 {
 	system("cls");
 	string tmp;
@@ -53,9 +53,9 @@ string getString(wstring msg)
 	return tmp;
 }
 
-string getPassword(wstring msg, bool boo)
+string getPassword(const wstring& msg, bool boo)
 {
-	string password = "";
+	string password;
 	char a = '1';
 
 	if (boo)
@@ -83,7 +83,7 @@ string getPassword(wstring msg, bool boo)
 	return password;
 }
 
-void getCharacter(wstring msg)
+void getCharacter(const wstring& msg)
 {
 	system("cls");
 	wcout << msg << L'\n';
@@ -92,8 +92,8 @@ void getCharacter(wstring msg)
 
 Credentials::Credentials(string login, string password)
 {
-	this->login = login;
-	this->password = password;
+	this->login = std::move(login);
+	this->password = std::move(password);
 }
 
 bool operator==(const Deal& l, const Deal& r)
@@ -200,7 +200,7 @@ Date::Date(const string& str)
 	}
 }
 
-int stringToInt(string str)
+int stringToInt(const string& str)
 {
 	int res = 0;
 	if (str.size() < 10)
@@ -246,7 +246,7 @@ string enterLogin(int8_t mode, bool& haveAccess, bool& leave)
 		if (login.size() < 4)
 		{
 			error = 1;
-			if (login != "")
+			if (!login.empty())
 				login = getString(L"Длина логина должна быть больше 3 символов. Повторите ввод логина. Для выхода введите exit");
 			else
 				getline(cin, login);
@@ -294,7 +294,7 @@ string enterPassword(bool& leave)
 		if (password.size() < 8)
 		{
 			error = 2;
-			if (password != "")
+			if (!password.empty())
 				password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
 			else
 				password = getPassword(L"", false);
@@ -323,7 +323,7 @@ string enterPassword(bool& leave)
 	return password;
 }
 
-bool dealCorrect(Deal deal, string date)
+bool dealCorrect(const Deal& deal, const string& date)
 {
 	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
 			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty())
@@ -435,3 +435,4 @@ bool comparePairs(pair<string, int> l, pair<string, int> r)
 {
 	return l.second > r.second;
 }
+#include <utility>

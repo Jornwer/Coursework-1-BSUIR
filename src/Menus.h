@@ -1,6 +1,7 @@
 ﻿#ifndef MENUS_H
 #define MENUS_H
 #include <string>
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
@@ -10,7 +11,7 @@
 #include <cstdio>
 #include <ctime>
 #include <unordered_map>
-#include "SHA256.h"
+#include "../lib/SHA256.h"
 
 class Catalog;
 class Credentials;
@@ -22,18 +23,18 @@ void drawMenu(std::vector<std::wstring>, int8_t&); //функция вывода
 void userHaveAccount(); //функция спрашиавющая у пользователя способ входа
 void rewriteFile(std::vector<Credentials>&, std::string); //функция перезаписи пользовательского файла
 void copyFile(std::vector<Credentials>&, std::string); //функция копирования данных с пользовательского файла
-std::string getString(std::wstring); //функция ввода строки с сообщение
-std::string getPassword(std::wstring, bool = true); //функция ввода пароля в формате **** с сообщением
-void getCharacter(std::wstring); //функция для нажатия любой клавишы без вывода
+std::string getString(const std::wstring&); //функция ввода строки с сообщение
+std::string getPassword(const std::wstring&, bool = true); //функция ввода пароля в формате **** с сообщением
+void getCharacter(const std::wstring&); //функция для нажатия любой клавишы без вывода
 bool copyCatalogFile(Catalog&); //функция копирования данных с файла каталога
 void rewriteCatalogFile(Catalog&); //функция перезаписи файла каталога
 int8_t getCharCode(); //функция выводящая код нажатой клавиши
 void displayDate(std::string); //функция вывода даты в формате ДД.ММ.ГГГГ
-int stringToInt(std::string); //функция перевода строки в целое число
+int stringToInt(const std::string&); //функция перевода строки в целое число
 void adminHaveAccount(); //функция спрашиавющая у админа способ входа
 std::string enterLogin(int8_t,bool&,bool&); //функция ввода логина с проверкой на правильность
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
-bool dealCorrect(Deal, std::string);//функция проверки сделки на правильность введенных данных
+bool dealCorrect(const Deal&, const std::string&);//функция проверки сделки на правильность введенных данных
 bool dealCorrect(Deal);//функция проверки сделки на правильность введенных данных
 bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
 bool stringContainString(std::string&, std::string&);//функция которая проверят начинается ли 1 строка со 2 строки

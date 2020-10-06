@@ -2,8 +2,6 @@
 #define SHA256_H
 #include <string>
 
-#pragma warning(disable : 4996)
-
 class SHA256
 {
 protected:
