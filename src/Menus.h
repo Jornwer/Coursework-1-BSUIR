@@ -21,8 +21,8 @@ class Deal;
 void mainMenu(); //функция вывода главного меню
 void drawMenu(std::vector<std::wstring>, int8_t&); //функция вывода строк со стрелочкой на строке
 void userHaveAccount(); //функция спрашиавющая у пользователя способ входа
-void rewriteFile(std::vector<Credentials>&, std::string); //функция перезаписи пользовательского файла
-void copyFile(std::vector<Credentials>&, std::string); //функция копирования данных с пользовательского файла
+void rewriteFile(std::vector<Credentials>&, const std::string&); //функция перезаписи пользовательского файла
+void copyFile(std::vector<Credentials>&, const std::string&); //функция копирования данных с пользовательского файла
 std::string getString(const std::wstring&); //функция ввода строки с сообщение
 std::string getPassword(const std::wstring&, bool = true); //функция ввода пароля в формате **** с сообщением
 void getCharacter(const std::wstring&); //функция для нажатия любой клавишы без вывода
@@ -35,13 +35,12 @@ void adminHaveAccount(); //функция спрашиавющая у админ
 std::string enterLogin(int8_t,bool&,bool&); //функция ввода логина с проверкой на правильность
 std::string enterPassword(bool&); //функция ввода пароля с проверкой на правильность
 bool dealCorrect(const Deal&, const std::string&);//функция проверки сделки на правильность введенных данных
-bool dealCorrect(Deal);//функция проверки сделки на правильность введенных данных
+bool dealCorrect(const Deal&);//функция проверки сделки на правильность введенных данных
 bool dayCorrect(int8_t, int8_t, int16_t); //проверяет введенный день на правильность
 bool stringContainString(std::string&, std::string&);//функция которая проверят начинается ли 1 строка со 2 строки
 bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);//функция сравнения пар
 
-class Credentials
-{
+class Credentials {
 public:
 	Credentials(std::string, std::string); //конструктор логин+пароль
 	Credentials() = default; // конструктор по умолчанию
@@ -52,20 +51,18 @@ public:
 	friend bool operator==(const Credentials&, const Credentials&); //перегрузка оператора ==
 };
 
-class User
-{
+class User {
 public:
 	Credentials credentials; //логин+пароль
 
 	void enterAccount(std::vector<Credentials>&); //функция входа в аккаунт
 	virtual void userMenu(std::vector<Credentials>&); //основное меню пользователя
-	void changePassword(std::vector<Credentials>&, std::string); //функция смены пароля
-	void deleteAccount(std::vector<Credentials>&, std::string);// функция удаления аккаунта
+	void changePassword(std::vector<Credentials>&, const std::string&); //функция смены пароля
+	void deleteAccount(std::vector<Credentials>&, const std::string&);// функция удаления аккаунта
 	int8_t checkPasswords();//функция ввода пароля и проверки его с существующим
 };
 
-class Admin: public User
-{
+class Admin: public User {
 public:
 	void createAccount(std::vector<Credentials>&); //функция создания аккаунта
 	void userMenu(std::vector<Credentials>&) override; //основное меню админа
@@ -74,8 +71,7 @@ public:
 	void addUser(); //функция добавления пользователя
 };
 
-class Date
-{
+class Date {
 private:
 	int countDays() const;//функция подсчета дней с 0 года(приблизительно)
 public:
@@ -91,8 +87,7 @@ public:
 	friend bool operator<(const Date&, const Date&);//перегрузка оператора меньше
 };
 
-class Car
-{
+class Car {
 public:
 	std::string brand;//марка
 	std::string model;//модель
@@ -100,8 +95,7 @@ public:
 	std::string price;//стоимость
 };
 
-class Deal
-{
+class Deal {
 public:
 	Car car;
 	Date date;
@@ -114,8 +108,7 @@ public:
 	friend bool operator==(const Deal&, const Deal&);
 };
 
-class Catalog
-{
+class Catalog {
 public:
 	std::vector<Deal> deals; 
 

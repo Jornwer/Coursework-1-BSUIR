@@ -2,33 +2,27 @@
 
 using namespace std;
 
-void userHaveAccount()
-{
+void userHaveAccount() {
 	int8_t row = 0;
 	User user;
 	vector<Credentials> users;
-	copyFile(users, "users.txt");
-	while (true)
-	{
+	copyFile(users, "data/users.txt");
+	while (true) {
 		system("cls");
 		
-		if (users.empty()) 
-		{
+		if (users.empty()) {
 			getCharacter(L"Список пользователей пуст. Для продолжения нажмите любую кнопку");
 			return;
 		}
-		else
-		{
+		else {
 			drawMenu({L"Войти в аккаунт   ", L"\n\nНазад   "}, row);
 
 			char a = getCharCode();
 
 			if (a == VK_UP || a == VK_DOWN) row = (row + 1) % 2;
-			else if (a == 13)
-			{
+			else if (a == 13) {
 				if (row == 0) user.enterAccount(users);
-				else if (row == 1)
-				{
+				else if (row == 1) {
 					system("cls");
 					break;
 				}
@@ -38,14 +32,12 @@ void userHaveAccount()
 	}
 }
 
-void User::userMenu(vector<Credentials>& users)
-{
+void User::userMenu(vector<Credentials>& users) {
 	int8_t row = 0;
 	int8_t colNum = 4;
 	Catalog catalog;
 	Credentials::currentUser = this->credentials.login;
-	while (true)
-	{
+	while (true) {
 		system("cls");
 		drawMenu({ L" Изменить каталог", L"\n\n Изменить пароль",L"\n\n Удалить аккаунт" ,L"\n\n Назад" }, row);
 
@@ -53,13 +45,11 @@ void User::userMenu(vector<Credentials>& users)
 
 		if (a == VK_UP) row = (row + colNum - 1) % colNum;
 		else if (a == VK_DOWN) row = (row + 1) % colNum;
-		else if (a == 13)
-		{
+		else if (a == 13) {
 			if (row == 0) catalog.changeCatalog();
-			else if (row == 1) changePassword(users, "users.txt");
-			else if (row == 2) { deleteAccount(users, "users.txt"); break; }
-			else if (row == 3)
-			{
+			else if (row == 1) changePassword(users, "data/users.txt");
+			else if (row == 2) { deleteAccount(users, "data/users.txt"); break; }
+			else if (row == 3) {
 				system("cls");
 				break;
 			}
@@ -67,8 +57,7 @@ void User::userMenu(vector<Credentials>& users)
 	}
 }
 
-void User::enterAccount(vector<Credentials>& users)
-{
+void User::enterAccount(vector<Credentials>& users) {
 	system("cls");
 	bool haveAccess = true;
 	bool leave = false;
@@ -88,27 +77,24 @@ void User::enterAccount(vector<Credentials>& users)
 
 	} while (!haveAccess);
 
-	if (!leave)
-	{
+	if (!leave) {
 		userMenu(users);
 	}
 }
 
-void rewriteFile(vector<Credentials>& users, string path)
-{
+void rewriteFile(vector<Credentials>& users, const string& path) {
 	ofstream file(path, ios::trunc);
 
-	for (auto i : users)
+	for (const auto& i : users)
 		file << i.login << '\n' << i.password << '\n';
 	file << flush;
 
 	file.close();
 }
 
-void rewriteCatalogFile(Catalog& catalog)
-{
-	ofstream file("catalog.txt", ios::trunc);
-	for (auto i : catalog.deals)
+void rewriteCatalogFile(Catalog& catalog) {
+	ofstream file("data/catalog.txt", ios::trunc);
+	for (const auto& i : catalog.deals)
 		file << i.car.brand << ' ' << i.car.model << ' ' << i.car.color << ' ' << i.car.price << ' '
 			<< i.date.day << ' ' << i.date.month << ' ' << i.date.year << ' '
 			<< i.buyerName << ' ' << i.buyerSurname << ' ' << i.seller << '\n';
@@ -117,11 +103,9 @@ void rewriteCatalogFile(Catalog& catalog)
 	file.close();
 }
 
-void copyFile(vector<Credentials>& users, string path)
-{
+void copyFile(vector<Credentials>& users, const string& path) {
 	ifstream file(path);
-	while (file)
-	{
+	while (file) {
 		Credentials temp;
 		getline(file, temp.login);
 		getline(file, temp.password);
@@ -132,24 +116,22 @@ void copyFile(vector<Credentials>& users, string path)
 
 }
 
-bool copyCatalogFile(Catalog& catalog)
-{
-	ifstream file("catalog.txt");
+bool copyCatalogFile(Catalog& catalog) {
+    ifstream file("data/catalog.txt");
 	if (!catalog.deals.empty()) catalog.deals.erase(catalog.deals.begin(), catalog.deals.end());
-	while (file)
-	{
+	while (file) {
 		Deal temp;
 
 		file >> temp.car.brand >> temp.car.model >> temp.car.color >> temp.car.price
 			>> temp.date.day >> temp.date.month >> temp.date.year
 			>> temp.buyerName >> temp.buyerSurname;
 		getline(file, temp.seller);
-		temp.seller.erase(temp.seller.begin());
+		if (!temp.seller.empty())
+		    temp.seller.erase(temp.seller.begin());
 
 		if (dealCorrect(temp)) 
 			catalog.deals.push_back(temp);
-		else
-		{
+		else {
 			getCharacter(L"Файл каталога поврежден. Для возвращения в меню нажмите любую клавишу");
 			return true;
 		}
@@ -159,28 +141,24 @@ bool copyCatalogFile(Catalog& catalog)
 	return false;
 }
 
-int8_t User::checkPasswords()
-{
+int8_t User::checkPasswords() {
 	string pass1 = getPassword(L"Введите пароль от аккаунта. Для выхода введите exit");
 	if (pass1 == "exit") return 2;
 	string pass2 = getPassword(L"Введите пароль от аккаунта еще раз. Для выхода введите exit");
 	if (pass2 == "exit") return 2;
 
-	if (pass1 != pass2 || pass1 != this->credentials.password)
-	{
+	if (pass1 != pass2 || pass1 != this->credentials.password) {
 		getCharacter(L"Пароли не совпадают. Для продолжения нажмите любую клавишу");
 		return 1;
 	}
 	return 0;
 }
 
-void Catalog::changeCatalog()
-{
+void Catalog::changeCatalog() {
 	int8_t row = 0;
 	int8_t colNum = 7;
 	if(copyCatalogFile(*this)) return;
-	while (true)
-	{
+	while (true) {
 		system("cls");
 		drawMenu({ L" Просмотреть каталог", L"\n\n Добавить элемент в каталог", L"\n\n Удалить элемент из каталога",
 					L"\n\n Поиск в каталоге", L"\n\n Изменить элемент", L"\n\n Показать самые продаваемые марки", L"\n\n Назад" }, row);
@@ -189,11 +167,9 @@ void Catalog::changeCatalog()
 
 		if (a == VK_UP) row = (row + colNum - 1) % colNum;
 		else if (a == VK_DOWN) row = (row + 1) % colNum;
-		else if (a == 13)
-		{
+		else if (a == 13) {
 			if (row == 0) displayCatalog();
-			else if (row == 1)
-			{
+			else if (row == 1) {
 				Deal deal = Deal();
 				enterElement(deal, string());
 			}
@@ -201,8 +177,7 @@ void Catalog::changeCatalog()
 			else if (row == 3) searchInCatalog();
 			else if (row == 4) modifyElement(&Catalog::changeElement);
 			else if (row == 5) showBestBrands();
-			else if (row == 6)
-			{
+			else if (row == 6) {
 				system("cls");
 				break;
 			}
@@ -210,20 +185,17 @@ void Catalog::changeCatalog()
 	}
 }
 
-void User::deleteAccount(vector<Credentials>& users, string path)
-{
+void User::deleteAccount(vector<Credentials>& users, const string& path) {
 	do {
 		int8_t i = checkPasswords();
 
-		if (!i)
-		{
+		if (!i) {
 			Credentials tmp(this->credentials.login, sha256(this->credentials.password));
 
 			auto ptr = find(users.begin(), users.end(), tmp);
-			if (ptr != users.end())
-			{
+			if (ptr != users.end()) {
 				users.erase(ptr);
-				rewriteFile(users, "users.txt");
+				rewriteFile(users, "data/users.txt");
 				return;
 			}
 		}
@@ -232,18 +204,15 @@ void User::deleteAccount(vector<Credentials>& users, string path)
 	} while (true);
 }
 
-void User::changePassword(vector<Credentials>& users, string path)
-{
+void User::changePassword(vector<Credentials>& users, const string& path) {
 	do {
 		int8_t i = checkPasswords();
 
-		if (!i)
-		{
+		if (!i) {
 			Credentials tmp(this->credentials.login, sha256(this->credentials.password));
 
 			auto ptr = find(users.begin(), users.end(), tmp);
-			if (ptr != users.end())
-			{
+			if (ptr != users.end()) {
 				bool leave = false;
 				this->credentials.password = enterPassword(leave);
 				if (leave) return;
@@ -258,12 +227,10 @@ void User::changePassword(vector<Credentials>& users, string path)
 	} while (true);
 }
 
-void Catalog::displayCatalog()
-{
+void Catalog::displayCatalog() {
 	if (this->deals.empty()) {getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
 	int pages = ceil((double)this->deals.size() / 6.0), page = 0;
-	while (true)
-	{
+	while (true) {
 		system("cls");
 		wcout << L"Страница " << page+1 << L" из " << pages <<
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите Escape" << L'\n';
@@ -278,15 +245,13 @@ void Catalog::displayCatalog()
 	}
 }
 
-void Catalog::enterElement(Deal& deal, string date)
-{
+void Catalog::enterElement(Deal& deal, string date) {
 	bool dealEmpty = (deal == Deal());
 	Deal save = deal;
 	int8_t row = 0;
 	deal.seller = Credentials::currentUser;
 
-	while (true)
-	{
+	while (true) {
 		system("cls");
 		wcout << L"Марка       :";
 		cout << deal.car.brand << string(16 - deal.car.brand.size(), ' ') << '|' << (!row ? " <--\n" : "\n");
@@ -316,27 +281,21 @@ void Catalog::enterElement(Deal& deal, string date)
 
 		uint8_t a = _getch();
 
-		if (a == 224)
-		{
-			if (GetAsyncKeyState('F') != -32767)
-			{
+		if (a == 224) {
+			if (GetAsyncKeyState('F') != -32767) {
 				a = _getch();
 				if (a == 'H') row = (row + 8) % 9;
 				else if (a == 'P') row = (row + 1) % 9;
 			}
 		}
-		else
-		{
-			if (a == 13 && row == 7)
-			{
-				if (dealCorrect(deal, date))
-				{
-					if (!dealEmpty)
-					{
+		else {
+			if (a == 13 && row == 7) {
+				if (dealCorrect(deal, date)) {
+					if (!dealEmpty) {
 						deal.date = date;
 						break;
 					}
-					ofstream file("catalog.txt", ios::app);
+					ofstream file("data/catalog.txt", ios::app);
 
 					file << deal.car.brand << ' ' << deal.car.model << ' ' << deal.car.color << ' ' << deal.car.price << ' '
 						<< date[0] << date[1] << ' ' << date[2] << date[3]
@@ -350,26 +309,22 @@ void Catalog::enterElement(Deal& deal, string date)
 					continue;
 				}
 			}
-			else if (a == 13 && row == 8)
-			{
+			else if (a == 13 && row == 8) {
 				if (!dealEmpty) deal = save;
 				return;
 			}
-			else if ((a >= '0' && a <= '9') && (row == 3 || row == 4))
-			{
+			else if ((a >= '0' && a <= '9') && (row == 3 || row == 4)) {
 				if (row == 3 && deal.car.price.size() < 16) deal.car.price += a;
 				else if (row == 4 && date.size() < 8) date += a;
 			}
-			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9'))
-			{
+			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')) {
 				if (!row && deal.car.brand.size() < 16) deal.car.brand += a;
 				else if (row == 1 && deal.car.model.size() < 16) deal.car.model += a;
 				else if (row == 2 && deal.car.color.size() < 16) deal.car.color += a;
 				else if (row == 5 && deal.buyerName.size() < 16) deal.buyerName += a;
 				else if (row == 6 && deal.buyerSurname.size() < 16) deal.buyerSurname += a;
 			}
-			else if (a == 8 && row < 7)
-			{
+			else if (a == 8 && row < 7) {
 				if (!row && !deal.car.brand.empty()) deal.car.brand.erase(deal.car.brand.end() - 1);
 				else if (row == 1 && !deal.car.model.empty()) deal.car.model.erase(deal.car.model.end() - 1);
 				else if (row == 2 && !deal.car.color.empty()) deal.car.color.erase(deal.car.color.end() - 1);
@@ -382,8 +337,7 @@ void Catalog::enterElement(Deal& deal, string date)
 	}
 }
 
-void Deal::displayElement()
-{
+void Deal::displayElement() {
 	wcout << L'\n' << L"Марка: ";
 	cout << car.brand;
 	wcout << L"     Модель: ";
@@ -400,24 +354,20 @@ void Deal::displayElement()
 	cout << seller << '\n';
 }
 
-void Catalog::approveDeletion(int &page, int &pos)
-{
+void Catalog::approveDeletion(int &page, int &pos) {
 	string temp;
 	system("cls");
 	temp = getString(L"Введите \"yes\" для удаления элемента");
-	if (temp == "yes")
-	{
+	if (temp == "yes") {
 		this->deals.erase(this->deals.begin() + pos + page * 6);
 		rewriteCatalogFile(*this);
 	}
 }
 
-void Catalog::searchInCatalog()
-{
-	string brand = "", model = "", color = "", priceFrom = "", priceTo = "", dateFrom = "", dateTo = "", buyerName = "", buyerSurname= "";
+void Catalog::searchInCatalog() {
+	string brand, model, color, priceFrom, priceTo, dateFrom, dateTo, buyerName, buyerSurname;
 	int8_t row = 0;
-	while (true)
-	{
+	while (true) {
 		system("cls");
 		wcout << L"Марка       :";
 		cout  << brand << string(16 - brand.size(), ' ') << '|' << (!row ? " <--\n" : "\n");
@@ -450,36 +400,30 @@ void Catalog::searchInCatalog()
 
 		uint8_t a = _getch();
 
-		if (a == 224)
-		{
-			if (GetAsyncKeyState('F') != -32767)
-			{
+		if (a == 224) {
+			if (GetAsyncKeyState('F') != -32767) {
 				a = _getch();
 				if (a == 'H') row = (row + 10) % 11;
 				else if (a == 'P') row = (row + 1) % 11;
 			}
 		}
-		else
-		{
+		else {
 			if (a == 13 && row == 9) displaySearch(brand, model, color, priceFrom, priceTo, dateFrom, dateTo, buyerName, buyerSurname);
 			else if (a == 13 && row == 10) return;
-			else if ((a >= '0' && a <= '9') && row > 2 && row < 7)
-			{
+			else if ((a >= '0' && a <= '9') && row > 2 && row < 7) {
 				if (row == 3 && priceFrom.size() < 11) priceFrom += a;
 				else if (row == 4 && priceTo.size() < 11) priceTo += a;
 				else if (row == 5 && dateFrom.size() < 8) dateFrom += a;
 				else if (row == 6 && dateTo.size() < 8) dateTo += a;
 			}
-			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9'))
-			{
+			else if ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9')) {
 				if (!row && brand.size() < 16) brand += a;
 				else if (row == 1 && model.size() < 16) model += a;
 				else if (row == 2 && color.size() < 16) color += a;
 				else if (row == 7 && buyerName.size() < 16) buyerName += a;
 				else if (row == 8 && buyerSurname.size() < 16) buyerSurname += a;
 			}
-			else if (a == 8 && row < 7)
-			{
+			else if (a == 8 && row < 7) {
 				if (!row && !brand.empty()) brand.erase(brand.end() - 1);
 				else if (row == 1 && !model.empty()) model.erase(model.end() - 1);
 				else if (row == 2 && !color.empty()) color.erase(color.end() - 1);
@@ -495,48 +439,38 @@ void Catalog::searchInCatalog()
 }
 
 void Catalog::displaySearch(string brand, string model, string color, string priceFrom,
-							string priceTo, string dateFrom, string dateTo, string buyerName, string buyerSurname)
-{
-	if ((dateFrom.size() != 8 && !dateFrom.empty()) || (dateTo.size() != 8 && !dateTo.empty()))
-	{
+							string priceTo, string dateFrom, string dateTo, string buyerName, string buyerSurname) {
+	if ((dateFrom.size() != 8 && !dateFrom.empty()) || (dateTo.size() != 8 && !dateTo.empty())) {
 		getCharacter(L"Дата введена неправильно. Для возвращения нажмите любую кнопку");
 		return;
 	}
 
 	Catalog cat;
 
-	for (auto i : this->deals)
-	{
+	for (auto i : this->deals) {
 		if (!stringContainString(i.car.brand, brand) || !stringContainString(i.car.model, model)
 			|| !stringContainString(i.car.color, color) || !stringContainString(i.buyerName, buyerName)
 			|| !stringContainString(i.buyerSurname, buyerSurname)) continue;
-		if (!(priceTo.empty() && priceFrom.empty()))
-		{
-			if (priceTo.empty())
-			{
+		if (!(priceTo.empty() && priceFrom.empty())) {
+			if (priceTo.empty()) {
 				if (stringToInt(i.car.price) < stringToInt(priceFrom)) continue;
 			}
-			if (priceFrom.empty())
-			{
+			if (priceFrom.empty()) {
 				if (stringToInt(i.car.price) > stringToInt(priceTo)) continue;
 			}
 			if (!priceFrom.empty() && !priceTo.empty())
 				if (stringToInt(priceFrom) > stringToInt(i.car.price) || stringToInt(priceTo) < stringToInt(i.car.price)) continue;
 		}
-		if (!(dateTo.empty() && dateFrom.empty()))
-		{
-			if (dateTo.empty())
-			{
+		if (!(dateTo.empty() && dateFrom.empty())) {
+			if (dateTo.empty()) {
 				Date from(dateFrom), date(i.date.day + i.date.month + i.date.year);
 				if (date < from) continue;
 			}
-			if (dateFrom.empty())
-			{
+			if (dateFrom.empty()) {
 				Date to(dateTo), date(i.date.day + i.date.month + i.date.year);
 				if (date > to) continue;
 			}
-			if (!(dateFrom.empty() || dateTo.empty()))
-			{
+			if (!(dateFrom.empty() || dateTo.empty())) {
 				Date from(dateFrom), to(dateTo), date(i.date.day + i.date.month + i.date.year);
 				if (from > date || to < date) continue;
 			}
@@ -544,22 +478,19 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 		cat.deals.push_back(i);
 	}
 	
-	if (cat.deals.empty())
-	{
+	if (cat.deals.empty()) {
 		getCharacter(L"Найдено 0 элементов. Для продолжения нажмите любую клавишу");
 		return;
 	}
 	cat.displayCatalog();
 }
 
-void Catalog::changeElement(int& page, int& pos)
-{
+void Catalog::changeElement(int& page, int& pos) {
 	enterElement(deals[pos + page * 6], deals[pos + page * 6].date.day + deals[pos + page * 6].date.month + deals[pos + page * 6].date.year);
 	rewriteCatalogFile(*this);
 }
 
-void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
-{
+void Catalog::modifyElement(void (Catalog::*f)(int&, int&)) {
 	int pages, page = 0, pos = 0, elInPage;
 	while (true)
 	{
@@ -573,8 +504,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 			L". Для перемещения страниц испольуйте стрелки вправо/влево. Для выхода нажмите Escape" << L'\n' <<
 			L"Для выбора элемента нажмите Enter" << L'\n' << L'\n';
 
-		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i)
-		{
+		for (int i = page * 6; i < (page + 1) * 6 && i < this->deals.size(); ++i) {
 			if (i % 6 == pos) cout << string(40, '/');
 			this->deals[i].displayElement();
 			if (i % 6 == pos) cout << string(40, '\\');
@@ -586,55 +516,45 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&))
 		else if (a == VK_RIGHT) page = (page + 1) % pages;
 		else if (a == VK_UP) pos = (pos + elInPage - 1) % elInPage;
 		else if (a == VK_DOWN) pos = (pos + 1) % elInPage;
-		else if (a == 13)
-		{
+		else if (a == 13) {
 			int num = deals.size();
 			(this->*f)(page, pos);
 			if (num != deals.size())   //если элемент не удален то правда, иначе ложь
-				if (pos + page * 6 == deals.size())
-				{
-					if (pos == 0)
-					{
-						if (page == 0)
-						{
+				if (pos + page * 6 == deals.size()) {
+					if (pos == 0) {
+						if (page == 0) {
 							getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку");
 							return;
 						}
-						else
-						{
+						else {
 							page--;
 							pos = 6;
 						}
 					}
-					else
-					{
+					else {
 						pos--;
 					}
 				}
 		}
-		else if (a == VK_ESCAPE)
-		{
+		else if (a == VK_ESCAPE) {
 			return;
 		}
 	}
 }
 
-void Catalog::showBestBrands()
-{
-	if (this->deals.empty())
-	{
+void Catalog::showBestBrands() {
+	if (this->deals.empty()) {
 		getCharacter(L"Каталог пуст. Для продолжения введите любую клавишу");
 		return;
 	}
 	unordered_map<string, int> umap;
-	for (auto i : this->deals)
+	for (const auto& i : this->deals)
 		umap[i.car.brand]++;
 	vector<pair<string, int>> vec(umap.begin(), umap.end());
 	sort(vec.begin(), vec.end(), comparePairs);
 	system("cls");
 	wcout << L"Самые продаваемые марки. Для выхода нажмите любую клавишу\n";
-	for (int8_t i = 0; i < 3 && i < vec.size(); ++i)
-	{
+	for (int8_t i = 0; i < 3 && i < vec.size(); ++i) {
 		cout << vec[i].first << " - " << vec[i].second;
 		wcout << L" машин продано\n";
 	}
