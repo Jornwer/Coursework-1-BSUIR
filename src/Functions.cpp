@@ -1,4 +1,4 @@
-﻿#include "Menus.h"
+﻿#include "Header.h"
 
 using namespace std;
 
@@ -8,12 +8,12 @@ int main() {
     return 0;
 }
 
-void drawMenu(vector<wstring> msg, int8_t& row) {
-	for (int i = 0; (unsigned long long)i < msg.size(); ++i) {
-		wcout << msg.at(i);
-		if (row == i) wcout << L"   <--";
-	}
-	wcout << L"\n\n" << flush;
+void drawMenu(vector<string> msg, int8_t &row) {
+    for (int i = 0; (unsigned long long) i < msg.size(); ++i) {
+        cout << msg.at(i);
+        if (row == i) cout << "   <--";
+    }
+    cout << "\n\n" << flush;
 }
 
 void mainMenu() {
@@ -38,57 +38,24 @@ void mainMenu() {
 	}
 }
 
-string getString(const wstring& msg) {
-	system("cls");
-	string tmp;
-	wcout << msg << endl;
-	getline(cin, tmp);
-	return tmp;
+string getString(const string &msg) {
+    system("cls");
+    string tmp;
+    cout << msg << endl;
+    getline(cin, tmp);
+    return tmp;
 }
 
-string getPassword(const wstring& msg, bool boo) {
-	string password;
-	char a = '1';
-
-	if (boo) {
-		system("cls");
-		wcout << msg << L'\n';
-	}
-
-	while ((a = getch()) != 13) {
-		if ((int)a == 8) {
-			if (password.empty()) continue;
-
-			password.erase(password.size() - 1, password.size());
-			cout << '\b' << ' ' << '\b';
-		}
-		else {
-			password += a;
-			cout << '*';
-		}
-	}
-	return password;
-}
-
-void getCharacter(const wstring& msg) {
-	system("cls");
-	wcout << msg << L'\n';
-	char a = getCharCode();
-}
-
-Credentials::Credentials(string login, string password) {
-	this->login = std::move(login);
-	this->password = std::move(password);
+void getCharacter(const string &msg) {
+    system("cls");
+    cout << msg << '\n';
+    getCharCode();
 }
 
 bool operator==(const Deal& l, const Deal& r) {
 	return (l.car.brand == r.car.brand && l.car.color == r.car.color && l.date == r.date 
 		&& l.car.model == r.car.model && l.car.price == r.car.price
 		&& l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
-}
-
-bool operator==(const Date& l, const Date& r) {
-	return (l.day == r.day && l.year == r.year && l.month == r.month);
 }
 
 bool dayCorrect(int8_t day, int8_t month, int16_t year) {
@@ -115,10 +82,6 @@ bool dayCorrect(int8_t day, int8_t month, int16_t year) {
 	}
 }
 
-bool operator==(const Credentials& l, const Credentials& r) {
-	return (l.login == r.login && l.password == r.password);
-}
-
 int8_t getCharCode() {
 	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
 	INPUT_RECORD rec;
@@ -129,10 +92,6 @@ int8_t getCharCode() {
 		}
 	}
     return 0;
-}
-
-int Date::countDays() const {
-	return 372 * stringToInt(year) + 31 * stringToInt(month) + stringToInt(day);
 }
 
 void displayDate(string date) {
@@ -147,27 +106,6 @@ void displayDate(string date) {
 	}
 }
 
-bool operator<(const Date& l, const Date& r) {
-	return l.countDays() < r.countDays();
-}
-
-bool operator>(const Date& l, const Date& r) {
-	return l.countDays() > r.countDays();
-}
-
-Date::Date(const string& str) {
-	if (str.size() == 8) {
-		day += str[0];
-		day += str[1];
-		month += str[2];
-		month += str[3];
-		year += str[4];
-		year += str[5];
-		year += str[6];
-		year += str[7];
-	}
-}
-
 int stringToInt(const string& str) {
 	int res = 0;
 	if (str.size() < 10) {
@@ -177,59 +115,6 @@ int stringToInt(const string& str) {
 		return res;
 	}
 	return -1;
-}
-
-string enterLogin(int8_t mode, bool& haveAccess, bool& leave) {
-	string login;
-	int8_t error;
-	switch (mode) {
-	case 0: login = (haveAccess ? getString(L"Введите логин. Для выхода введите exit")
-		: getString(L"Введите заново логин. Для выхода введите exit"));
-		break;
-	case 1: login = getString(L"Неправильный логин и/или пароль. Повторите ввод логина и пароля. Для выхода введите exit"); break;
-	case 2: login = getString(L"Аккаунт с таким логином уже существует. Повторите ввод логина и пароля. Для выхода введите exit"); break;
-	}
-
-	do {
-		error = 0;
-
-		if (login == "exit") {
-			leave = true;
-			break;
-		}
-
-		if (login[0] == ' ') {
-			error = 1;
-			login = getString(L"Логин не может начинаться с пробела. Повторите ввод логина. Для выхода введите exit");
-			continue;
-		}
-
-		if (login.size() < 4) {
-			error = 1;
-			if (!login.empty())
-				login = getString(L"Длина логина должна быть больше 3 символов. Повторите ввод логина. Для выхода введите exit");
-			else
-				getline(cin, login);
-			continue;
-		}
-
-		if (login.size() > 16) {
-			error = 1;
-			login = getString(L"Длина логина должна быть меньше 17 символов. Повторите ввод логина. Для выхода введите exit");
-			continue;
-		}
-
-		for (auto a : login) {
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') || a == ' ')) {
-				error = 2;
-				login = getString(L"Логин содержит недопустимые символы. Повторите ввод логина. Для выхода введите exit");
-				break;
-			}
-		}
-
-	} while (error);
-
-	return login;
 }
 
 string enterPassword(bool& leave) {

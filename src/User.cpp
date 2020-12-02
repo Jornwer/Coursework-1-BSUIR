@@ -1,4 +1,4 @@
-﻿#include "Menus.h"
+﻿#include "Header.h"
 
 using namespace std;
 
@@ -58,28 +58,7 @@ void User::userMenu(vector<Credentials>& users) {
 }
 
 void User::enterAccount(vector<Credentials>& users) {
-	system("cls");
-	bool haveAccess = true;
-	bool leave = false;
 
-	do {
-		if (haveAccess) this->credentials.login = enterLogin(0, haveAccess, leave);
-		else this->credentials.login = enterLogin(1, haveAccess, leave);
-		if (leave) break;
-		this->credentials.password = enterPassword(leave);
-		if (leave) break;
-
-		haveAccess = true;
-
-		Credentials tmp(credentials.login, sha256(credentials.password));
-		if ( find(users.begin(), users.end(), tmp) == users.end())
-			haveAccess = false;
-
-	} while (!haveAccess);
-
-	if (!leave) {
-		userMenu(users);
-	}
 }
 
 void rewriteFile(vector<Credentials>& users, const string& path) {
@@ -139,19 +118,6 @@ bool copyCatalogFile(Catalog& catalog) {
 	if (!catalog.deals.empty()) catalog.deals.erase(catalog.deals.end() - 1);
 	file.close();
 	return false;
-}
-
-int8_t User::checkPasswords() {
-	string pass1 = getPassword(L"Введите пароль от аккаунта. Для выхода введите exit");
-	if (pass1 == "exit") return 2;
-	string pass2 = getPassword(L"Введите пароль от аккаунта еще раз. Для выхода введите exit");
-	if (pass2 == "exit") return 2;
-
-	if (pass1 != pass2 || pass1 != this->credentials.password) {
-		getCharacter(L"Пароли не совпадают. Для продолжения нажмите любую клавишу");
-		return 1;
-	}
-	return 0;
 }
 
 void Catalog::changeCatalog() {
@@ -548,7 +514,7 @@ void Catalog::showBestBrands() {
 		return;
 	}
 	unordered_map<string, int> umap;
-	for (const auto& i : this->deals)
+	for (const auto &i : this->deals)
 		umap[i.car.brand]++;
 	vector<pair<string, int>> vec(umap.begin(), umap.end());
 	sort(vec.begin(), vec.end(), comparePairs);
@@ -558,5 +524,5 @@ void Catalog::showBestBrands() {
 		cout << vec[i].first << " - " << vec[i].second;
 		wcout << L" машин продано\n";
 	}
-	char a = getCharCode();
+	getCharCode();
 }
