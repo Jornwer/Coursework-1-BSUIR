@@ -57,20 +57,6 @@ void User::userMenu(vector<Credentials>& users) {
 	}
 }
 
-void User::enterAccount(vector<Credentials>& users) {
-
-}
-
-void rewriteFile(vector<Credentials>& users, const string& path) {
-	ofstream file(path, ios::trunc);
-
-	for (const auto& i : users)
-		file << i.login << '\n' << i.password << '\n';
-	file << flush;
-
-	file.close();
-}
-
 void rewriteCatalogFile(Catalog& catalog) {
 	ofstream file("data/catalog.txt", ios::trunc);
 	for (const auto& i : catalog.deals)
@@ -80,19 +66,6 @@ void rewriteCatalogFile(Catalog& catalog) {
 	file << flush;
 
 	file.close();
-}
-
-void copyFile(vector<Credentials>& users, const string& path) {
-	ifstream file(path);
-	while (file) {
-		Credentials temp;
-		getline(file, temp.login);
-		getline(file, temp.password);
-		users.push_back(temp);
-	}
-	if (!users.empty()) users.erase(users.end() - 1);
-	file.close();
-
 }
 
 bool copyCatalogFile(Catalog& catalog) {

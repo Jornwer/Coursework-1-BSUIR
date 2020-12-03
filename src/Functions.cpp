@@ -58,30 +58,6 @@ bool operator==(const Deal& l, const Deal& r) {
 		&& l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
 }
 
-bool dayCorrect(int8_t day, int8_t month, int16_t year) {
-	if (day > 31 || day == 0 || month == 0 || month > 12 || year == 0) return false;
-	if (day < 29) return true;
-	if (month == 2) {
-		if (day == 29) {
-			if (year % 4) return false;
-			if (!(year % 400)) return true;
-            return year % 100 != 0;
-
-        }
-		return false;
-	}
-	if (month <= 7) {
-		if (month % 2) return true;
-		else if (day != 31) return true;
-		else return false;
-	}
-	else {
-		if (!month % 2) return true;
-		else if (day != 31) return true;
-		else return false;
-	}
-}
-
 int8_t getCharCode() {
 	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
 	INPUT_RECORD rec;
@@ -104,59 +80,6 @@ void displayDate(string date) {
 			else cout << date[index++];
 		}
 	}
-}
-
-int stringToInt(const string& str) {
-	int res = 0;
-	if (str.size() < 10) {
-		for (auto i : str)
-			if (i >= '0' && i <= '9') res = 10 * res + i - '0';
-			else return -1;
-		return res;
-	}
-	return -1;
-}
-
-string enterPassword(bool& leave) {
-	int8_t error;
-	string password;
-
-	password = getPassword(L"Введите пароль. Для выхода введите exit");
-
-	do {
-		error = 0;
-
-		if (password == "exit") {
-			leave = true;
-			return "";
-		}
-		
-		if (password.size() < 8) {
-			error = 2;
-			if (!password.empty())
-				password = getPassword(L"Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
-			else
-				password = getPassword(L"", false);
-			continue;
-		}
-
-		string symbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-		for (auto a : password) {
-			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9'))) {
-				error = 1;
-				password = getPassword(L"Пароль содержит недопустимые символы. Повторите ввод пароля. Для выхода введите exit");
-				break;
-			}
-			for (auto b : symbols)
-				if (a == b) {
-					error = 1;
-					password = getPassword(L"Пароль содержит недопустимые символы. Повторите ввод пароля. Для выхода введите exit");
-					break;
-				}
-		}
-	} while (error);
-
-	return password;
 }
 
 bool dealCorrect(const Deal& deal, const string& date) {

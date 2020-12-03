@@ -22,6 +22,6 @@ add_executable(Coursework
         src/Users/User.h
         src/Users/Admin.cpp
         src/Users/Admin.h
-        src/Date.cpp
-        src/Date.h
+        src/Data/Date.cpp
+        src/Data/Date.h
         src/Users/AbstractUserImpl.h)

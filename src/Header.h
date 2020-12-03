@@ -24,8 +24,8 @@
 - Исходная и итоговая информация должна храниться в текстовых (бинарных) файлах.                done
 ­ реализация базовых принципов объектно-ориентированного программирования;                      done
 ­ использование стандартных и пользовательских функции, дружественных и виртуальных функции;    done
-­ использование пространств имен (стандартных и собственных);                                   todo
-­ реализация обработки ошибок программы (средствами языка С);                                   todo
+­ использование пространств имен (стандартных и собственных);                                   done
+­ реализация обработки ошибок программы (средствами языка С);                                   done
 ­ использование механизмов абстракции;                                                          done
 ­ использование классов и наследования;                                                         done
 ­ использование перегрузки операторов и методов;                                                done
@@ -43,6 +43,11 @@ class Deal;
 
 void mainMenu();
 void drawMenu(std::vector<std::string>, int8_t &);
+std::string getString(const std::string &);
+void getCharacter(const std::string &);
+int8_t getCharCode();
+void displayDate(std::string);
+
 void userHaveAccount();
 void rewriteFile(std::vector<Credentials> &, const std::string &);
 void copyFile(std::vector<Credentials> &, const std::string &);
@@ -50,15 +55,9 @@ std::string getString(const std::string &);
 void getCharacter(const std::string &);
 bool copyCatalogFile(Catalog &);
 void rewriteCatalogFile(Catalog &);
-int8_t getCharCode();
-void displayDate(std::string);
-int stringToInt(const std::string &);
 void adminHaveAccount();
-std::string enterLogin(int8_t, bool &, bool &);
-std::string enterPassword(bool &);
 bool dealCorrect(const Deal &, const std::string &);
 bool dealCorrect(const Deal &);
-bool dayCorrect(int8_t, int8_t, int16_t);
 bool stringContainString(std::string &, std::string &);
 bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);
 
