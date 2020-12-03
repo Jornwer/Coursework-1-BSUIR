@@ -13,6 +13,10 @@
 #include <ctime>
 #include <unordered_map>
 #include "../lib/SHA256.h"
+namespace Constants {
+    const std::string pathToUserFile = "data/users.json";
+    const std::string pathToAdminFile = "data/admins.json";
+}
 
 /*
 ­ авторизация пользователя, хранение пароля в зашифрованном виде;                               done

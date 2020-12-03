@@ -12,7 +12,6 @@ add_executable(Coursework
         lib/SHA256.cpp
         lib/SHA256.h
         lib/json.hpp
-        src/Admin.cpp
         src/Functions.cpp
         src/Header.h
         src/User.cpp

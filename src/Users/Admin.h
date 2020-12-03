@@ -2,17 +2,26 @@
 #define COURSEWORK_ADMIN_H
 
 #include "AbstractUser.h"
+#include "AbstractUserImpl.h"
 
 class Admin : public AbstractUser {
 private:
-    void addAdmin();
+    Admin(): AbstractUser(){};
+    Admin(std::string &login, std::string&password): AbstractUser(login, password){};
 
-    void deleteUser();
-
-    void addUser();
+    static bool deleteUserThenAddAdmin(std::string&);
+    static bool deleteUser(std::string&);
+protected:
+    std::string pathToData() override;
+    static void addAdmin();
+    static void deleteUser();
+    static void addUser();
+    void createAccount();
 
 public:
-    void createAccount();
+    static void adminHaveAccount();
+
+    void userMenu() override;
 };
 
 #endif //COURSEWORK_ADMIN_H

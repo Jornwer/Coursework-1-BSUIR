@@ -1,7 +1,7 @@
 #include "User.h"
 
 std::string User::pathToData() {
-    return "data/users.json";
+    return Constants::pathToUserFile;
 }
 
 void User::userMenu() {
@@ -32,11 +32,12 @@ void User::userMenu() {
 void User::userHaveAccount() {
     int8_t row = 0;
     User user;
+    bool isUserFileEmpty = user.isUserFileEmpty();
 
     while (true) {
         system("cls");
 
-        if (user.isUserFileEmpty()) {
+        if (isUserFileEmpty) {
             getCharacter("Список пользователей пуст. Для продолжения нажмите любую кнопку");
             return;
         }

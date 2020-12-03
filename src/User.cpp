@@ -70,29 +70,6 @@ void Catalog::changeCatalog() {
 	}
 }
 
-void User::changePassword(vector<Credentials>& users, const string& path) {
-	do {
-		int8_t i = checkPasswords();
-
-		if (!i) {
-			Credentials tmp(this->credentials.login, sha256(this->credentials.password));
-
-			auto ptr = find(users.begin(), users.end(), tmp);
-			if (ptr != users.end()) {
-				bool leave = false;
-				this->credentials.password = enterPassword(leave);
-				if (leave) return;
-
-				ptr->password = sha256(credentials.password);
-				rewriteFile(users, path);
-				getCharacter(L"Пароль успешно изменен. Для продолжения нажмите любую клавишу");
-				return;
-			}
-		}
-		else if (i == 2) break;
-	} while (true);
-}
-
 void Catalog::displayCatalog() {
 	if (this->deals.empty()) {getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
 	int pages = ceil((double)this->deals.size() / 6.0), page = 0;

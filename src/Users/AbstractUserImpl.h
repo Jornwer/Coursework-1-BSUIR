@@ -7,13 +7,15 @@
 namespace core {
     class AbstractUserImpl : public AbstractUser {
     public:
-        AbstractUserImpl(std::string login, std::string password) : AbstractUser(std::move(login),
-                                                                                 std::move(password)) {
-        }
+        void userMenu() override {}
 
-        void userMenu() override {
+        void enterCredentials(bool &leave) {
+            login = enterLogin(0, leave);
+            if (leave) return;
+            this->enterPassword(leave);
+            if (leave) return;
+            if (this->isUserInFile()) userMenu();
         }
-
     protected:
         std::string pathToData() override {
             return "";

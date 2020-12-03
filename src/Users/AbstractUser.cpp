@@ -4,8 +4,8 @@
 using namespace std;
 using namespace nlohmann;
 
-AbstractUser::AbstractUser(std::string login,
-                           std::string password) :
+AbstractUser::AbstractUser(std::string &login,
+                           std::string &password) :
         login(std::move(login)), password(std::move(password)) {}
 
 const std::string &AbstractUser::getCurrentUser() {
@@ -186,29 +186,7 @@ void AbstractUser::deleteAccount() {
     } while (true);
 }
 
-vector<AbstractUser *> *AbstractUser::getUsersFromFile() {
-    string path = this->pathToData();
-    ifstream file(path);
-    vector<AbstractUser *> *users = new vector<AbstractUser *>();
-    json j;
-
-    try {
-        file >> j;
-    } catch (detail::parse_error &error) {
-        j = json::array();
-    }
-
-    for (auto &i: j) {
-        users->push_back(new core::AbstractUserImpl(i["login"], i["password"]));
-    }
-
-    file.close();
-
-    return users;
-}
-
-void AbstractUser::addUserToFile() {
-    string path = this->pathToData();
+void AbstractUser::addUserToFile(const string &path) {
     ifstream file(path);
     json j;
     try {
@@ -216,9 +194,7 @@ void AbstractUser::addUserToFile() {
     } catch (detail::parse_error &error) {
         j = json::array();
     }
-    json user;
-    user["login"] = login;
-    user["password"] = password;
+    json user = userToJson();
     j.push_back(user);
 
     ofstream output(path, ios::trunc);
@@ -259,7 +235,7 @@ bool AbstractUser::isUserInFile() {
         return false;
     }
     for (auto &i : j) {
-        if (i["login"] == login && i["password"] == password) {
+        if (i["login"] == login && i["password"] == sha256(password)) {
             return true;
         }
     }
@@ -314,4 +290,27 @@ bool AbstractUser::isUserFileEmpty() {
         file.close();
         return true;
     }
+}
+
+nlohmann::json AbstractUser::userToJson() {
+    json j;
+    j["login"] = login;
+    j["password"] = password;
+    return j;
+}
+
+bool AbstractUser::isUserLoginInFile(const string &path) {
+    ifstream file(path);
+    json j;
+    try {
+        file >> j;
+    } catch (detail::parse_error &error) {
+        return false;
+    }
+    for (auto &i : j) {
+        if (i["login"] == login) {
+            return true;
+        }
+    }
+    return false;
 }
