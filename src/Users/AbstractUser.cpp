@@ -36,9 +36,14 @@ std::string AbstractUser::inputPassword(const std::string &msg) {
 
 std::string AbstractUser::inputPassword() {
     string pass;
-    char a;
+    unsigned char a;
 
     while ((a = getch()) != 13) {
+        if (a == 27) return "*_*";
+        if (a == 224) {
+            getch();
+            pass +=a;
+        }
         if ((int) a == 8) {
             if (pass.empty()) continue;
 
@@ -55,24 +60,28 @@ std::string AbstractUser::inputPassword() {
 void AbstractUser::enterAccount() {
     system("cls");
     bool leave = false;
+
     this->login = enterLogin(0, leave);
+    if (leave) return;
+    this->enterPassword(leave);
+    if (leave) return;
+    if (this->isUserInFile()) userMenu();
+
     do {
         this->login = enterLogin(1, leave);
-        if (leave) break;
-        this->password = enterPassword(leave);
-        if (leave) break;
-
+        if (leave) return;
+        this->enterPassword(leave);
+        if (leave) return;
     } while (!this->isUserInFile());
 
-    if (!leave) {
-        userMenu();
-    }
+    userMenu();
 }
 
 string AbstractUser::enterLogin(int8_t mode, bool &leave) {
     string login;
     int8_t error;
     switch (mode) {
+        default:
         case 0:
             login = getString("Введите логин. Для выхода введите exit");
             break;
@@ -133,10 +142,10 @@ string AbstractUser::enterLogin(int8_t mode, bool &leave) {
 
 void AbstractUser::changePassword() {
     do {
-        AbstractUser::Error error = checkPasswords();
+        AbstractUser::Error error = this->checkPasswords();
 
         if (error == Error::AU_NO_ERROR) {
-            string path = pathToData();
+            string path = this->pathToData();
             ifstream file(path);
             json j;
             try {
@@ -148,7 +157,7 @@ void AbstractUser::changePassword() {
             for (auto &i : j) {
                 if (i["login"] == login && i["password"] == password) {
                     bool leave = false;
-                    this->password = enterPassword(leave);
+                    this->enterPassword(leave);
                     if (leave) return;
                     i["password"] = sha256(password);
                     ofstream output(path, ios::trunc);
@@ -167,9 +176,9 @@ void AbstractUser::changePassword() {
 
 void AbstractUser::deleteAccount() {
     do {
-        AbstractUser::Error error = checkPasswords();
+        AbstractUser::Error error = this->checkPasswords();
         if (error == Error::AU_NO_ERROR) {
-            deleteUserFromFile();
+            this->deleteUserFromFile();
             getCharacter("Пароль успешно изменен. Для продолжения нажмите любую клавишу");
             return;
         } else if (error == Error::AU_INTERRUPTION_ERROR) break;
@@ -177,8 +186,8 @@ void AbstractUser::deleteAccount() {
     } while (true);
 }
 
-std::vector<AbstractUser *> *AbstractUser::getUsersFromFile() {
-    string path = pathToData();
+vector<AbstractUser *> *AbstractUser::getUsersFromFile() {
+    string path = this->pathToData();
     ifstream file(path);
     vector<AbstractUser *> *users = new vector<AbstractUser *>();
     json j;
@@ -199,7 +208,7 @@ std::vector<AbstractUser *> *AbstractUser::getUsersFromFile() {
 }
 
 void AbstractUser::addUserToFile() {
-    string path = pathToData();
+    string path = this->pathToData();
     ifstream file(path);
     json j;
     try {
@@ -220,7 +229,7 @@ void AbstractUser::addUserToFile() {
 }
 
 void AbstractUser::deleteUserFromFile() {
-    string path = pathToData();
+    string path = this->pathToData();
     ifstream file(path);
     json j;
     try {
@@ -241,13 +250,13 @@ void AbstractUser::deleteUserFromFile() {
 }
 
 bool AbstractUser::isUserInFile() {
-    string path = pathToData();
+    string path = this->pathToData();
     ifstream file(path);
     json j;
     try {
         file >> j;
     } catch (detail::parse_error &error) {
-        j = json::array();
+        return false;
     }
     for (auto &i : j) {
         if (i["login"] == login && i["password"] == password) {
@@ -257,5 +266,38 @@ bool AbstractUser::isUserInFile() {
     return false;
 }
 
+void AbstractUser::enterPassword(bool &leave) {
+    int8_t error;
+    string password;
 
+    password = this->inputPassword("Введите пароль. Для выхода введите exit");
 
+    do {
+        error = 0;
+
+        if (password == "exit") {
+            leave = true;
+            return;
+        }
+
+        if (password.size() < 8) {
+            error = 2;
+            if (!password.empty())
+                password = this->inputPassword("Пароль должен содержать минимум 8 символов. Повторите ввод пароля. Для выхода введите exit");
+            else
+                password = this->inputPassword();
+            continue;
+        }
+
+        for (auto a : password) {
+            if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9'))) {
+                error = 1;
+                password = this->inputPassword("Пароль содержит недопустимые символы. Повторите ввод пароля. Для выхода введите exit");
+                break;
+            }
+
+        }
+    } while (error);
+
+    this->password = password;
+}

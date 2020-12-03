@@ -38,51 +38,28 @@
 - статические методы и поля.                                                                    done
 */
 class Catalog;
-
-class Credentials;
-
 class Car;
-
 class Deal;
 
 void mainMenu();
-
 void drawMenu(std::vector<std::string>, int8_t &);
-
 void userHaveAccount();
-
 void rewriteFile(std::vector<Credentials> &, const std::string &);
-
 void copyFile(std::vector<Credentials> &, const std::string &);
-
 std::string getString(const std::string &);
-
 void getCharacter(const std::string &);
-
 bool copyCatalogFile(Catalog &);
-
 void rewriteCatalogFile(Catalog &);
-
 int8_t getCharCode();
-
 void displayDate(std::string);
-
 int stringToInt(const std::string &);
-
 void adminHaveAccount();
-
 std::string enterLogin(int8_t, bool &, bool &);
-
 std::string enterPassword(bool &);
-
 bool dealCorrect(const Deal &, const std::string &);
-
 bool dealCorrect(const Deal &);
-
 bool dayCorrect(int8_t, int8_t, int16_t);
-
 bool stringContainString(std::string &, std::string &);
-
 bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);
 
 class Car {
