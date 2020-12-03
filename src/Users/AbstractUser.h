@@ -29,6 +29,7 @@ protected:
     static std::string inputPassword(const std::string &);
     static std::string inputPassword();
     void enterPassword(bool &);
+    void setCurrentUser();
     virtual std::string pathToData() = 0;
     virtual std::vector<AbstractUser *> *getUsersFromFile();
     virtual void addUserToFile();
@@ -42,8 +43,8 @@ public:
     void enterAccount();
     void changePassword();
     void deleteAccount();
+    bool isUserFileEmpty();
     static const std::string &getCurrentUser();
-    static void setCurrentUser(const std::string &currentUser);
 };
 
 #endif //COURSEWORK_ABSTRACTUSER_H

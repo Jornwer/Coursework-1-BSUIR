@@ -12,8 +12,8 @@ const std::string &AbstractUser::getCurrentUser() {
     return currentUser;
 }
 
-void AbstractUser::setCurrentUser(const std::string &currentUser) {
-    AbstractUser::currentUser = currentUser;
+void AbstractUser::setCurrentUser() {
+    AbstractUser::currentUser = login;
 }
 
 AbstractUser::Error AbstractUser::checkPasswords() {
@@ -179,7 +179,7 @@ void AbstractUser::deleteAccount() {
         AbstractUser::Error error = this->checkPasswords();
         if (error == Error::AU_NO_ERROR) {
             this->deleteUserFromFile();
-            getCharacter("Пароль успешно изменен. Для продолжения нажмите любую клавишу");
+            getCharacter("Пользователь удален. Для продолжения нажмите любую клавишу");
             return;
         } else if (error == Error::AU_INTERRUPTION_ERROR) break;
 
@@ -300,4 +300,18 @@ void AbstractUser::enterPassword(bool &leave) {
     } while (error);
 
     this->password = password;
+}
+
+bool AbstractUser::isUserFileEmpty() {
+    string path = this->pathToData();
+    ifstream file(path);
+    json j;
+    try {
+        file >> j;
+        file.close();
+        return false;
+    } catch (detail::parse_error &error) {
+        file.close();
+        return true;
+    }
 }
