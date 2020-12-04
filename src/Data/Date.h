@@ -13,7 +13,7 @@ private:
     [[nodiscard]] int countDays() const;
 
 public:
-    explicit Date(const std::string &); //конструктор в формате ДДММГГГГ
+    explicit Date(int); //конструктор в формате ДДММГГГГ
     explicit Date(nlohmann::json &);
     Date() = default;
 

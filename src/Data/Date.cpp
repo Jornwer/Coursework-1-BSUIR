@@ -2,17 +2,11 @@
 
 using namespace std;
 
-Date::Date(const string &str) {
-    if (str.size() == 8) {
-        day += str[0];
-        day += 10 * day + str[1];
-        month += 10 * month + str[2];
-        month += 10 * month + str[3];
-        year += 10 * year + str[4];
-        year += 10 * year + str[5];
-        year += 10 * year + str[6];
-        year += 10 * year + str[7];
-    }
+Date::Date(int date) {
+    year = date % 10000;
+    date /= 10000;
+    month = date % 100;
+    day = date / 100;
 }
 
 Date::Date(nlohmann::json &j) {

@@ -13,6 +13,8 @@
 #include <ctime>
 #include <unordered_map>
 #include "../lib/SHA256.h"
+#include "Data/Date.h"
+
 namespace Constants {
     const std::string pathToUserFile = "data/users.json";
     const std::string pathToAdminFile = "data/admins.json";
@@ -52,14 +54,10 @@ void getCharacter(const std::string &);
 int8_t getCharCode();
 void displayDate(std::string);
 
-void userHaveAccount();
-void rewriteFile(std::vector<Credentials> &, const std::string &);
-void copyFile(std::vector<Credentials> &, const std::string &);
-std::string getString(const std::string &);
-void getCharacter(const std::string &);
+/*void rewriteFile(std::vector<Credentials> &, const std::string &);
+void copyFile(std::vector<Credentials> &, const std::string &);*/
 bool copyCatalogFile(Catalog &);
 void rewriteCatalogFile(Catalog &);
-void adminHaveAccount();
 bool dealCorrect(const Deal &, const std::string &);
 bool dealCorrect(const Deal &);
 bool stringContainString(std::string &, std::string &);

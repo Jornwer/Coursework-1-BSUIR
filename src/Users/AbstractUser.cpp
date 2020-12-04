@@ -65,7 +65,10 @@ void AbstractUser::enterAccount() {
     if (leave) return;
     this->enterPassword(leave);
     if (leave) return;
-    if (this->isUserInFile()) userMenu();
+    if (this->isUserInFile()) {
+        userMenu();
+        return;
+    }
 
     do {
         this->login = enterLogin(1, leave);
@@ -155,7 +158,7 @@ void AbstractUser::changePassword() {
             }
 
             for (auto &i : j) {
-                if (i["login"] == login && i["password"] == password) {
+                if (i["login"] == login && i["password"] == sha256(password)) {
                     bool leave = false;
                     this->enterPassword(leave);
                     if (leave) return;
@@ -295,7 +298,7 @@ bool AbstractUser::isUserFileEmpty() {
 nlohmann::json AbstractUser::userToJson() {
     json j;
     j["login"] = login;
-    j["password"] = password;
+    j["password"] = sha256(password);
     return j;
 }
 

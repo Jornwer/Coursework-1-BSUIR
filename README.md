@@ -1,11 +1,6 @@
 # Coursework-1-BSUIR
-Coursework
 
 
-Это просто курсовой проект 2 семестра ИЭФ БГУИРа. В этом прокте нет ничего интересного,
-т.к. мой опыт составляет чуть более половины года в программировании
+This is just coursework project from second and third semester of BSUIR.
 
-
-Тема : Учет продажи автомобилей
-
-Версия языка C++20
+Theme: Car sales accounting

@@ -1,9 +1,11 @@
 ﻿#include "Header.h"
+#include "Users/Admin.h"
+#include "Users/User.h"
 
 using namespace std;
 
 int main() {
-    setlocale(0, "");
+    system("chcp 65001");
 	mainMenu();
     return 0;
 }
@@ -21,15 +23,15 @@ void mainMenu() {
 
 	while (true) {
 		system("cls");
-		drawMenu({L"Войти как администратор",L"\n\nВойти как пользователь",L"\n\nВыход"}, row);
+		drawMenu({"Войти как администратор", "\n\nВойти как пользователь", "\n\nВыход"}, row);
 
 		int8_t a = getCharCode();
 
 		if (a == VK_UP) row = (row + 2) % 3;
 		else if (a == VK_DOWN) row = (row + 1) % 3;
 		else if (a == 13) {
-			if (row == 0) adminHaveAccount();
-			else if (row == 1) userHaveAccount();
+			if (row == 0) Admin::adminHaveAccount();
+			else if (row == 1) User::userHaveAccount();
 			else if (row == 2) {
 				system("cls");
 				break;
@@ -82,7 +84,7 @@ void displayDate(string date) {
 	}
 }
 
-bool dealCorrect(const Deal& deal, const string& date) {
+/*bool dealCorrect(const Deal& deal, const string& date) {
 	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
 			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty()) {
 		getCharacter(L"Одно из полей пустое. Для повторного ввода данных нажмите любую клавишу");
@@ -171,7 +173,7 @@ bool dealCorrect(const Deal& deal)
 	if (deal.date < Date("01011990")) return false;
 
 	return true;
-}
+}*/
 
 bool stringContainString(string& stringForSearch, string& searchingString) {
 	if (stringForSearch.size() < searchingString.size()) return false;

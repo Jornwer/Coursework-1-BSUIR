@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void rewriteCatalogFile(Catalog& catalog) {
+/*void rewriteCatalogFile(Catalog& catalog) {
 	ofstream file("data/catalog.txt", ios::trunc);
 	for (const auto& i : catalog.deals)
 		file << i.car.brand << ' ' << i.car.model << ' ' << i.car.color << ' ' << i.car.price << ' '
@@ -30,23 +30,23 @@ bool copyCatalogFile(Catalog& catalog) {
 		if (dealCorrect(temp)) 
 			catalog.deals.push_back(temp);
 		else {
-			getCharacter(L"Файл каталога поврежден. Для возвращения в меню нажмите любую клавишу");
+			getCharacter("Файл каталога поврежден. Для возвращения в меню нажмите любую клавишу");
 			return true;
 		}
 	}
 	if (!catalog.deals.empty()) catalog.deals.erase(catalog.deals.end() - 1);
 	file.close();
 	return false;
-}
+}*/
 
 void Catalog::changeCatalog() {
-	int8_t row = 0;
+	/*int8_t row = 0;
 	int8_t colNum = 7;
 	if(copyCatalogFile(*this)) return;
 	while (true) {
 		system("cls");
-		drawMenu({ L" Просмотреть каталог", L"\n\n Добавить элемент в каталог", L"\n\n Удалить элемент из каталога",
-					L"\n\n Поиск в каталоге", L"\n\n Изменить элемент", L"\n\n Показать самые продаваемые марки", L"\n\n Назад" }, row);
+		drawMenu({ " Просмотреть каталог", "\n\n Добавить элемент в каталог", "\n\n Удалить элемент из каталога",
+					"\n\n Поиск в каталоге", "\n\n Изменить элемент", "\n\n Показать самые продаваемые марки", "\n\n Назад" }, row);
 
 		char a = getCharCode();
 
@@ -67,11 +67,11 @@ void Catalog::changeCatalog() {
 				break;
 			}
 		}
-	}
+	}*/
 }
 
-void Catalog::displayCatalog() {
-	if (this->deals.empty()) {getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
+/*void Catalog::displayCatalog() {
+	if (this->deals.empty()) {getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return;}
 	int pages = ceil((double)this->deals.size() / 6.0), page = 0;
 	while (true) {
 		system("cls");
@@ -92,7 +92,7 @@ void Catalog::enterElement(Deal& deal, string date) {
 	bool dealEmpty = (deal == Deal());
 	Deal save = deal;
 	int8_t row = 0;
-	deal.seller = Credentials::currentUser;
+	deal.seller = AbstractUser::getCurrentUser();
 
 	while (true) {
 		system("cls");
@@ -146,9 +146,9 @@ void Catalog::enterElement(Deal& deal, string date) {
 						<< deal.buyerName << ' ' << deal.buyerSurname << ' ' << deal.seller << '\n';
 
 					file.close();
-					deal.date = Date(date);
+					//deal.date = Date(date);
 					this->deals.push_back(deal);
-					getCharacter(L"Машина успешно добавлена. Для продолжения нажмите любую клавишу");
+					getCharacter("Машина успешно добавлена. Для продолжения нажмите любую клавишу");
 					continue;
 				}
 			}
@@ -200,7 +200,7 @@ void Deal::displayElement() {
 void Catalog::approveDeletion(int &page, int &pos) {
 	string temp;
 	system("cls");
-	temp = getString(L"Введите \"yes\" для удаления элемента");
+	temp = getString("Введите \"yes\" для удаления элемента");
 	if (temp == "yes") {
 		this->deals.erase(this->deals.begin() + pos + page * 6);
 		rewriteCatalogFile(*this);
@@ -284,7 +284,7 @@ void Catalog::searchInCatalog() {
 void Catalog::displaySearch(string brand, string model, string color, string priceFrom,
 							string priceTo, string dateFrom, string dateTo, string buyerName, string buyerSurname) {
 	if ((dateFrom.size() != 8 && !dateFrom.empty()) || (dateTo.size() != 8 && !dateTo.empty())) {
-		getCharacter(L"Дата введена неправильно. Для возвращения нажмите любую кнопку");
+		getCharacter("Дата введена неправильно. Для возвращения нажмите любую кнопку");
 		return;
 	}
 
@@ -322,7 +322,7 @@ void Catalog::displaySearch(string brand, string model, string color, string pri
 	}
 	
 	if (cat.deals.empty()) {
-		getCharacter(L"Найдено 0 элементов. Для продолжения нажмите любую клавишу");
+		getCharacter("Найдено 0 элементов. Для продолжения нажмите любую клавишу");
 		return;
 	}
 	cat.displayCatalog();
@@ -337,7 +337,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&)) {
 	int pages, page = 0, pos = 0, elInPage;
 	while (true)
 	{
-		if (this->deals.empty()) { getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
+		if (this->deals.empty()) { getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку"); return; }
 		pages = ceil((double)this->deals.size() / 6.0);
 		if (page == pages - 1) { elInPage = this->deals.size() - page * 6; pos = (pos >= elInPage ? 0 : pos); }
 		else elInPage = 6;
@@ -366,7 +366,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&)) {
 				if (pos + page * 6 == deals.size()) {
 					if (pos == 0) {
 						if (page == 0) {
-							getCharacter(L"Каталог пуст. Для возвращения нажмите любую кнопку");
+							getCharacter("Каталог пуст. Для возвращения нажмите любую кнопку");
 							return;
 						}
 						else {
@@ -387,7 +387,7 @@ void Catalog::modifyElement(void (Catalog::*f)(int&, int&)) {
 
 void Catalog::showBestBrands() {
 	if (this->deals.empty()) {
-		getCharacter(L"Каталог пуст. Для продолжения введите любую клавишу");
+		getCharacter("Каталог пуст. Для продолжения введите любую клавишу");
 		return;
 	}
 	unordered_map<string, int> umap;
@@ -402,4 +402,4 @@ void Catalog::showBestBrands() {
 		wcout << L" машин продано\n";
 	}
 	getCharCode();
-}
+}*/

@@ -57,7 +57,7 @@ void Admin::createAccount() {
         getCharacter("Пользователь с таким логином уже существует. Для возвращения в меню нажмите любую клавишу");
     } else {
         addUserToFile(Constants::pathToAdminFile);
-        getCharacter("Пользователь успешно добавлен. Для продолжения нажмите любую клавишу");
+        userMenu();
     }
 
 }
@@ -101,9 +101,9 @@ void Admin::adminHaveAccount() {
         system("cls");
 
         if (isUserFileEmpty)
-            drawMenu({ L"  Создать аккаунт",L"\n\n  Назад" }, row);
+            drawMenu({ "  Создать аккаунт", "\n\n  Назад" }, row);
         else
-            drawMenu({ L"  Войти в аккаунт",L"\n\n  Назад" }, row);
+            drawMenu({ "  Войти в аккаунт", "\n\n  Назад" }, row);
 
         char a = getCharCode();
 
@@ -115,16 +115,15 @@ void Admin::adminHaveAccount() {
                     system("cls");
                     break;
                 }
-                return;
-            }
-            else {
+
+            } else {
                 if (row == 0) admin.enterAccount();
                 else if (row == 1) {
                     system("cls");
                     break;
                 }
-                return;
             }
+            return;
         }
     }
 }
