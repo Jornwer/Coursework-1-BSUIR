@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    system("chcp 1251");
+    system("chcp 65001");
 	mainMenu();
     return 0;
 }
@@ -23,7 +23,7 @@ void mainMenu() {
 
 	while (true) {
 		system("cls");
-		drawMenu({"Войти как администратор", "\n\nВойти как пользователь", "\n\nВыход"}, row);
+		drawMenu({"Р’РѕР№С‚Рё РєР°Рє Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ", "\n\nР’РѕР№С‚Рё РєР°Рє РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ", "\n\nР’С‹С…РѕРґ"}, row);
 
 		int8_t a = getCharCode();
 
@@ -87,7 +87,7 @@ int8_t getCharCode() {
 
 void displayDate(string date) {
 	int8_t index = 0;
-	string str = "ДД.ММ.ГГГГ      ";
+	string str = "Р”Р”.РњРњ.Р“Р“Р“Р“      ";
 	for (int8_t i = 0; i < 16; ++i) {
 		if (index + 1 > date.size() || index == 8)
 		    cout << str[i];
@@ -110,28 +110,28 @@ bool isCharacterValid(char &a) {
 /*bool dealCorrect(const Deal& deal, const string& date) {
 	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
 			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty()) {
-		getCharacter(L"Одно из полей пустое. Для повторного ввода данных нажмите любую клавишу");
+		getCharacter(L"РћРґРЅРѕ РёР· РїРѕР»РµР№ РїСѓСЃС‚РѕРµ. Р”Р»СЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІРІРѕРґР° РґР°РЅРЅС‹С… РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
 	if (date.size() != 8) {
-		getCharacter(L"Дата должна состоять из 8 цифр. Для повторного ввода данных нажмите любую клавишу");
+		getCharacter(L"Р”Р°С‚Р° РґРѕР»Р¶РЅР° СЃРѕСЃС‚РѕСЏС‚СЊ РёР· 8 С†РёС„СЂ. Р”Р»СЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІРІРѕРґР° РґР°РЅРЅС‹С… РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
 	if (deal.car.price.size() > 9) {
-		getCharacter(L"Стоимость машины должна быть меньше 1000000000. Для продолжения нажмите любую клавишу");
+		getCharacter(L"РЎС‚РѕРёРјРѕСЃС‚СЊ РјР°С€РёРЅС‹ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 1000000000. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
 	if (stringToInt(deal.car.price) == 0) {
-		getCharacter(L"Стоимость машины должна быть больше 0. Для продолжения намите любую клавишу");
+		getCharacter(L"РЎС‚РѕРёРјРѕСЃС‚СЊ РјР°С€РёРЅС‹ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
 	Date tmp(date);
 	if (!dayCorrect(stringToInt(tmp.day), stringToInt(tmp.month), stringToInt(tmp.year))) {
-		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
+		getCharacter(L"Р’РІРµРґРµРЅРЅРѕР№ РґР°С‚С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
@@ -142,12 +142,12 @@ bool isCharacterValid(char &a) {
 		+ to_string(1900 + ltm->tm_year);
 
 	if (tmp > Date(currTime)) {
-		getCharacter(L"Введенная дата больше настоящей даты. Для продолжения нажмите любую клавишу");
+		getCharacter(L"Р’РІРµРґРµРЅРЅР°СЏ РґР°С‚Р° Р±РѕР»СЊС€Рµ РЅР°СЃС‚РѕСЏС‰РµР№ РґР°С‚С‹. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 
 	if (tmp < Date("01011990")) {
-		getCharacter(L"Введенная дата дожна быть больше 01.01.1990. Для продолжения нажмите любую клавишу");
+		getCharacter(L"Р’РІРµРґРµРЅРЅР°СЏ РґР°С‚Р° РґРѕР¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 01.01.1990. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
 		return false;
 	}
 	
