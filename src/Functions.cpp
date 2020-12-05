@@ -1,11 +1,11 @@
-п»ї#include "Header.h"
+#include "Header.h"
 #include "Users/Admin.h"
 #include "Users/User.h"
 
 using namespace std;
 
 int main() {
-    system("chcp 65001");
+    system("chcp 1251");
 	mainMenu();
     return 0;
 }
@@ -23,7 +23,7 @@ void mainMenu() {
 
 	while (true) {
 		system("cls");
-		drawMenu({"Р’РѕР№С‚Рё РєР°Рє Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ", "\n\nР’РѕР№С‚Рё РєР°Рє РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ", "\n\nР’С‹С…РѕРґ"}, row);
+		drawMenu({"Войти как администратор", "\n\nВойти как пользователь", "\n\nВыход"}, row);
 
 		int8_t a = getCharCode();
 
@@ -42,22 +42,35 @@ void mainMenu() {
 
 string getString(const string &msg) {
     system("cls");
+    cout << msg << '\n';
     string tmp;
-    cout << msg << endl;
-    getline(cin, tmp);
-    return tmp;
+    return getString();
+}
+
+string getString() {
+    string pass;
+    unsigned char a;
+
+    while ((a = getch()) != 13) {
+        if (a == 27) return "exit";
+
+        if ((int) a == 8) {
+            if (pass.empty()) continue;
+
+            pass.pop_back();
+            cout << '\b' << ' ' << '\b';
+        } else {
+            pass += a;
+            cout << a;
+        }
+    }
+    return pass;
 }
 
 void getCharacter(const string &msg) {
     system("cls");
     cout << msg << '\n';
     getCharCode();
-}
-
-bool operator==(const Deal& l, const Deal& r) {
-	return (l.car.brand == r.car.brand && l.car.color == r.car.color && l.date == r.date 
-		&& l.car.model == r.car.model && l.car.price == r.car.price
-		&& l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
 }
 
 int8_t getCharCode() {
@@ -74,41 +87,51 @@ int8_t getCharCode() {
 
 void displayDate(string date) {
 	int8_t index = 0;
-	wstring str = L"Р”Р”.РњРњ.Р“Р“Р“Р“      ";
+	string str = "ДД.ММ.ГГГГ      ";
 	for (int8_t i = 0; i < 16; ++i) {
-		if (index + 1 > date.size() || index == 8) wcout << str[i];
+		if (index + 1 > date.size() || index == 8)
+		    cout << str[i];
 		else {
-			if (i == 2 || i == 5) cout << '.';
-			else cout << date[index++];
+			if (i == 2 || i == 5)
+			    cout << '.';
+			else
+			    cout << date[index++];
 		}
 	}
+}
+
+bool isCharacterValid(char &a) {
+    return ((a >= 'a' && a <= 'z') ||
+            (a >= 'A' && a <= 'Z') ||
+            (a >= '0' && a <= '9') ||
+            a == ' ');
 }
 
 /*bool dealCorrect(const Deal& deal, const string& date) {
 	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
 			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty()) {
-		getCharacter(L"РћРґРЅРѕ РёР· РїРѕР»РµР№ РїСѓСЃС‚РѕРµ. Р”Р»СЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІРІРѕРґР° РґР°РЅРЅС‹С… РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Одно из полей пустое. Для повторного ввода данных нажмите любую клавишу");
 		return false;
 	}
 
 	if (date.size() != 8) {
-		getCharacter(L"Р”Р°С‚Р° РґРѕР»Р¶РЅР° СЃРѕСЃС‚РѕСЏС‚СЊ РёР· 8 С†РёС„СЂ. Р”Р»СЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІРІРѕРґР° РґР°РЅРЅС‹С… РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Дата должна состоять из 8 цифр. Для повторного ввода данных нажмите любую клавишу");
 		return false;
 	}
 
 	if (deal.car.price.size() > 9) {
-		getCharacter(L"РЎС‚РѕРёРјРѕСЃС‚СЊ РјР°С€РёРЅС‹ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 1000000000. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Стоимость машины должна быть меньше 1000000000. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 
 	if (stringToInt(deal.car.price) == 0) {
-		getCharacter(L"РЎС‚РѕРёРјРѕСЃС‚СЊ РјР°С€РёРЅС‹ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Стоимость машины должна быть больше 0. Для продолжения намите любую клавишу");
 		return false;
 	}
 
 	Date tmp(date);
 	if (!dayCorrect(stringToInt(tmp.day), stringToInt(tmp.month), stringToInt(tmp.year))) {
-		getCharacter(L"Р’РІРµРґРµРЅРЅРѕР№ РґР°С‚С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 
@@ -119,12 +142,12 @@ void displayDate(string date) {
 		+ to_string(1900 + ltm->tm_year);
 
 	if (tmp > Date(currTime)) {
-		getCharacter(L"Р’РІРµРґРµРЅРЅР°СЏ РґР°С‚Р° Р±РѕР»СЊС€Рµ РЅР°СЃС‚РѕСЏС‰РµР№ РґР°С‚С‹. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Введенная дата больше настоящей даты. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 
 	if (tmp < Date("01011990")) {
-		getCharacter(L"Р’РІРµРґРµРЅРЅР°СЏ РґР°С‚Р° РґРѕР¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 01.01.1990. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+		getCharacter(L"Введенная дата дожна быть больше 01.01.1990. Для продолжения нажмите любую клавишу");
 		return false;
 	}
 	
@@ -185,4 +208,10 @@ bool stringContainString(string& stringForSearch, string& searchingString) {
 
 bool comparePairs(pair<string, int> l, pair<string, int> r) {
 	return l.second > r.second;
+}
+
+bool operator==(const Deal& l, const Deal& r) {
+    return (l.car.brand == r.car.brand && l.car.color == r.car.color && l.date == r.date
+            && l.car.model == r.car.model && l.car.price == r.car.price
+            && l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
 }

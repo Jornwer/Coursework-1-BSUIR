@@ -11,6 +11,7 @@ private:
 
     static bool deleteUserThenAddAdmin(std::string&);
     static bool deleteUser(std::string&);
+    static void addUserToFileWithoutPasswordEncoding(const std::string&, const std::string&, const std::string&);
 protected:
     std::string pathToData() override;
     static void addAdmin();

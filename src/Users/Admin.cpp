@@ -8,23 +8,23 @@ string Admin::pathToData() {
 }
 
 void Admin::addAdmin() {
-    string login = getString("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ. Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ exit Ð´Ð»Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð°");
+    string login = getString("Ââåäèòå èìÿ ïîëüçîâàòåëÿ. Ââåäèòå exit äëÿ âûõîäà èëè íàæìèòå êëàâèøó Esc");
     if (login == "exit") return;
     if (deleteUserThenAddAdmin(login)) {
-        getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð¿Ð¾Ð²Ñ‹ÑˆÐµÐ½. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+        getCharacter("Ïîëüçîâàòåëü ïîâûøåí. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
     }
-    else getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+    else getCharacter("Ïîëüçîâàòåëü íå íàéäåí. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
 }
 
 void Admin::deleteUser() {
-    string login = getString("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ. Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ exit Ð´Ð»Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð°");
+    string login = getString("Ââåäèòå èìÿ ïîëüçîâàòåëÿ. Ââåäèòå exit äëÿ âûõîäà èëè íàæìèòå êëàâèøó Esc");
     if (login == "exit") return;
 
     if (deleteUser(login)) {
-        getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÑƒÐ´Ð°Ð»ÐµÐ½. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+        getCharacter("Ïîëüçîâàòåëü óäàëåí. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
         return;
     }
-    else getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+    else getCharacter("Ïîëüçîâàòåëü íå íàéäåí. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
 }
 
 void Admin::addUser() {
@@ -36,9 +36,10 @@ void Admin::addUser() {
     if (leave) return;
 
     if (newUser.isUserLoginInFile(Constants::pathToAdminFile) || newUser.isUserLoginInFile(Constants::pathToUserFile)){
-        getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ñ Ñ‚Ð°ÐºÐ¸Ð¼ Ð»Ð¾Ð³Ð¸Ð½Ð¾Ð¼ ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+        getCharacter("Ïîëüçîâàòåëü ñ òàêèì ëîãèíîì óæå ñóùåñòâóåò. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
     } else {
-        getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½. Ð”Ð»Ñ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶ÐµÐ½Ð¸Ñ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+        newUser.addUserToFile(Constants::pathToUserFile);
+        getCharacter("Ïîëüçîâàòåëü óñïåøíî äîáàâëåí. Äëÿ ïðîäîëæåíèÿ íàæìèòå ëþáóþ êëàâèøó");
     }
 
 }
@@ -54,7 +55,7 @@ void Admin::createAccount() {
     if (leave) return;
 
     if (isUserLoginInFile(Constants::pathToUserFile)){
-        getCharacter("ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ñ Ñ‚Ð°ÐºÐ¸Ð¼ Ð»Ð¾Ð³Ð¸Ð½Ð¾Ð¼ ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚. Ð”Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð² Ð¼ÐµÐ½ÑŽ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð»ÑŽÐ±ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ");
+        getCharacter("Ïîëüçîâàòåëü ñ òàêèì ëîãèíîì óæå ñóùåñòâóåò. Äëÿ âîçâðàùåíèÿ â ìåíþ íàæìèòå ëþáóþ êëàâèøó");
     } else {
         addUserToFile(Constants::pathToAdminFile);
         userMenu();
@@ -69,9 +70,9 @@ void Admin::userMenu() {
     setCurrentUser();
     while (true) {
         system("cls");
-        drawMenu({ " Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³", "\n\n Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ","\n\n Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚",
-                   "\n\n ÐÐ°Ð·Ð½Ð°Ñ‡Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ð¾Ð³Ð¾ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€Ð°", "\n\n Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ",
-                   "\n\n Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ð¾Ð³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ", "\n\n ÐÐ°Ð·Ð°Ð´" }, row);
+        drawMenu({ " Èçìåíèòü êàòàëîã", "\n\n Èçìåíèòü ïàðîëü","\n\n Óäàëèòü àêêàóíò",
+                   "\n\n Íàçíà÷èòü íîâîãî àäìèíèñòðàòîðà", "\n\n Óäàëèòü ïîëüçîâàòåëÿ",
+                   "\n\n Äîáàâèòü íîâîãî ïîëüçîâàòåëÿ", "\n\n Íàçàä" }, row);
 
         char a = getCharCode();
 
@@ -101,9 +102,9 @@ void Admin::adminHaveAccount() {
         system("cls");
 
         if (isUserFileEmpty)
-            drawMenu({ "  Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚", "\n\n  ÐÐ°Ð·Ð°Ð´" }, row);
+            drawMenu({ "  Ñîçäàòü àêêàóíò", "\n\n  Íàçàä" }, row);
         else
-            drawMenu({ "  Ð’Ð¾Ð¹Ñ‚Ð¸ Ð² Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚", "\n\n  ÐÐ°Ð·Ð°Ð´" }, row);
+            drawMenu({ "  Âîéòè â àêêàóíò", "\n\n  Íàçàä" }, row);
 
         char a = getCharCode();
 
@@ -129,22 +130,22 @@ void Admin::adminHaveAccount() {
 }
 
 bool Admin::deleteUserThenAddAdmin(string &login) {
-    ifstream file(Constants::pathToUserFile);
+    ifstream fIn(Constants::pathToUserFile);
     json j;
     try {
-        file >> j;
+        fIn >> j;
     } catch (detail::parse_error &error) {
         return false;
     }
     for (int i = 0; i < j.size(); ++i) {
         if (j[i]["login"] == login) {
-            string password = j["password"];
+            string password = j[i]["password"];
             j.erase(j.begin() + i);
-            ofstream output(Constants::pathToUserFile, ios::trunc);
-            output << j;
-            file.close();
-            output.close();
-            (new Admin(login, password))->addUserToFile(Constants::pathToAdminFile);
+            ofstream fOut(Constants::pathToUserFile, ios::trunc);
+            fOut << j;
+            fIn.close();
+            fOut.close();
+            addUserToFileWithoutPasswordEncoding(login, password, Constants::pathToAdminFile);
             return true;
         }
     }
@@ -171,3 +172,26 @@ bool Admin::deleteUser(string &login) {
     }
     return false;
 }
+
+void Admin::addUserToFileWithoutPasswordEncoding(const std::string &login,
+                                                 const std::string &password,
+                                                 const std::string &path) {
+    ifstream file(path);
+    json j;
+    try {
+        file >> j;
+    } catch (detail::parse_error &error) {
+        j = json::array();
+    }
+    json user;
+    user["login"] = login;
+    user["password"] = password;
+    j.push_back(j);
+
+    ofstream output(path, ios::trunc);
+    output << j;
+
+    file.close();
+    output.close();
+}
+

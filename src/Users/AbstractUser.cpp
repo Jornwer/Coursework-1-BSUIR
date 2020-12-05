@@ -17,11 +17,12 @@ void AbstractUser::setCurrentUser() {
 }
 
 AbstractUser::Error AbstractUser::checkPasswords() {
-    string pass1 = inputPassword("Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ РѕС‚ Р°РєРєР°СѓРЅС‚Р°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+    string pass1 = inputPassword("Введите пароль от аккаунта."
+                                 " Для выхода введите exit или нажмите клавишу Esc");
     if (pass1 == "exit") return Error::AU_INTERRUPTION_ERROR;
 
     if (pass1 != this->password) {
-        getCharacter("РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+        getCharacter("Пароли не совпадают. Для продолжения нажмите любую клавишу");
         return Error::AU_ERROR;
     }
     return Error::AU_NO_ERROR;
@@ -39,15 +40,12 @@ std::string AbstractUser::inputPassword() {
     unsigned char a;
 
     while ((a = getch()) != 13) {
-        if (a == 27) return "*_*";
-        if (a == 224) {
-            getch();
-            pass +=a;
-        }
+        if (a == 27) return "exit";
+
         if ((int) a == 8) {
             if (pass.empty()) continue;
 
-            pass.erase(pass.size() - 1, pass.size());
+            pass.pop_back();
             cout << '\b' << ' ' << '\b';
         } else {
             pass += a;
@@ -86,15 +84,16 @@ string AbstractUser::enterLogin(int8_t mode, bool &leave) {
     switch (mode) {
         default:
         case 0:
-            login = getString("Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+            login = getString("Введите логин. Для выхода введите exit или нажмите клавишу Esc");
             break;
         case 1:
-            login = getString(
-                    "РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ Р»РѕРіРёРЅ Рё/РёР»Рё РїР°СЂРѕР»СЊ. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР° Рё РїР°СЂРѕР»СЏ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+            login = getString("Неправильный логин и/или пароль. Повторите ввод логина и пароля. "
+                              "Для выхода введите exit или нажмите клавишу Esc");
             break;
         case 2:
             login = getString(
-                    "РђРєРєР°СѓРЅС‚ СЃ С‚Р°РєРёРј Р»РѕРіРёРЅРѕРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР° Рё РїР°СЂРѕР»СЏ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                    "Аккаунт с таким логином уже существует. Повторите ввод логина и пароля. "
+                    "Для выхода введите exit или нажмите клавишу Esc");
             break;
     }
 
@@ -108,7 +107,8 @@ string AbstractUser::enterLogin(int8_t mode, bool &leave) {
 
         if (login[0] == ' ') {
             error = 1;
-            login = getString("Р›РѕРіРёРЅ РЅРµ РјРѕР¶РµС‚ РЅР°С‡РёРЅР°С‚СЊСЃСЏ СЃ РїСЂРѕР±РµР»Р°. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+            login = getString("Логин не может начинаться с пробела. Повторите ввод логина. "
+                              "Для выхода введите exit или нажмите клавишу Esc");
             continue;
         }
 
@@ -116,7 +116,8 @@ string AbstractUser::enterLogin(int8_t mode, bool &leave) {
             error = 1;
             if (!login.empty())
                 login = getString(
-                        "Р”Р»РёРЅР° Р»РѕРіРёРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 3 СЃРёРјРІРѕР»РѕРІ. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                        "Длина логина должна быть больше 3 символов. Повторите ввод логина. "
+                        "Для выхода введите exit или нажмите клавишу Esc");
             else
                 getline(cin, login);
             continue;
@@ -125,15 +126,16 @@ string AbstractUser::enterLogin(int8_t mode, bool &leave) {
         if (login.size() > 16) {
             error = 1;
             login = getString(
-                    "Р”Р»РёРЅР° Р»РѕРіРёРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 17 СЃРёРјРІРѕР»РѕРІ. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                    "Длина логина должна быть меньше 17 символов. "
+                    "Повторите ввод логина. Для выхода введите exit или нажмите клавишу Esc");
             continue;
         }
 
         for (auto a : login) {
-            if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9') || a == ' ')) {
+            if (!isCharacterValid(a)) {
                 error = 2;
-                login = getString(
-                        "Р›РѕРіРёРЅ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ Р»РѕРіРёРЅР°. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                login = getString("Логин содержит недопустимые символы. Повторите ввод логина."
+                                  " Для выхода введите exit или нажмите клавишу Esc");
                 break;
             }
         }
@@ -182,7 +184,7 @@ void AbstractUser::deleteAccount() {
         AbstractUser::Error error = this->checkPasswords();
         if (error == Error::AU_NO_ERROR) {
             this->deleteUserFromFile();
-            getCharacter("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓРґР°Р»РµРЅ. Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РЅР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ");
+            getCharacter("Пользователь удален. Для продолжения нажмите любую клавишу");
             return;
         } else if (error == Error::AU_INTERRUPTION_ERROR) break;
 
@@ -217,7 +219,7 @@ void AbstractUser::deleteUserFromFile() {
         j = json::array();
     }
     for (int i = 0; i < j.size(); ++i) {
-        if (j[i]["login"] == login && j[i]["password"] == password) {
+        if (j[i]["login"] == login && j[i]["password"] == sha256(password)) {
             j.erase(j.begin() + i);
             ofstream output(path, ios::trunc);
             output << j;
@@ -249,7 +251,8 @@ void AbstractUser::enterPassword(bool &leave) {
     int8_t error;
     string password;
 
-    password = this->inputPassword("Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+    password = this->inputPassword("Введите пароль."
+                                   " Для выхода введите exit или нажмите клавишу Esc");
 
     do {
         error = 0;
@@ -262,16 +265,20 @@ void AbstractUser::enterPassword(bool &leave) {
         if (password.size() < 8) {
             error = 2;
             if (!password.empty())
-                password = this->inputPassword("РџР°СЂРѕР»СЊ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РјРёРЅРёРјСѓРј 8 СЃРёРјРІРѕР»РѕРІ. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ РїР°СЂРѕР»СЏ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                password = this->inputPassword("Пароль должен содержать минимум 8 символов."
+                                               " Повторите ввод пароля."
+                                               " Для выхода введите exit или нажмите клавишу Esc");
             else
                 password = this->inputPassword();
             continue;
         }
 
         for (auto a : password) {
-            if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z') || (a >= '0' && a <= '9'))) {
+            if (!isCharacterValid(a)) {
                 error = 1;
-                password = this->inputPassword("РџР°СЂРѕР»СЊ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹. РџРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ РїР°СЂРѕР»СЏ. Р”Р»СЏ РІС‹С…РѕРґР° РІРІРµРґРёС‚Рµ exit");
+                password = this->inputPassword("Пароль содержит недопустимые символы."
+                                               " Повторите ввод пароля."
+                                               " Для выхода введите exit или нажмите клавишу Esc");
                 break;
             }
 

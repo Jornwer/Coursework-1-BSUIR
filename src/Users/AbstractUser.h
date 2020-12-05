@@ -30,7 +30,6 @@ protected:
     void enterAccount();
     void changePassword();
     void deleteAccount();
-    void addUserToFile(const std::string &);
 
     static std::string enterLogin(int8_t, bool &);
     static std::string inputPassword(const std::string &);
@@ -39,6 +38,7 @@ protected:
     virtual std::string pathToData() = 0;
     virtual void deleteUserFromFile();
     virtual nlohmann::json userToJson();
+    virtual void addUserToFile(const std::string &);
 
 public:
     AbstractUser() = default;
