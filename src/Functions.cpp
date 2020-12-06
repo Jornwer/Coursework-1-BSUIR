@@ -85,21 +85,6 @@ int8_t getCharCode() {
     return 0;
 }
 
-void displayDate(string date) {
-	int8_t index = 0;
-	string str = "ДД.ММ.ГГГГ      ";
-	for (int8_t i = 0; i < 16; ++i) {
-		if (index + 1 > date.size() || index == 8)
-		    cout << str[i];
-		else {
-			if (i == 2 || i == 5)
-			    cout << '.';
-			else
-			    cout << date[index++];
-		}
-	}
-}
-
 bool isCharacterValid(char &a) {
     return ((a >= 'a' && a <= 'z') ||
             (a >= 'A' && a <= 'Z') ||
@@ -107,53 +92,7 @@ bool isCharacterValid(char &a) {
             a == ' ');
 }
 
-/*bool dealCorrect(const Deal& deal, const string& date) {
-	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty()
-			|| deal.car.price.empty() || deal.buyerName.empty() || deal.buyerSurname.empty()) {
-		getCharacter(L"Одно из полей пустое. Для повторного ввода данных нажмите любую клавишу");
-		return false;
-	}
-
-	if (date.size() != 8) {
-		getCharacter(L"Дата должна состоять из 8 цифр. Для повторного ввода данных нажмите любую клавишу");
-		return false;
-	}
-
-	if (deal.car.price.size() > 9) {
-		getCharacter(L"Стоимость машины должна быть меньше 1000000000. Для продолжения нажмите любую клавишу");
-		return false;
-	}
-
-	if (stringToInt(deal.car.price) == 0) {
-		getCharacter(L"Стоимость машины должна быть больше 0. Для продолжения намите любую клавишу");
-		return false;
-	}
-
-	Date tmp(date);
-	if (!dayCorrect(stringToInt(tmp.day), stringToInt(tmp.month), stringToInt(tmp.year))) {
-		getCharacter(L"Введенной даты не существует. Для продолжения нажмите любую клавишу");
-		return false;
-	}
-
-	time_t now = time(0);
-	tm* ltm = localtime(&now);
-	string currTime = (ltm->tm_mday < 10 ? "0" + to_string(ltm->tm_mday) : to_string(ltm->tm_mday))
-		+ (ltm->tm_mon < 9 ? "0" + to_string(1 + ltm->tm_mon) : to_string(1 + ltm->tm_mon))
-		+ to_string(1900 + ltm->tm_year);
-
-	if (tmp > Date(currTime)) {
-		getCharacter(L"Введенная дата больше настоящей даты. Для продолжения нажмите любую клавишу");
-		return false;
-	}
-
-	if (tmp < Date("01011990")) {
-		getCharacter(L"Введенная дата дожна быть больше 01.01.1990. Для продолжения нажмите любую клавишу");
-		return false;
-	}
-	
-	return true;
-}
-
+/*
 bool dealCorrect(const Deal& deal)
 {
 	string date = deal.date.day + deal.date.month + deal.date.year;
@@ -200,7 +139,7 @@ bool dealCorrect(const Deal& deal)
 
 bool stringContainString(string& stringForSearch, string& searchingString) {
 	if (stringForSearch.size() < searchingString.size()) return false;
-	for (int i = 0; i < searchingString.size(); ++i)
+	for (uint32_t i = 0; i < searchingString.size(); ++i)
 		if (stringForSearch[i] != searchingString[i])
 			return false;
 	return true;
@@ -210,8 +149,3 @@ bool comparePairs(pair<string, int> l, pair<string, int> r) {
 	return l.second > r.second;
 }
 
-bool operator==(const Deal& l, const Deal& r) {
-    return (l.car.brand == r.car.brand && l.car.color == r.car.color && l.date == r.date
-            && l.car.model == r.car.model && l.car.price == r.car.price
-            && l.buyerName == r.buyerName && l.buyerSurname == r.buyerSurname && l.seller == r.seller);
-}

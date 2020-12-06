@@ -14,18 +14,18 @@ private:
 
 public:
     explicit Date(int); //конструктор в формате ДДММГГГГ
-    explicit Date(nlohmann::json &);
+    explicit Date(std::string &);
     Date() = default;
 
+    bool dateCorrect();
+    std::string toString();
+    int dateToInt();
     static bool dateCorrect(int8_t, int8_t, int16_t);
+    static std::string displayDate(std::string&);
 
     friend bool operator==(const Date &, const Date &);
     friend bool operator>(const Date &, const Date &);
     friend bool operator<(const Date &, const Date &);
-
-    [[nodiscard]] int getDay() const;
-    [[nodiscard]] int getMonth() const;
-    [[nodiscard]] int getYear() const;
 };
 
 

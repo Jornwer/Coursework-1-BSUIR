@@ -137,7 +137,7 @@ bool Admin::deleteUserThenAddAdmin(string &login) {
     } catch (detail::parse_error &error) {
         return false;
     }
-    for (int i = 0; i < j.size(); ++i) {
+    for (uint32_t i = 0; i < j.size(); ++i) {
         if (j[i]["login"] == login) {
             string password = j[i]["password"];
             j.erase(j.begin() + i);
@@ -160,7 +160,7 @@ bool Admin::deleteUser(string &login) {
     } catch (detail::parse_error &error) {
         return false;
     }
-    for (int i = 0; i < j.size(); ++i) {
+    for (uint32_t i = 0; i < j.size(); ++i) {
         if (j[i]["login"] == login) {
             j.erase(j.begin() + i);
             ofstream output(Constants::pathToUserFile, ios::trunc);

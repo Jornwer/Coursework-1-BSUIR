@@ -3,6 +3,7 @@
 
 #include "AbstractUser.h"
 #include "AbstractUserImpl.h"
+#include "../Data/Catalog.h"
 
 class Admin : public AbstractUser {
 private:

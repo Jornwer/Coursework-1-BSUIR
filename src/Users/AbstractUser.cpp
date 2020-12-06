@@ -218,7 +218,7 @@ void AbstractUser::deleteUserFromFile() {
     } catch (detail::parse_error &error) {
         j = json::array();
     }
-    for (int i = 0; i < j.size(); ++i) {
+    for (uint32_t i = 0; i < j.size(); ++i) {
         if (j[i]["login"] == login && j[i]["password"] == sha256(password)) {
             j.erase(j.begin() + i);
             ofstream output(path, ios::trunc);

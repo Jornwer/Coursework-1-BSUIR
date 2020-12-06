@@ -1,4 +1,5 @@
 #include "Date.h"
+#include "../Header.h"
 
 using namespace std;
 
@@ -9,11 +10,13 @@ Date::Date(int date) {
     day = date / 100;
 }
 
-Date::Date(nlohmann::json &j) {
-    day = j["day"];
-    month = j["month"];
-    year = j["year"];
-}
+Date::Date(std::string &date): Date((date.empty()?
+                                                    0 :
+                                                    ((date[0] == '0')?
+                                                        ((date[1] == '0')?
+                                                        0:
+                                                        stoi(date.substr(1, 7))):
+                                                    stoi(date)))) {}
 
 int Date::countDays() const {
     return 372 * year + 31 * month + day;
@@ -55,14 +58,27 @@ bool Date::dateCorrect(int8_t day, int8_t month, int16_t year) {
     }
 }
 
-int Date::getDay() const {
-    return day;
+bool Date::dateCorrect() {
+    return dateCorrect(day, month, year);
 }
 
-int Date::getMonth() const {
-    return month;
+std::string Date::toString() {
+    return ((day < 10) ? "0" + to_string(day) : to_string(day)) + "." +
+           ((month < 10) ? "0" + to_string(month) : to_string(month)) + "." +
+           to_string(year) + string(4 - digitsInNumber(year), ' ');
 }
 
-int Date::getYear() const {
-    return year;
+int Date::dateToInt() {
+    return day * 1000000 + month * 10000 + year;
+}
+
+std::string Date::displayDate(std::string &date) {
+    uint8_t index = 0;
+    string str = "ДД.ММ.ГГГГ";
+    for (uint32_t i = 0; i < str.size() && index < date.size(); ++i) {
+        if (i == 2 || i == 5)
+            continue;
+        str[i++] = date[index++];
+    }
+    return str;
 }

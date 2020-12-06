@@ -18,8 +18,10 @@
 namespace Constants {
     const std::string pathToUserFile = "data/users.json";
     const std::string pathToAdminFile = "data/admins.json";
+    const std::string pathToCatalogFile = "data/catalog.json";
 }
 
+#define ultimateDebugging(x) cout << x;getCharCode();
 /*
 ­ авторизация пользователя, хранение пароля в зашифрованном виде;                               done
 ­ просмотр необходимой информации;                                                              done
@@ -43,9 +45,6 @@ namespace Constants {
 - передачу параметров по ссылке и по значению,                                                  done
 - статические методы и поля.                                                                    done
 */
-class Catalog;
-class Car;
-class Deal;
 
 void mainMenu();
 void drawMenu(std::vector<std::string>, int8_t &);
@@ -53,56 +52,22 @@ std::string getString(const std::string &);
 std::string getString();
 void getCharacter(const std::string &);
 int8_t getCharCode();
-void displayDate(std::string);
 bool isCharacterValid(char &);
+
+template<typename T>
+int digitsInNumber(T number){
+    int n=1;
+    while ((number/=10) > 0) n++;
+    return n;
+}
 
 /*void rewriteFile(std::vector<Credentials> &, const std::string &);
 void copyFile(std::vector<Credentials> &, const std::string &);*/
-bool copyCatalogFile(Catalog &);
+/*bool copyCatalogFile(Catalog &);
 void rewriteCatalogFile(Catalog &);
 bool dealCorrect(const Deal &, const std::string &);
-bool dealCorrect(const Deal &);
+bool dealCorrect(const Deal &);*/
 bool stringContainString(std::string &, std::string &);
 bool comparePairs(std::pair<std::string, int>, std::pair<std::string, int>);
-
-class Car {
-public:
-    std::string brand;//марка
-    std::string model;//модель
-    std::string color;//цвет
-    std::string price;//стоимость
-};
-
-class Deal {
-public:
-    Car car;
-    Date date;
-    std::string seller;
-    std::string buyerName;
-    std::string buyerSurname;
-
-    void displayElement();//функция вывода 1 элемента каталога
-
-    friend bool operator==(const Deal &, const Deal &);
-};
-
-class Catalog {
-public:
-    std::vector<Deal> deals;
-
-    void changeCatalog(); //функция меню каталога
-    void displayCatalog(); //вывод каталога
-    void enterElement(Deal &, std::string); //функция добавления элемента в каталог
-    void approveDeletion(int &, int &);//функция подтверждения удаления
-    void searchInCatalog();//функция поиска в каталоге
-    void changeElement(int &, int &);
-
-    void modifyElement(void (Catalog::*)(int &, int &));
-
-    void displaySearch(std::string, std::string, std::string, std::string,
-                       std::string, std::string, std::string, std::string,
-                       std::string);//функция выводящая найденные элементы в каталоге
-    void showBestBrands();
-};
 
 #endif

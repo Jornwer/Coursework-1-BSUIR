@@ -10,13 +10,13 @@ class AbstractUser;
 #include "../../lib/json.hpp"
 
 class AbstractUser {
+protected:
+    std::string login;
 private:
     std::string password;
     inline static std::string currentUser;
 
 protected:
-    std::string login;
-
     enum class Error {
         AU_NO_ERROR,
         AU_ERROR,

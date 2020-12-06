@@ -1,0 +1,146 @@
+[
+  {
+    "brand": "BMW",
+    "buyerName": "Ivan Ivanov",
+    "color": "Black",
+    "date": 6052000,
+    "model": "X9",
+    "price": 20000,
+    "seller": "Rob"
+  },
+  {
+    "brand": "Tesla",
+    "buyerName": "Elon Musk",
+    "color": "White",
+    "date": 12121990,
+    "model": "ModelS",
+    "price": 28000,
+    "seller": "Bob"
+  },
+  {
+    "brand": "Ford",
+    "buyerName": "Anna Sablina",
+    "color": "Brown",
+    "date": 13072002,
+    "model": "Mondeo",
+    "price": 7828,
+    "seller": "Jornwer"
+  },
+  {
+    "brand": "Infinity",
+    "buyerName": "Nikita Vaizin",
+    "color": "White",
+    "date": 26012008,
+    "model": "EX",
+    "price": 24095,
+    "seller": "Fedor"
+  },
+  {
+    "brand": "Volkswagen",
+    "buyerName": "Ivan Misura",
+    "color": "Red",
+    "date": 6092015,
+    "model": "Polo",
+    "price": 19567,
+    "seller": "Fedor"
+  },
+  {
+    "brand": "Nissan",
+    "buyerName": "Aleksei Krutsko",
+    "color": "Brown",
+    "date": 19052012,
+    "model": "Qashqai",
+    "price": 33391,
+    "seller": "Jornwer"
+  },
+  {
+    "brand": "Audi",
+    "buyerName": "Egor Fedorenko",
+    "color": "Silver",
+    "date": 3081997,
+    "model": "A6",
+    "price": 5100,
+    "seller": "Annette"
+  },
+  {
+    "brand": "Mercedes",
+    "buyerName": "Vladimir Putin",
+    "color": "Gray",
+    "date": 14111992,
+    "model": "Benz",
+    "price": 5382,
+    "seller": "Dmitry"
+  },
+  {
+    "brand": "Ford",
+    "buyerName": "Juilius Caesar",
+    "color": "Red",
+    "date": 12062019,
+    "model": "Escape",
+    "price": 36669,
+    "seller": "Bob"
+  },
+  {
+    "brand": "Hyundai",
+    "buyerName": "Ivan Grozniy",
+    "color": "Silver",
+    "date": 30032001,
+    "model": "Sonata",
+    "price": 4892,
+    "seller": "Jornwer"
+  },
+  {
+    "brand": "Opel",
+    "buyerName": "Aleksandr Makedonskiy",
+    "color": "Black",
+    "date": 23122012,
+    "model": "Insignia",
+    "price": 24951,
+    "seller": "Rob"
+  },
+  {
+    "brand": "BMW",
+    "buyerName": "Aleksandr Druz",
+    "color": "Black",
+    "date": 1022008,
+    "model": "X5",
+    "price": 25685,
+    "seller": "Annette"
+  },
+  {
+    "brand": "Jeep",
+    "buyerName": "Kadzuto Kirigaya",
+    "color": "Black",
+    "date": 6101993,
+    "model": "Grand",
+    "price": 8562,
+    "seller": "Dmitry"
+  },
+  {
+    "brand": "Chrysler",
+    "buyerName": "Kazuma Satou",
+    "color": "White",
+    "date": 3042006,
+    "model": "Voyager",
+    "price": 15900,
+    "seller": "Fedor"
+  },
+  {
+    "brand": "Tesla",
+    "buyerName": "Asuna Yukki",
+    "color": "White",
+    "date": 29012020,
+    "model": "Model3",
+    "price": 190382,
+    "seller": "Jornwer"
+  },
+  {
+    "brand": "Mercedes",
+    "buyerName": "Nagisa Shioto",
+    "color": "Black",
+    "date": 4072012,
+    "model": "Benz",
+    "price": 56018,
+    "seller": "Rob"
+  }
+]

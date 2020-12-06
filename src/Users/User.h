@@ -2,6 +2,7 @@
 #define COURSEWORK_USER_H
 
 #include "AbstractUser.h"
+#include "../Data/Catalog.h"
 
 class User : public AbstractUser {
 private:
