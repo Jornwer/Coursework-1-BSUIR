@@ -8,14 +8,11 @@ private:
     std::vector<Deal> deals;
 
     void displaySearch(std::string&, std::string&, std::string&, std::string&,
-                       std::string&, std::string&, std::string&, std::string&);
+                       std::string&, std::string&, std::string&, std::string&, std::string&);
     void copyCatalogFile();
     void enterElement(Deal&);
-    static void rewriteDealInCatalog(Deal&, Deal&);
-    static void appendDealInCatalog(Deal &);
-
-public:
-    void changeCatalog();
+    void rewriteDealInCatalog(Deal&, Deal&);
+    void appendDealInCatalog(Deal &);
     void displayCatalog();
     void enterElement();
     void approveDeletion(int &, int &);
@@ -23,6 +20,10 @@ public:
     void changeElement(int &, int &);
     void modifyElement(void (Catalog::*)(int &, int &));
     void showBestBrands();
+    void deleteDeal(Deal &);
+
+public:
+    void changeCatalog();
 };
 
 #endif //COURSEWORK_CATALOG_H

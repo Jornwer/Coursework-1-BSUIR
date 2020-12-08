@@ -82,3 +82,7 @@ std::string Date::displayDate(std::string &date) {
     }
     return str;
 }
+
+bool Date::validateDate(std::string &date) {
+    return ((new Date(date))->dateCorrect());
+}

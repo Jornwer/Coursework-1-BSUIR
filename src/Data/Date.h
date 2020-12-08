@@ -22,6 +22,7 @@ public:
     int dateToInt();
     static bool dateCorrect(int8_t, int8_t, int16_t);
     static std::string displayDate(std::string&);
+    static bool validateDate(std::string &);
 
     friend bool operator==(const Date &, const Date &);
     friend bool operator>(const Date &, const Date &);

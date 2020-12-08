@@ -92,60 +92,8 @@ bool isCharacterValid(char &a) {
             a == ' ');
 }
 
-/*
-bool dealCorrect(const Deal& deal)
-{
-	string date = deal.date.day + deal.date.month + deal.date.year;
-
-	if (deal.car.brand.empty() && deal.car.color.empty() && deal.car.model.empty() && deal.car.price.empty()
-		&& date.empty() && deal.buyerName.empty() && deal.buyerSurname.empty() && deal.seller.empty()) return true;
-
-	if (deal.date.day.size() != 2 || deal.date.month.size() != 2 || deal.date.year.size() != 4) return false;
-
-	if (deal.car.brand.empty() || deal.car.color.empty() || deal.car.model.empty() || deal.car.price.empty()
-		|| deal.buyerName.empty() || deal.buyerSurname.empty() || deal.seller.empty()) return false;
-
-	if (stringToInt(deal.car.price) == 0 || stringToInt(deal.car.price) == -1) return false;
-
-	if (deal.car.price.size() > 9) return false;
-
-	for (const auto& str : vector<string>{ deal.car.color, deal.car.brand, deal.car.model, deal.buyerName, deal.buyerSurname})
-		for (auto i : str)
-			if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i >= '0' && i <= '9')))
-				return false;
-
-	for (auto i : deal.seller)
-		if (!((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z') || (i >= '0' && i <= '9') || i == ' '))
-			return false;
-
-
-	for (auto a : date)
-		if (a < '0' || a > '9') return false;
-
-	if (!dayCorrect(stringToInt(deal.date.day), stringToInt(deal.date.month), stringToInt(deal.date.year))) return false;
-
-	time_t now = time(nullptr);
-	tm* ltm = localtime(&now);
-
-	string currTime = (ltm->tm_mday < 10 ? "0" + to_string(ltm->tm_mday) : to_string(ltm->tm_mday)) 
-					+ (ltm->tm_mon < 9 ? "0" + to_string(1 + ltm->tm_mon) : to_string(1 + ltm->tm_mon))
-					+ to_string(1900 + ltm->tm_year);
-	if (deal.date > Date(currTime)) return false;
-
-	if (deal.date < Date("01011990")) return false;
-
-	return true;
-}*/
-
-bool stringContainString(string& stringForSearch, string& searchingString) {
-	if (stringForSearch.size() < searchingString.size()) return false;
-	for (uint32_t i = 0; i < searchingString.size(); ++i)
-		if (stringForSearch[i] != searchingString[i])
-			return false;
-	return true;
+bool stringStartsFromString(string &stringForSearch, string &searchingString) {
+	return (stringForSearch.find(searchingString) != std::string::npos);
 }
 
-bool comparePairs(pair<string, int> l, pair<string, int> r) {
-	return l.second > r.second;
-}
 
