@@ -186,7 +186,7 @@ void Admin::addUserToFileWithoutPasswordEncoding(const std::string &login,
     json user;
     user["login"] = login;
     user["password"] = password;
-    j.push_back(j);
+    j.push_back(user);
 
     ofstream output(path, ios::trunc);
     output << j;

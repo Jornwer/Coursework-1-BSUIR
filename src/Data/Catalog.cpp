@@ -241,9 +241,7 @@ void Catalog::displaySearch(string &brand, string &model, string &color,
 
     int pTo = 0, pFrom = 0;
     try {
-        if (!(priceTo.empty() && priceFrom.empty())) {
-            pTo = stoi(priceTo), pFrom = stoi(priceFrom);
-        }
+        pTo = stoi(priceTo.empty()?"0":priceTo), pFrom = stoi(priceFrom.empty()?"0":priceFrom);
     } catch (...){
         getCharacter("Одна из стоимостей введена неправильно. Для возвращения нажмите любую кнопку");
         return;
@@ -342,10 +340,11 @@ void Catalog::enterElement(Deal &deal) {
     Deal save;
     bool dealEmpty = (deal == Deal());
     int8_t row = 0;
-    deal.setSeller();
     string buyerSurname, date = (digitsInNumber(deal.date.dateToInt()) == 7?
                                                     "0" + to_string(deal.date.dateToInt()):
-                                                    to_string(deal.date.dateToInt()));
+                                                     (deal.date.dateToInt()==0?
+                                                         "":
+                                                         to_string(deal.date.dateToInt())));
     if (!dealEmpty) {
         save = deal;
         for (uint32_t i = 0; i < deal.buyerName.size(); ++i) {
@@ -355,6 +354,8 @@ void Catalog::enterElement(Deal &deal) {
                 break;
             }
         }
+    } else {
+        deal.setSeller();
     }
 
     while (true) {

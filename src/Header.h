@@ -14,6 +14,8 @@
 #include <unordered_map>
 #include "../lib/SHA256.h"
 
+#define ultimateDebugging(x) cout << x;getCharCode();
+
 namespace Constants {
     const std::string pathToUserFile = "data/users.json";
     const std::string pathToAdminFile = "data/admins.json";
@@ -36,7 +38,5 @@ int digitsInNumber(T number){
     while ((number/=10) > 0) n++;
     return n;
 }
-
-
 
 #endif
