@@ -4,6 +4,7 @@
 #include "AbstractUser.h"
 #include "AbstractUserImpl.h"
 #include "../Data/Catalog.h"
+#include "../Menu.h"
 
 class Admin : public AbstractUser {
 private:
@@ -13,14 +14,16 @@ private:
     static bool deleteUserThenAddAdmin(std::string&);
     static bool deleteUser(std::string&);
     static void addUserToFileWithoutPasswordEncoding(const std::string&, const std::string&, const std::string&);
+    void changeCatalog();
 protected:
     std::string pathToData() override;
-    static void addAdmin();
-    static void deleteUser();
-    static void addUser();
+    void addAdmin();
+    void deleteUser();
+    void addUser();
     void createAccount();
 
 public:
+    friend class Menu<Admin>;
     static void adminHaveAccount();
 
     void userMenu() override;

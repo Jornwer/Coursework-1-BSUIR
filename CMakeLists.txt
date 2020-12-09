@@ -28,7 +28,8 @@ add_executable(Coursework
         src/Data/Deal.cpp
         src/Data/Deal.h
         src/Data/Catalog.cpp
-        src/Data/Catalog.h)
+        src/Data/Catalog.h
+        src/Menu.h)
 
 add_subdirectory(lib/libfort)
 target_link_libraries(Coursework PRIVATE fort)

@@ -19,25 +19,22 @@ void drawMenu(vector<string> msg, int8_t &row) {
 }
 
 void mainMenu() {
-	int8_t row = 0;
+    class MainMenu{
+    public:
+        void adminHaveAccount(){
+            Admin::adminHaveAccount();
+        }
+        void userHaveAccount(){
+            User::userHaveAccount();
+        }
+    };
 
-	while (true) {
-		system("cls");
-		drawMenu({"Войти как администратор", "\n\nВойти как пользователь", "\n\nВыход"}, row);
-
-		int8_t a = getCharCode();
-
-		if (a == VK_UP) row = (row + 2) % 3;
-		else if (a == VK_DOWN) row = (row + 1) % 3;
-		else if (a == 13) {
-			if (row == 0) Admin::adminHaveAccount();
-			else if (row == 1) User::userHaveAccount();
-			else if (row == 2) {
-				system("cls");
-				break;
-			}
-		}
-	}
+    (new Menu<MainMenu>("Войти как администратор", &MainMenu::adminHaveAccount))
+    ->add("\n\nВойти как пользователь", &MainMenu::userHaveAccount)
+    ->add("\n\nВыход")
+    ->exit(2)
+    ->addClass(*(new MainMenu()))
+    ->whileTrue();
 }
 
 string getString(const string &msg) {
@@ -95,5 +92,3 @@ bool isCharacterValid(char &a) {
 bool stringStartsFromString(string &stringForSearch, string &searchingString) {
 	return (stringForSearch.find(searchingString) != std::string::npos);
 }
-
-

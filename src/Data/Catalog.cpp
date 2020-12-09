@@ -1,5 +1,6 @@
 #include "Catalog.h"
 #include "../Users/AbstractUser.h"
+#include "../Menu.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -75,11 +76,17 @@ void Catalog::showBestBrands() {
     });
 
     system("cls");
-    cout << "Самые продаваемые марки. Для выхода нажмите любую клавишу\n";
-    for (uint32_t i = 0; i < 3 && i < vec.size(); ++i) {
-        cout << vec[i].first << " - " << vec[i].second;
-        cout << " машин продано\n";
+    cout << "Самые продаваемые марки. Для выхода нажмите любую клавишу\n\n";
+
+    fort::utf8_table table;
+    table.set_border_style(FT_NICE_STYLE);
+    table.column(0).set_cell_text_align(fort::text_align::center);
+    table.column(1).set_cell_text_align(fort::text_align::center);
+    table << fort::header << "Марка" << "Машин продан" << fort::endr;
+    for (uint32_t i = 0; i < vec.size() && i < elementsOnPage; ++i) {
+        table << vec[i].first << vec[i].second << fort::endr;
     }
+    cout << table.to_string();
     getCharCode();
 }
 

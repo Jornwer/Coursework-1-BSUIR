@@ -64,69 +64,34 @@ void Admin::createAccount() {
 }
 
 void Admin::userMenu() {
-    int8_t row = 0;
-    int8_t colNum = 7;
-    Catalog catalog;
     setCurrentUser();
-    while (true) {
-        system("cls");
-        drawMenu({ " Изменить каталог", "\n\n Изменить пароль","\n\n Удалить аккаунт",
-                   "\n\n Назначить нового администратора", "\n\n Удалить пользователя",
-                   "\n\n Добавить нового пользователя", "\n\n Назад" }, row);
-
-        char a = getCharCode();
-
-        if (a == VK_UP) row = (row + colNum - 1) % colNum;
-        else if (a == VK_DOWN) row = (row + 1) % colNum;
-        else if (a == 13) {
-            if (row == 0) catalog.changeCatalog();
-            else if (row == 1) changePassword();
-            else if (row == 2) { deleteAccount(); break; }
-            else if (row == 3) addAdmin();
-            else if (row == 4) deleteUser();
-            else if (row == 5) addUser();
-            else if (row == 6) {
-                system("cls");
-                break;
-            }
-        }
-    }
+    (new Menu<Admin>(" Изменить каталог", &Admin::changeCatalog))
+    ->add("\n\n Изменить пароль", &Admin::changePassword)
+    ->add("\n\n Удалить аккаунт", &Admin::deleteAccount)
+    ->add("\n\n Назначить нового администратора", &Admin::addAdmin)
+    ->add("\n\n Удалить пользователя", &Admin::deleteUser)
+    ->add("\n\n Добавить нового пользователя", &Admin::addUser)
+    ->add("\n\n Назад")
+    ->exit(2)
+    ->exit(6)
+    ->addClass(*this)
+    ->whileTrue();
 }
 
 void Admin::adminHaveAccount() {
-    int8_t row = 0;
     Admin admin;
-    bool isUserFileEmpty = admin.isUserFileEmpty();
-
-    while (true) {
-        system("cls");
-
-        if (isUserFileEmpty)
-            drawMenu({ "  Создать аккаунт", "\n\n  Назад" }, row);
-        else
-            drawMenu({ "  Войти в аккаунт", "\n\n  Назад" }, row);
-
-        char a = getCharCode();
-
-        if (a == VK_UP || a == VK_DOWN) row = !row;
-        else if (a == 13) {
-            if (isUserFileEmpty) {
-                if (row == 0) admin.createAccount();
-                else if (row == 1) {
-                    system("cls");
-                    break;
-                }
-
-            } else {
-                if (row == 0) admin.enterAccount();
-                else if (row == 1) {
-                    system("cls");
-                    break;
-                }
-            }
-            return;
-        }
+    Menu<Admin>* menu;
+    if (admin.isUserFileEmpty()) {
+        menu = new Menu<Admin>("  Создать аккаунт", &Admin::createAccount);
+    } else {
+        menu = new Menu<Admin>("  Войти в аккаунт", &Admin::enterAccount);
     }
+    menu
+    ->add("\n\n  Назад")
+    ->exit(0)
+    ->exit(1)
+    ->addClass(admin)
+    ->whileTrue();
 }
 
 bool Admin::deleteUserThenAddAdmin(string &login) {
@@ -193,5 +158,10 @@ void Admin::addUserToFileWithoutPasswordEncoding(const std::string &login,
 
     file.close();
     output.close();
+}
+
+void Admin::changeCatalog() {
+    Catalog catalog;
+    catalog.changeCatalog();
 }
 

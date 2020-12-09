@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include "../lib/SHA256.h"
 
-#define ultimateDebugging(x) cout << x;getCharCode();
+#define ultimateDebugging(x) std::cout << x;getCharCode();
 
 namespace Constants {
     const std::string pathToUserFile = "data/users.json";
