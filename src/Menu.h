@@ -17,6 +17,10 @@ public:
         functions.emplace_back(function);
     }
 
+    Menu(std::string description){
+        strings.emplace_back(description);
+    }
+
     Menu* add(std::string description, fPtr function) {
         strings.emplace_back(description);
         functions.emplace_back(function);
@@ -51,12 +55,28 @@ public:
             if (a == VK_UP) row = (row + colNum - 1) % colNum;
             else if (a == VK_DOWN) row = (row + 1) % colNum;
             else if (a == 13) {
-                if (row < functions.size())
+                if (row < (int8_t)functions.size())
                     (clazz.*functions[row])();
                 if (std::find(exitOn.begin(), exitOn.end(), row) != exitOn.end()) {
                     system("cls");
                     return;
                 }
+            }
+        }
+    }
+
+    int chooseRow(){
+        int8_t row = 0;
+        uint32_t colNum = strings.size();
+        while (true) {
+            system("cls");
+            drawMenu(strings, row);
+
+            char a = getCharCode();
+            if (a == VK_UP) row = (row + colNum - 1) % colNum;
+            else if (a == VK_DOWN) row = (row + 1) % colNum;
+            else if (a == 13) {
+                return row;
             }
         }
     }

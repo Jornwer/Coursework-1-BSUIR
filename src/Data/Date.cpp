@@ -84,5 +84,9 @@ std::string Date::displayDate(std::string &date) {
 }
 
 bool Date::validateDate(std::string &date) {
-    return ((new Date(date))->dateCorrect());
+    try {
+        return ((new Date(date))->dateCorrect());
+    } catch (...){
+        return false;
+    }
 }

@@ -13,8 +13,18 @@
 #include <ctime>
 #include <unordered_map>
 #include "../lib/SHA256.h"
+/*
+везде слова предм.область заменить под свою
+мало описания предм.области
+никакого описания вашей шифровки
 
-#define ultimateDebugging(x) std::cout << x;getCharCode();
+фильтрацию (скрины работы) и сортировку вообще не нашла
+добавить про сортировку в:
+    юз кейс
+    дк
+    описание
+нормально код накидать
+*/
 
 namespace Constants {
     const std::string pathToUserFile = "data/users.json";
@@ -30,7 +40,7 @@ std::string getString();
 void getCharacter(const std::string &);
 int8_t getCharCode();
 bool isCharacterValid(char &);
-bool stringStartsFromString(std::string &, std::string &);
+bool isStringContainString(std::string &stringForSearch, std::string &searchingString);
 
 template<typename T>
 int digitsInNumber(T number){

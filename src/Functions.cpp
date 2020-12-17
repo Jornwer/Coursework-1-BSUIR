@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     system("chcp 65001");
-	mainMenu();
+    mainMenu();
     return 0;
 }
 
@@ -71,14 +71,14 @@ void getCharacter(const string &msg) {
 }
 
 int8_t getCharCode() {
-	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-	INPUT_RECORD rec;
-	DWORD numRead;
-	while (ReadConsoleInput(hIn, &rec, 1, &numRead) && numRead == 1) {
-		if (rec.EventType == KEY_EVENT && rec.Event.KeyEvent.bKeyDown) {
-			return rec.Event.KeyEvent.wVirtualKeyCode;
-		}
-	}
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    INPUT_RECORD rec;
+    DWORD numRead;
+    while (ReadConsoleInput(hIn, &rec, 1, &numRead) && numRead == 1) {
+        if (rec.EventType == KEY_EVENT && rec.Event.KeyEvent.bKeyDown) {
+            return rec.Event.KeyEvent.wVirtualKeyCode;
+        }
+    }
     return 0;
 }
 
@@ -89,6 +89,6 @@ bool isCharacterValid(char &a) {
             a == ' ');
 }
 
-bool stringStartsFromString(string &stringForSearch, string &searchingString) {
+bool isStringContainString(string &stringForSearch, string &searchingString) {
 	return (stringForSearch.find(searchingString) != std::string::npos);
 }

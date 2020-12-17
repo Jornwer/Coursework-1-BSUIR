@@ -21,6 +21,11 @@ private:
     void modifyElement(void (Catalog::*)(int &, int &));
     void showBestBrands();
     void deleteDeal(Deal &);
+    void showUserDeals();
+    void deleteDeal();
+    void changeDeal();
+    void sortCatalog();
+    static std::function<bool(const Deal&, const Deal&)> chooseComparator(int);
 
 public:
     void changeCatalog();

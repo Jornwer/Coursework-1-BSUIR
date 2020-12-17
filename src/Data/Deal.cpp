@@ -8,20 +8,6 @@ void Deal::fillTableRow(fort::utf8_table &table) {
     table << brand << model << color << price << date.toString() << buyerName << seller << fort::endr;
 }
 
-bool Deal::operator==(const Deal &rhs) const {
-    return date == rhs.date &&
-           brand == rhs.brand &&
-           model == rhs.model &&
-           color == rhs.color &&
-           price == rhs.price &&
-           seller == rhs.seller &&
-           buyerName == rhs.buyerName;
-}
-
-bool Deal::operator!=(const Deal &rhs) const {
-    return !(rhs == *this);
-}
-
 Deal::Deal(int date, std::string brand, std::string model, std::string color,
            int price, std::string seller, std::string buyerName) : date(Date(date)),
                        brand(std::move(brand)), model(std::move(model)), color(std::move(color)),
@@ -82,4 +68,18 @@ bool Deal::isDealCorrect() {
     }
 
     return true;
+}
+
+bool operator==(const Deal &lhs, const Deal &rhs) {
+    return lhs.date == rhs.date &&
+           lhs.brand == rhs.brand &&
+           lhs.model == rhs.model &&
+           lhs.color == rhs.color &&
+           lhs.price == rhs.price &&
+           lhs.seller == rhs.seller &&
+           lhs.buyerName == rhs.buyerName;
+}
+
+bool operator!=(const Deal &lhs, const Deal &rhs) {
+    return !(rhs == lhs);
 }

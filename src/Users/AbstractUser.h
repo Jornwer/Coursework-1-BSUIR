@@ -36,8 +36,9 @@ protected:
     static std::string inputPassword();
 
     virtual std::string pathToData() = 0;
-    virtual void deleteUserFromFile();
-    virtual nlohmann::json userToJson();
+    void deleteUserFromFile();
+    nlohmann::json userToJson();
+
     virtual void addUserToFile(const std::string &);
 
 public:

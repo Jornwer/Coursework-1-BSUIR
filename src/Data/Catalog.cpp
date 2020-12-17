@@ -7,32 +7,20 @@ using namespace nlohmann;
 using Constants::elementsOnPage;
 
 void Catalog::changeCatalog() {
-    int8_t row = 0;
-    int8_t colNum = 7;
     copyCatalogFile();
 
-    while (true) {
-        system("cls");
-        drawMenu({ " Просмотреть каталог", "\n\n Добавить элемент в каталог", "\n\n Удалить элемент из каталога",
-                   "\n\n Поиск в каталоге", "\n\n Изменить элемент", "\n\n Показать самые продаваемые марки", "\n\n Назад" }, row);
-
-        char a = getCharCode();
-
-        if (a == VK_UP) row = (row + colNum - 1) % colNum;
-        else if (a == VK_DOWN) row = (row + 1) % colNum;
-        else if (a == 13) {
-            if (row == 0) displayCatalog();
-            else if (row == 1) enterElement();
-            else if (row == 2) modifyElement(&Catalog::approveDeletion);
-            else if (row == 3) searchInCatalog();
-            else if (row == 4) modifyElement(&Catalog::changeElement);
-            else if (row == 5) showBestBrands();
-            else if (row == 6) {
-                system("cls");
-                break;
-            }
-        }
-    }
+    (new Menu<Catalog>(" Просмотреть каталог", &Catalog::displayCatalog))
+    ->add("\n\n Добавить элемент в каталог", &Catalog::enterElement)
+    ->add("\n\n Удалить элемент из каталога", &Catalog::deleteDeal)
+    ->add("\n\n Поиск в каталоге",  &Catalog::searchInCatalog)
+    ->add("\n\n Изменить элемент", &Catalog::changeDeal)
+    ->add("\n\n Показать самые продаваемые марки", &Catalog::showBestBrands)
+    ->add("\n\n Показать все сделки пользователя", &Catalog::showUserDeals)
+    ->add("\n\n Отсортировать каталог", &Catalog::sortCatalog)
+    ->add("\n\n Назад")
+    ->exit(8)
+    ->addClass(*this)
+    ->whileTrue();
 }
 
 void Catalog::displayCatalog() {
@@ -266,9 +254,9 @@ void Catalog::displaySearch(string &brand, string &model, string &color,
             }
         }
 
-        if (!stringStartsFromString(deal.brand, brand) || !stringStartsFromString(deal.model, model)
-            || !stringStartsFromString(deal.color, color) || !stringStartsFromString(dealBuyerName, buyerName)
-            || !stringStartsFromString(dealBuyerSurname, buyerSurname)) continue;
+        if (!isStringContainString(deal.brand, brand) || !isStringContainString(deal.model, model)
+            || !isStringContainString(deal.color, color) || !isStringContainString(dealBuyerName, buyerName)
+            || !isStringContainString(dealBuyerSurname, buyerSurname)) continue;
 
         if (!(pTo == 0 && pFrom == 0)) {
             if (pTo != 0 && pFrom != 0) {
@@ -465,5 +453,79 @@ void Catalog::deleteDeal(Deal &deal) {
             output << j;
             return;
         }
+    }
+}
+
+void Catalog::showUserDeals() {
+    string user = AbstractUser::getCurrentUser();
+    Catalog cat;
+    for (auto & item: deals){
+        if (item.seller == user)
+            cat.deals.emplace_back(item);
+    }
+    if (cat.deals.empty()){
+        getCharacter("Данный пользователь создал 0 сделок. Для выхода в меню нажмите любую клавишу");
+        return;
+    }
+    cat.displayCatalog();
+}
+
+void Catalog::deleteDeal() {
+    modifyElement(&Catalog::approveDeletion);
+}
+
+void Catalog::changeDeal() {
+    modifyElement(&Catalog::changeElement);
+}
+
+void Catalog::sortCatalog() {
+    int column = (new Menu<Catalog>("\n\nСортировать по марке"))
+            ->add("\n\nСортировать по моделе")
+            ->add("\n\nСортировать по цвету")
+            ->add("\n\nСортировать по цене")
+            ->add("\n\nСортировать по дате")
+            ->add("\n\nСортировать по имени покупателя")
+            ->add("\n\nСортировать по имени продавца")
+            ->chooseRow();
+    Catalog catalog;
+    catalog.deals = deals;
+    sort(catalog.deals.begin(), catalog.deals.end(), chooseComparator(column));
+    catalog.displayCatalog();
+}
+
+std::function<bool(const Deal&, const Deal&)> Catalog::chooseComparator(int column) {
+    switch (column){
+        case 0:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.brand < d2.brand;
+            };
+        case 1:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.model < d2.model;
+            };
+        case 2:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.color < d2.color;
+            };
+        case 3:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.price < d2.price;
+            };
+        case 4:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.date < d2.date;
+            };
+        case 5:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.buyerName < d2.buyerName;
+            };
+        case 6:
+            return [](const Deal& d1, const Deal& d2){
+                return d1.seller < d2.seller;
+            };
+        default:
+            return [](const Deal&, const Deal&){
+                return true;
+            };
     }
 }

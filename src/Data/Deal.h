@@ -26,8 +26,8 @@ public:
     void setSeller();
     bool isDealCorrect();
 
-    bool operator==(const Deal &rhs) const;
-    bool operator!=(const Deal &rhs) const;
+    friend bool operator==(const Deal &lhs, const Deal &rhs);
+    friend bool operator!=(const Deal &lhs, const Deal &rhs);
 };
 
 
