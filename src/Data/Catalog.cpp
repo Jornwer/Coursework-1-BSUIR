@@ -479,7 +479,7 @@ void Catalog::changeDeal() {
 }
 
 void Catalog::sortCatalog() {
-    int column = (new Menu<Catalog>("\n\nСортировать по марке"))
+    int column = (new Menu<Catalog>("Сортировать по марке"))
             ->add("\n\nСортировать по моделе")
             ->add("\n\nСортировать по цвету")
             ->add("\n\nСортировать по цене")
@@ -487,6 +487,7 @@ void Catalog::sortCatalog() {
             ->add("\n\nСортировать по имени покупателя")
             ->add("\n\nСортировать по имени продавца")
             ->chooseRow();
+    
     Catalog catalog;
     catalog.deals = deals;
     sort(catalog.deals.begin(), catalog.deals.end(), chooseComparator(column));

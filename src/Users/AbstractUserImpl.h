@@ -16,7 +16,7 @@ namespace core {
             if (leave) return;
             if (this->isUserInFile()) userMenu();
         }
-        void addUserToFile(const std::string& path){
+        void addUserToFile(const std::string& path) override{
             AbstractUser::addUserToFile(path);
         }
     protected:
